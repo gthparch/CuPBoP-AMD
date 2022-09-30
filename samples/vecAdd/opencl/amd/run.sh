@@ -1,0 +1,1 @@
+clang++ -target amdgcn-amdhsa-opencl -c -S -emit-llvm -x cl vector_add_kernel.cl

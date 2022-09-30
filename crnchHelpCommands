@@ -31,6 +31,9 @@ Clang:
 
 You can copy llvm to your local directory to allow to use across different nodes.
 
+export PATH=/nethome/jchen706/llvm/bin:$PATH
+
+
 
 Nvidia GPU
 
@@ -41,9 +44,19 @@ export LD_LIBRARY_PATH=/usr/local/cuda-11.5/lib64:$LD_LIBRARY_PATH
 
 nvcc vecAdd.cu -c -save-temps
 
-/opt/mellanox/doca/lib/x86_64-linux-gnu/pkgconfig
-
 clang++ vecAdd.cu -c -save-temps -emit-llvm 
+
+
+
+OpenCL
+
+AMD: 
+
+clang++ -target amdgcn-amdhsa-opencl -c -S -emit-llvm -x cl vecAdd.cl -include <path to clc.h>
+
+
+Nvidia: 
+
 
 
 
