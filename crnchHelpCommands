@@ -1,0 +1,49 @@
+/opt/rocm-5.2.0/llvm/bin/llvm-dis
+
+/opt/rocm-5.2.0/llvm/bin/clang -c -emit-llvm 
+
+salloc -t 1:00:00 -p rg-gpu -w instinct
+
+source /etc/profile.d/modules.sh
+module use /projects/tools/x86_64/rhel-8/modulefiles/
+module load rocm/5.2.0
+
+
+hipcc -emit-llvm -save-temps -c
+
+export LD_LIBRARY_PATH=/opt/rocm-5.2.0/opencl/lib:$LD_LIBRARY_PATH
+
+gcc openclex.c -o vectorAddition -I/opt/rocm-5.2.0/opencl/include -lOpenCL
+
+gcc openclex.c -L/opt/rocm-5.2.0/opencl/lib -o vectorAddition -I/opt/rocm-5.2.0/opencl/include -lOpenCL
+
+
+AMD_OCL_BUILD_OPTIONS_APPEND="-save-temps-all -fbin-amdil"
+export AMD_OCL_BUILD_OPTIONS_APPEND=-save-temps-all
+
+
+
+
+Clang: 
+
+/opt/rocm-5.2.0/llvm/bin/clang 
+/opt/rocm-5.2.0/llvm/bin/clang++
+
+You can copy llvm to your local directory to allow to use across different nodes.
+
+
+Nvidia GPU
+
+salloc -t 1:00:00 -p rg-gpu -w quorra2
+
+export PATH=/usr/local/cuda-11.5/bin:/nethome/jchen706/llvm/bin:$PATH
+export LD_LIBRARY_PATH=/usr/local/cuda-11.5/lib64:$LD_LIBRARY_PATH
+
+nvcc vecAdd.cu -c -save-temps
+
+/opt/mellanox/doca/lib/x86_64-linux-gnu/pkgconfig
+
+clang++ vecAdd.cu -c -save-temps -emit-llvm 
+
+
+
