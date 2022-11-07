@@ -5,11 +5,23 @@ enum cudaError_t {
   cudaErrorInvalidValue 
 };
 
+enum cudaMemcpyKind {
+  cudaMemcpyHostToHost,
+  cudaMemcpyHostToDevice,
+  cudaMemcpyDeviceToHost,
+  cudaMemcpyDeviceToDevice,
+  cudaMemcpyDefault
+};
+
 typedef struct CUuuid_st {                                /**< CUDA definition of UUID */
     char bytes[16];
 } CUuuid;
 
 typedef  struct CUuuid_st cudaUUID_t;
+
+typedef uint8_t CUstream_st*;
+typedef CUstream_st* cudaStream_t;
+
 
 struct cudaDeviceProp {
       char name[256];
@@ -91,4 +103,7 @@ struct cudaDeviceProp {
 cudaError_t cudaGetDevice(int *devPtr);
 
 cudaError_t cudaGetDeviceProperties (cudaDeviceProp* prop, int  device );
+
+cudaError_t cudaMalloc (void ** devPtr, size_t size);
+
 }
