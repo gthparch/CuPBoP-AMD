@@ -100,10 +100,25 @@ struct cudaDeviceProp {
       int accessPolicyMaxWindowSize;
 };
 
-cudaError_t cudaGetDevice(int *devPtr);
+
+cudaError_t cudaDeviceReset ();
+
+cudaError_t cudaGetLastError ();
+
+cudaError_t cudaPeekAtLastError ();
+
+cudaError_t cudaGetDevice (int *devPtr);
 
 cudaError_t cudaGetDeviceProperties (cudaDeviceProp* prop, int  device );
 
 cudaError_t cudaMalloc (void ** devPtr, size_t size);
+
+cudaError_t cudaFree (void * ptr);
+
+cudaError_t cudaHostAlloc (void** ptr, size_t size, unsigned int flag);
+
+cudaError_t cudaMemcpy (void* dst, const void* src, size_t count, cudaMemcpyKind kind);
+
+cudaError_t cudaLaunchKernel (const void* func, dim3 gridDim, dim3 blockDim, void** args, size_t sharedMem, cudaStream_t stream);
 
 }

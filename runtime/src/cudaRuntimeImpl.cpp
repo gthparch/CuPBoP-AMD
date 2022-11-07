@@ -11,15 +11,18 @@
 
 // https://docs.nvidia.com/cuda/cuda-runtime-api/structcudaDeviceProp.html
 
-cudaError_t cudaDeviceRest() {
+cudaError_t cudaDeviceReset() {
+  printf("insideDeviceReset\n")
   HIP_CHECK(hipDeviceReset());
 }
 
 cudaError_t cudaGetLastError() {
+  printf("insideGetLastError\n")
   HIP_CHECK(hipGetLastError());
 }
 
 cudaError_t cudaPeekAtLastError() {
+  printf("insidePeekAtLastError\n")
   HIP_CHECK(hipPeekAtLastError());
 }
 
@@ -46,14 +49,14 @@ cudaError_t cudaMalloc (void ** devPtr, size_t size) {
 }
 
 cudaError_t cudaFree (void* ptr) {
+  printf("inside cudaFree\n")
   HIP_CHECK(hipFree(ptr));
 }
 
 cudaError_t cudaHostAlloc (void** ptr, size_t size, unsigned int flag) {
+  printf("inside HostAlloc\n")
   HIP_CHECK(hipHostMalloc(ptr, size, flag));
 }
-
-
 
 cudaError_t cudaMemcpy (void* dst, const void* src, size_t count, cudaMemcpyKind kind) {
   printf("insideCudaMemcpy\n");
