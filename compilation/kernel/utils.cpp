@@ -1,4 +1,4 @@
-#include <llvm/IR/Module.h>
+#include "llvm/IR/Module.h"
 
 #include "cupbop_amd.hpp"
 #include "kernel_translator.hpp"

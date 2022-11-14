@@ -1,6 +1,7 @@
 #pragma once
 
-#include <llvm/IR/Module.h>
+#include "llvm/IR/Instructions.h"
+#include "llvm/IR/Module.h"
 
 namespace cupbop::amd::kernel {
     void transform_metadata(llvm::Module&);

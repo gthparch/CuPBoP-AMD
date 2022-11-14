@@ -90,5 +90,5 @@ struct cudaDeviceProp {
 
 cudaError_t cudaGetDevice(int *devPtr);
 
-cudaError_t cudaGetDeviceProperties (cudaDeviceProp* prop, int  device );
+cudaError_t cudaGetDeviceProperties (cudaDeviceProp* prop, int  device);
 }

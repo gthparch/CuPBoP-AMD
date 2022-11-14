@@ -17,7 +17,7 @@ using namespace llvm;
 using namespace cupbop::kernel;
 using namespace cupbop::amd::kernel;
 
-LLVMContext& ::getCupbopLLVMContext() {
+LLVMContext& getCupbopLLVMContext() {
     static LLVMContext context;
     return context;
 }

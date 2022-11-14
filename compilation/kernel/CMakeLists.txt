@@ -10,11 +10,18 @@ project(
 set(CMAKE_VERBOSE_MAKEFILE ON)
 set(LIB_NAME cupbop-amd-kernel)
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_BUILD_TYPE Debug)
+# find_package(LLVM REQUIRED CONFIG)
+# add_definitions(${LLVM_DEFINITIONS})
+# include_directories(${LLVM_INCLUDE_DIRS})
+
 include_directories(../include)
 
 file(GLOB proj_SOURCES "*.cpp")
+
+# set(GCC_COVERAGE_LINK_FLAGS
+#     "-L${LLVM_LIB_PATH} ${LLVM_LINK_FLAG} -lz -lrt -ldl -ltinfo -lpthread -lm")
 
 # Add core library.
 add_library(${LIB_NAME} SHARED ${proj_SOURCES})
