@@ -20,9 +20,9 @@ $_ZN17__HIP_CoordinatesI15__HIP_ThreadIdxE1xE = comdat any
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn
 define protected amdgpu_kernel void @_Z6vecAddPiS_S_i(i32 addrspace(1)* nocapture noundef readonly %0, i32 addrspace(1)* nocapture noundef readonly %1, i32 addrspace(1)* nocapture noundef writeonly %2, i32 noundef %3) local_unnamed_addr #0 {
-  %5 = tail call align 4 dereferenceable(64) i8 addrspace(4)* @llvm.amdgcn.dispatch.ptr() #2
+  %5 = tail call align 4 dereferenceable(64) i8 addrspace(4)* @llvm.amdgcn.dispatch.ptr() #2 
   %6 = tail call i32 @llvm.amdgcn.workgroup.id.x() #2
-  %7 = getelementptr i8, i8 addrspace(4)* %5, i64 4 // 
+  %7 = getelementptr i8, i8 addrspace(4)* %5, i64 4 // access 5th element of kernel dispatch packet which is workgroup_size_x
   %8 = bitcast i8 addrspace(4)* %7 to i16 addrspace(4)*
   %9 = load i16, i16 addrspace(4)* %8, align 4, !range !4, !invariant.load !5
   %10 = zext i16 %9 to i32
