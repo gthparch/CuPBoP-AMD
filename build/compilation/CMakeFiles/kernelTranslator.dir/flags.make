@@ -4,7 +4,7 @@
 # compile CXX with /usr/bin/c++
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/nethome/jchen706/opt/llvm/include -I/nethome/jchen706/coding/amdcuda/include -I/nethome/jchen706/coding/amdcuda/compilation/./include
+CXX_INCLUDES = -I/nethome/jlu393/opt/llvm/include -I/nethome/jlu393/amdcuda/include -I/nethome/jlu393/amdcuda/compilation/./include
 
-CXX_FLAGS = -I/nethome/jchen706/opt/llvm/include -std=c++17   -fno-exceptions -fno-rtti -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS  -g   -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -std=gnu++17
+CXX_FLAGS = -g   -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -std=gnu++17
 

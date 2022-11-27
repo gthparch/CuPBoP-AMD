@@ -1,4 +1,4 @@
-# Install script for directory: /nethome/jchen706/coding/amdcuda/compilation
+# Install script for directory: /nethome/jlu393/amdcuda/compilation
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -44,7 +44,7 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("/nethome/jchen706/coding/amdcuda/build/compilation/kernel/cmake_install.cmake")
+  include("/nethome/jlu393/amdcuda/build/compilation/kernel/cmake_install.cmake")
 
 endif()
 

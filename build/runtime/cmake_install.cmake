@@ -1,4 +1,4 @@
-# Install script for directory: /nethome/jchen706/coding/amdcuda/runtime
+# Install script for directory: /nethome/jlu393/amdcuda/runtime
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

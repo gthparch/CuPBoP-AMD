@@ -60,10 +60,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /nethome/jchen706/coding/amdcuda
+CMAKE_SOURCE_DIR = /nethome/jlu393/amdcuda
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /nethome/jchen706/coding/amdcuda/build
+CMAKE_BINARY_DIR = /nethome/jlu393/amdcuda/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -90,14 +90,14 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	cd /nethome/jchen706/coding/amdcuda/build && $(CMAKE_COMMAND) -E cmake_progress_start /nethome/jchen706/coding/amdcuda/build/CMakeFiles /nethome/jchen706/coding/amdcuda/build/compilation//CMakeFiles/progress.marks
-	cd /nethome/jchen706/coding/amdcuda/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 compilation/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /nethome/jchen706/coding/amdcuda/build/CMakeFiles 0
+	cd /nethome/jlu393/amdcuda/build && $(CMAKE_COMMAND) -E cmake_progress_start /nethome/jlu393/amdcuda/build/CMakeFiles /nethome/jlu393/amdcuda/build/compilation//CMakeFiles/progress.marks
+	cd /nethome/jlu393/amdcuda/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 compilation/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /nethome/jlu393/amdcuda/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /nethome/jchen706/coding/amdcuda/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 compilation/clean
+	cd /nethome/jlu393/amdcuda/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 compilation/clean
 .PHONY : clean
 
 # The main clean target
@@ -106,22 +106,22 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /nethome/jchen706/coding/amdcuda/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 compilation/preinstall
+	cd /nethome/jlu393/amdcuda/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 compilation/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /nethome/jchen706/coding/amdcuda/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 compilation/preinstall
+	cd /nethome/jlu393/amdcuda/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 compilation/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /nethome/jchen706/coding/amdcuda/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /nethome/jlu393/amdcuda/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
 compilation/CMakeFiles/kernelTranslator.dir/rule:
-	cd /nethome/jchen706/coding/amdcuda/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 compilation/CMakeFiles/kernelTranslator.dir/rule
+	cd /nethome/jlu393/amdcuda/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 compilation/CMakeFiles/kernelTranslator.dir/rule
 .PHONY : compilation/CMakeFiles/kernelTranslator.dir/rule
 
 # Convenience name for target.
@@ -130,7 +130,7 @@ kernelTranslator: compilation/CMakeFiles/kernelTranslator.dir/rule
 
 # fast build rule for target.
 kernelTranslator/fast:
-	cd /nethome/jchen706/coding/amdcuda/build && $(MAKE) $(MAKESILENT) -f compilation/CMakeFiles/kernelTranslator.dir/build.make compilation/CMakeFiles/kernelTranslator.dir/build
+	cd /nethome/jlu393/amdcuda/build && $(MAKE) $(MAKESILENT) -f compilation/CMakeFiles/kernelTranslator.dir/build.make compilation/CMakeFiles/kernelTranslator.dir/build
 .PHONY : kernelTranslator/fast
 
 KernelTranslation.o: KernelTranslation.cpp.o
@@ -138,7 +138,7 @@ KernelTranslation.o: KernelTranslation.cpp.o
 
 # target to build an object file
 KernelTranslation.cpp.o:
-	cd /nethome/jchen706/coding/amdcuda/build && $(MAKE) $(MAKESILENT) -f compilation/CMakeFiles/kernelTranslator.dir/build.make compilation/CMakeFiles/kernelTranslator.dir/KernelTranslation.cpp.o
+	cd /nethome/jlu393/amdcuda/build && $(MAKE) $(MAKESILENT) -f compilation/CMakeFiles/kernelTranslator.dir/build.make compilation/CMakeFiles/kernelTranslator.dir/KernelTranslation.cpp.o
 .PHONY : KernelTranslation.cpp.o
 
 KernelTranslation.i: KernelTranslation.cpp.i
@@ -146,7 +146,7 @@ KernelTranslation.i: KernelTranslation.cpp.i
 
 # target to preprocess a source file
 KernelTranslation.cpp.i:
-	cd /nethome/jchen706/coding/amdcuda/build && $(MAKE) $(MAKESILENT) -f compilation/CMakeFiles/kernelTranslator.dir/build.make compilation/CMakeFiles/kernelTranslator.dir/KernelTranslation.cpp.i
+	cd /nethome/jlu393/amdcuda/build && $(MAKE) $(MAKESILENT) -f compilation/CMakeFiles/kernelTranslator.dir/build.make compilation/CMakeFiles/kernelTranslator.dir/KernelTranslation.cpp.i
 .PHONY : KernelTranslation.cpp.i
 
 KernelTranslation.s: KernelTranslation.cpp.s
@@ -154,7 +154,7 @@ KernelTranslation.s: KernelTranslation.cpp.s
 
 # target to generate assembly for a file
 KernelTranslation.cpp.s:
-	cd /nethome/jchen706/coding/amdcuda/build && $(MAKE) $(MAKESILENT) -f compilation/CMakeFiles/kernelTranslator.dir/build.make compilation/CMakeFiles/kernelTranslator.dir/KernelTranslation.cpp.s
+	cd /nethome/jlu393/amdcuda/build && $(MAKE) $(MAKESILENT) -f compilation/CMakeFiles/kernelTranslator.dir/build.make compilation/CMakeFiles/kernelTranslator.dir/KernelTranslation.cpp.s
 .PHONY : KernelTranslation.cpp.s
 
 # Help Target
@@ -180,6 +180,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /nethome/jchen706/coding/amdcuda/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /nethome/jlu393/amdcuda/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

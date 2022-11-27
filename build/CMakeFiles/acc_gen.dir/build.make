@@ -56,10 +56,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /nethome/jchen706/coding/amdcuda
+CMAKE_SOURCE_DIR = /nethome/jlu393/amdcuda
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /nethome/jchen706/coding/amdcuda/build
+CMAKE_BINARY_DIR = /nethome/jlu393/amdcuda/build
 
 # Utility rule file for acc_gen.
 
@@ -81,6 +81,6 @@ CMakeFiles/acc_gen.dir/clean:
 .PHONY : CMakeFiles/acc_gen.dir/clean
 
 CMakeFiles/acc_gen.dir/depend:
-	cd /nethome/jchen706/coding/amdcuda/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /nethome/jchen706/coding/amdcuda /nethome/jchen706/coding/amdcuda /nethome/jchen706/coding/amdcuda/build /nethome/jchen706/coding/amdcuda/build /nethome/jchen706/coding/amdcuda/build/CMakeFiles/acc_gen.dir/DependInfo.cmake --color=$(COLOR)
+	cd /nethome/jlu393/amdcuda/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /nethome/jlu393/amdcuda /nethome/jlu393/amdcuda /nethome/jlu393/amdcuda/build /nethome/jlu393/amdcuda/build /nethome/jlu393/amdcuda/build/CMakeFiles/acc_gen.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/acc_gen.dir/depend
 

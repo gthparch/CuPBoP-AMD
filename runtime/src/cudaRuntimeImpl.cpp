@@ -10,7 +10,7 @@
     }
 
 // https://docs.nvidia.com/cuda/cuda-runtime-api/structcudaDeviceProp.html
-
+/*
 cudaError_t cudaDeviceReset() {
   printf("insideDeviceReset\n")
   HIP_CHECK(hipDeviceReset());
@@ -30,7 +30,7 @@ cudaError_t cudaGetDevice(int *devPtr) {
   printf("insideGetDevice\n");
   HIP_CHECK(hipGetDevice(devPtr));
 }
-
+*/
 cudaError_t cudaGetDeviceProperties (cudaDeviceProp* prop, int  device)
 {
   printf("Get Device Properties\n");
@@ -42,7 +42,7 @@ cudaError_t cudaGetDeviceProperties (cudaDeviceProp* prop, int  device)
   printf("Device WarpSize: %d \n", prop->warpSize);
   printf("Device clockRate: %d \n", prop->clockRate);
 }
-
+/*
 cudaError_t cudaMalloc (void ** devPtr, size_t size) {
   printf("insideCudaMalloc\n");
   HIP_CHECK(hipMalloc(ptr, size));
@@ -67,3 +67,4 @@ cudaError_t cudaLaunchKernel (const void* func, dim3 gridDim, dim3 blockDim, voi
   printf("insideCudaLaunchKernel\n");
   HIP_CHECK(hipLaunchKernel(func, gridDim, blockDim, args, sharedMem, (hipStream_t) stream));
 }
+*/

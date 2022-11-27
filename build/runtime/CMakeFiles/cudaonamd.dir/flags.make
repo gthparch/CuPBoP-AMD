@@ -4,7 +4,7 @@
 # compile CXX with /usr/bin/c++
 CXX_DEFINES = -Dcudaonamd_EXPORTS
 
-CXX_INCLUDES = -I/nethome/jchen706/opt/llvm/include -I/nethome/jchen706/coding/amdcuda/include -I/nethome/jchen706/coding/amdcuda/runtime/./include -I/nethome/jchen706/opt/hip/include
+CXX_INCLUDES = -I/nethome/jlu393/opt/llvm/include -I/nethome/jlu393/amdcuda/include -I/nethome/jlu393/amdcuda/runtime/./include -I/nethome/jlu393/opt/hip/include
 
-CXX_FLAGS = -I/nethome/jchen706/opt/llvm/include -std=c++17   -fno-exceptions -fno-rtti -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS  -D__HIP_PLATFORM_AMD__ -L/nethome/jchen706/opt/hip/lib -lamdhip64 -L/nethome/jchen706/opt/lib -lhsa-runtime64 -ldl -lnuma -g -fPIC   -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -std=gnu++17
+CXX_FLAGS =   -D__HIP_PLATFORM_AMD__ -L/nethome/jlu393/opt/hip/lib -lamdhip64 -L/nethome/jlu393/opt/lib -lhsa-runtime64 -ldl -lnuma -g -fPIC   -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -std=gnu++17
 

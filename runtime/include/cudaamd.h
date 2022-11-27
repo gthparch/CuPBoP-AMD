@@ -1,4 +1,5 @@
 #include <stddef.h>
+#include <stdint.h>
 extern "C" {
 enum cudaError_t {
   cudaSuccess,
