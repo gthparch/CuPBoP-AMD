@@ -11,7 +11,7 @@ set(CMAKE_VERBOSE_MAKEFILE on)
 # find_package(LLVM REQUIRED CONFIG)
 # add_definitions(${LLVM_DEFINITIONS})
 # include_directories(${LLVM_INCLUDE_DIRS})
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_BUILD_TYPE Debug)
 set(LIB_NAME cudaonamd)
 

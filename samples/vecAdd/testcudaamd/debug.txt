@@ -1,0 +1,996 @@
+Script started on 2022-11-07 06:24:39-05:00
+]0;jchen706@instinct: ~/coding/amdcuda/samples/vecAdd/testcudaamd[01;32mjchen706@instinct[00m:[01;34m~/coding/amdcuda/samples/vecAdd/testcudaamd[00m$ hipcc vecAdd.cpp -c --save-tempsls[Khipcc vecAdd.cpp -c --save-temps
+here in hipcc
+here invoking hipcc.pl here
+syntax error at /nethome/jchen706/opt/bin//hipcc.pl line 777, near "system"
+Execution of /nethome/jchen706/opt/bin//hipcc.pl aborted due to compilation errors.
+]0;jchen706@instinct: ~/coding/amdcuda/samples/vecAdd/testcudaamd[01;32mjchen706@instinct[00m:[01;34m~/coding/amdcuda/samples/vecAdd/testcudaamd[00m$ hipcc vecAdd.cpp -c --save-temps
+here in hipcc
+here invoking hipcc.pl here
+/nethome/jchen706/opt/llvm/bin/clang++  -isystem /nethome/jchen706/opt/hsa/include -isystem "/nethome/jchen706/opt/include" --offload-arch=gfx90a --offload-arch=gfx90a -O3 -mllvm -amdgpu-early-inline-all=true -mllvm -amdgpu-function-calls=false --hip-device-lib-path="/nethome/jchen706/ROCm-Device-Libs/install/amdgcn/bitcode/"  -x hip vecAdd.cpp -c --save-tempsIn file included from vecAdd.cpp:1:
+[1m/nethome/jchen706/opt/hip/include/hip/hip_runtime.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:58:
+[1m/nethome/jchen706/opt/hip/include/hip/hip_version.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:59:
+[1m/nethome/jchen706/opt/hip/include/hip/hip_common.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+[1m/nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h:32:
+[1m/nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_common.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h:105:
+[1m/nethome/jchen706/opt/hip/include/hip/hip_runtime_api.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h:105:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime_api.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h:503:
+[1m/nethome/jchen706/opt/hip/include/hip/amd_detail/host_defines.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h:105:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime_api.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h:504:
+[1m/nethome/jchen706/opt/hip/include/hip/driver_types.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h:105:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime_api.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h:505:
+[1m/nethome/jchen706/opt/hip/include/hip/texture_types.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h:105:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime_api.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h:505:
+In file included from /nethome/jchen706/opt/hip/include/hip/texture_types.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/texture_types.h:38:
+[1m/nethome/jchen706/opt/hip/include/hip/channel_descriptor.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h:105:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime_api.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h:505:
+In file included from /nethome/jchen706/opt/hip/include/hip/texture_types.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/texture_types.h:38:
+In file included from /nethome/jchen706/opt/hip/include/hip/channel_descriptor.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/channel_descriptor.h:32:
+[1m/nethome/jchen706/opt/hip/include/hip/amd_detail/amd_channel_descriptor.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h:105:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime_api.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h:505:
+In file included from /nethome/jchen706/opt/hip/include/hip/texture_types.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/texture_types.h:38:
+In file included from /nethome/jchen706/opt/hip/include/hip/channel_descriptor.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/channel_descriptor.h:32:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_channel_descriptor.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_channel_descriptor.h:28:
+[1m/nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_vector_types.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h:105:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime_api.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h:506:
+[1m/nethome/jchen706/opt/hip/include/hip/surface_types.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h:105:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime_api.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h:1184:
+[1m/nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime_pt_api.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h:110:
+[1m/nethome/jchen706/opt/hip/include/hip/amd_detail/hip_ldg.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h:112:
+[1m/nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_atomic.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h:112:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_atomic.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_atomic.h:25:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_device_functions.h:34:
+[1m/nethome/jchen706/opt/hip/include/hip/hip_vector_types.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h:112:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_atomic.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_atomic.h:25:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_device_functions.h:35:
+[1m/nethome/jchen706/opt/hip/include/hip/amd_detail/device_library_decls.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h:112:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_atomic.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_atomic.h:25:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_device_functions.h:36:
+[1m/nethome/jchen706/opt/hip/include/hip/amd_detail/llvm_intrinsics.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h:114:
+[1m/nethome/jchen706/opt/hip/include/hip/amd_detail/amd_device_functions.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h:115:
+[1m/nethome/jchen706/opt/hip/include/hip/amd_detail/amd_surface_functions.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h:115:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_surface_functions.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_surface_functions.h:30:
+[1m/nethome/jchen706/opt/hip/include/hip/amd_detail/ockl_image.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h:116:
+[1m/nethome/jchen706/opt/hip/include/hip/amd_detail/texture_fetch_functions.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h:116:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/texture_fetch_functions.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/texture_fetch_functions.h:28:
+[1m/nethome/jchen706/opt/hip/include/hip/hip_texture_types.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h:117:
+[1m/nethome/jchen706/opt/hip/include/hip/amd_detail/texture_indirect_functions.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h:390:
+[1m/nethome/jchen706/opt/hip/include/hip/amd_detail/amd_math_functions.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:114:
+[1m/nethome/jchen706/opt/hip/include/hip/library_types.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0m27 warnings generated when compiling for gfx90a.
+In file included from vecAdd.cpp:1:
+[1m/nethome/jchen706/opt/hip/include/hip/hip_runtime.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:58:
+[1m/nethome/jchen706/opt/hip/include/hip/hip_version.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:59:
+[1m/nethome/jchen706/opt/hip/include/hip/hip_common.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+[1m/nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h:32:
+[1m/nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_common.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h:105:
+[1m/nethome/jchen706/opt/hip/include/hip/hip_runtime_api.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h:105:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime_api.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h:503:
+[1m/nethome/jchen706/opt/hip/include/hip/amd_detail/host_defines.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h:105:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime_api.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h:504:
+[1m/nethome/jchen706/opt/hip/include/hip/driver_types.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h:105:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime_api.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h:505:
+[1m/nethome/jchen706/opt/hip/include/hip/texture_types.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h:105:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime_api.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h:505:
+In file included from /nethome/jchen706/opt/hip/include/hip/texture_types.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/texture_types.h:38:
+[1m/nethome/jchen706/opt/hip/include/hip/channel_descriptor.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h:105:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime_api.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h:505:
+In file included from /nethome/jchen706/opt/hip/include/hip/texture_types.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/texture_types.h:38:
+In file included from /nethome/jchen706/opt/hip/include/hip/channel_descriptor.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/channel_descriptor.h:32:
+[1m/nethome/jchen706/opt/hip/include/hip/amd_detail/amd_channel_descriptor.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h:105:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime_api.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h:505:
+In file included from /nethome/jchen706/opt/hip/include/hip/texture_types.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/texture_types.h:38:
+In file included from /nethome/jchen706/opt/hip/include/hip/channel_descriptor.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/channel_descriptor.h:32:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_channel_descriptor.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_channel_descriptor.h:28:
+[1m/nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_vector_types.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h:105:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime_api.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h:506:
+[1m/nethome/jchen706/opt/hip/include/hip/surface_types.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h:105:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime_api.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h:1184:
+[1m/nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime_pt_api.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h:110:
+[1m/nethome/jchen706/opt/hip/include/hip/amd_detail/hip_ldg.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h:112:
+[1m/nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_atomic.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h:112:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_atomic.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_atomic.h:25:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_device_functions.h:34:
+[1m/nethome/jchen706/opt/hip/include/hip/hip_vector_types.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h:112:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_atomic.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_atomic.h:25:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_device_functions.h:35:
+[1m/nethome/jchen706/opt/hip/include/hip/amd_detail/device_library_decls.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h:112:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_atomic.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_atomic.h:25:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_device_functions.h:36:
+[1m/nethome/jchen706/opt/hip/include/hip/amd_detail/llvm_intrinsics.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h:114:
+[1m/nethome/jchen706/opt/hip/include/hip/amd_detail/amd_device_functions.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h:115:
+[1m/nethome/jchen706/opt/hip/include/hip/amd_detail/amd_surface_functions.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h:115:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_surface_functions.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_surface_functions.h:30:
+[1m/nethome/jchen706/opt/hip/include/hip/amd_detail/ockl_image.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h:116:
+[1m/nethome/jchen706/opt/hip/include/hip/amd_detail/texture_fetch_functions.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h:116:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/texture_fetch_functions.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/texture_fetch_functions.h:28:
+[1m/nethome/jchen706/opt/hip/include/hip/hip_texture_types.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h:117:
+[1m/nethome/jchen706/opt/hip/include/hip/amd_detail/texture_indirect_functions.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h:390:
+[1m/nethome/jchen706/opt/hip/include/hip/amd_detail/amd_math_functions.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:114:
+[1m/nethome/jchen706/opt/hip/include/hip/library_types.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0m27 warnings generated when compiling for gfx90a.
+In file included from vecAdd.cpp:1:
+[1m/nethome/jchen706/opt/hip/include/hip/hip_runtime.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:58:
+[1m/nethome/jchen706/opt/hip/include/hip/hip_version.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:59:
+[1m/nethome/jchen706/opt/hip/include/hip/hip_common.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+[1m/nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h:32:
+[1m/nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_common.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h:105:
+[1m/nethome/jchen706/opt/hip/include/hip/hip_runtime_api.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h:105:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime_api.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h:503:
+[1m/nethome/jchen706/opt/hip/include/hip/amd_detail/host_defines.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h:105:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime_api.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h:504:
+[1m/nethome/jchen706/opt/hip/include/hip/driver_types.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h:105:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime_api.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h:505:
+[1m/nethome/jchen706/opt/hip/include/hip/texture_types.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h:105:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime_api.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h:505:
+In file included from /nethome/jchen706/opt/hip/include/hip/texture_types.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/texture_types.h:38:
+[1m/nethome/jchen706/opt/hip/include/hip/channel_descriptor.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h:105:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime_api.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h:505:
+In file included from /nethome/jchen706/opt/hip/include/hip/texture_types.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/texture_types.h:38:
+In file included from /nethome/jchen706/opt/hip/include/hip/channel_descriptor.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/channel_descriptor.h:32:
+[1m/nethome/jchen706/opt/hip/include/hip/amd_detail/amd_channel_descriptor.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h:105:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime_api.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h:505:
+In file included from /nethome/jchen706/opt/hip/include/hip/texture_types.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/texture_types.h:38:
+In file included from /nethome/jchen706/opt/hip/include/hip/channel_descriptor.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/channel_descriptor.h:32:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_channel_descriptor.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_channel_descriptor.h:28:
+[1m/nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_vector_types.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h:105:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime_api.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h:506:
+[1m/nethome/jchen706/opt/hip/include/hip/surface_types.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h:105:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime_api.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h:1184:
+[1m/nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime_pt_api.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h:110:
+[1m/nethome/jchen706/opt/hip/include/hip/amd_detail/hip_ldg.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h:112:
+[1m/nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_atomic.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h:112:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_atomic.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_atomic.h:25:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_device_functions.h:34:
+[1m/nethome/jchen706/opt/hip/include/hip/hip_vector_types.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h:112:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_atomic.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_atomic.h:25:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_device_functions.h:35:
+[1m/nethome/jchen706/opt/hip/include/hip/amd_detail/device_library_decls.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h:112:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_atomic.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_atomic.h:25:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_device_functions.h:36:
+[1m/nethome/jchen706/opt/hip/include/hip/amd_detail/llvm_intrinsics.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h:114:
+[1m/nethome/jchen706/opt/hip/include/hip/amd_detail/amd_device_functions.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h:115:
+[1m/nethome/jchen706/opt/hip/include/hip/amd_detail/amd_surface_functions.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h:115:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_surface_functions.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_surface_functions.h:30:
+[1m/nethome/jchen706/opt/hip/include/hip/amd_detail/ockl_image.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h:116:
+[1m/nethome/jchen706/opt/hip/include/hip/amd_detail/texture_fetch_functions.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h:116:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/texture_fetch_functions.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/texture_fetch_functions.h:28:
+[1m/nethome/jchen706/opt/hip/include/hip/hip_texture_types.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h:117:
+[1m/nethome/jchen706/opt/hip/include/hip/amd_detail/texture_indirect_functions.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h:390:
+[1m/nethome/jchen706/opt/hip/include/hip/amd_detail/amd_math_functions.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:114:
+[1m/nethome/jchen706/opt/hip/include/hip/library_types.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0m27 warnings generated when compiling for host.
+In file included from vecAdd.cpp:1:
+[1m/nethome/jchen706/opt/hip/include/hip/hip_runtime.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:58:
+[1m/nethome/jchen706/opt/hip/include/hip/hip_version.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:59:
+[1m/nethome/jchen706/opt/hip/include/hip/hip_common.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+[1m/nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h:32:
+[1m/nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_common.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h:105:
+[1m/nethome/jchen706/opt/hip/include/hip/hip_runtime_api.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h:105:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime_api.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h:503:
+[1m/nethome/jchen706/opt/hip/include/hip/amd_detail/host_defines.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h:105:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime_api.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h:504:
+[1m/nethome/jchen706/opt/hip/include/hip/driver_types.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h:105:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime_api.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h:505:
+[1m/nethome/jchen706/opt/hip/include/hip/texture_types.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h:105:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime_api.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h:505:
+In file included from /nethome/jchen706/opt/hip/include/hip/texture_types.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/texture_types.h:38:
+[1m/nethome/jchen706/opt/hip/include/hip/channel_descriptor.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h:105:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime_api.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h:505:
+In file included from /nethome/jchen706/opt/hip/include/hip/texture_types.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/texture_types.h:38:
+In file included from /nethome/jchen706/opt/hip/include/hip/channel_descriptor.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/channel_descriptor.h:32:
+[1m/nethome/jchen706/opt/hip/include/hip/amd_detail/amd_channel_descriptor.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h:105:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime_api.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h:505:
+In file included from /nethome/jchen706/opt/hip/include/hip/texture_types.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/texture_types.h:38:
+In file included from /nethome/jchen706/opt/hip/include/hip/channel_descriptor.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/channel_descriptor.h:32:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_channel_descriptor.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_channel_descriptor.h:28:
+[1m/nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_vector_types.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h:105:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime_api.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h:506:
+[1m/nethome/jchen706/opt/hip/include/hip/surface_types.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h:105:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime_api.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h:1184:
+[1m/nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime_pt_api.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h:110:
+[1m/nethome/jchen706/opt/hip/include/hip/amd_detail/hip_ldg.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h:112:
+[1m/nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_atomic.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h:112:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_atomic.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_atomic.h:25:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_device_functions.h:34:
+[1m/nethome/jchen706/opt/hip/include/hip/hip_vector_types.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h:112:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_atomic.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_atomic.h:25:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_device_functions.h:35:
+[1m/nethome/jchen706/opt/hip/include/hip/amd_detail/device_library_decls.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h:112:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_atomic.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_atomic.h:25:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_device_functions.h:36:
+[1m/nethome/jchen706/opt/hip/include/hip/amd_detail/llvm_intrinsics.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h:114:
+[1m/nethome/jchen706/opt/hip/include/hip/amd_detail/amd_device_functions.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h:115:
+[1m/nethome/jchen706/opt/hip/include/hip/amd_detail/amd_surface_functions.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h:115:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_surface_functions.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_surface_functions.h:30:
+[1m/nethome/jchen706/opt/hip/include/hip/amd_detail/ockl_image.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h:116:
+[1m/nethome/jchen706/opt/hip/include/hip/amd_detail/texture_fetch_functions.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h:116:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/texture_fetch_functions.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/texture_fetch_functions.h:28:
+[1m/nethome/jchen706/opt/hip/include/hip/hip_texture_types.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h:117:
+[1m/nethome/jchen706/opt/hip/include/hip/amd_detail/texture_indirect_functions.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:62:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h:390:
+[1m/nethome/jchen706/opt/hip/include/hip/amd_detail/amd_math_functions.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0mIn file included from vecAdd.cpp:1:
+In file included from /nethome/jchen706/opt/hip/include/hip/hip_runtime.h:26:
+In file included from /nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h:114:
+[1m/nethome/jchen706/opt/hip/include/hip/library_types.h:25:9: [0m[0;1;35mwarning: [0m[1mThis file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip [-W#pragma-messages][0m
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+[0;1;32m        ^
+[0m27 warnings generated when compiling for host.
+]0;jchen706@instinct: ~/coding/amdcuda/samples/vecAdd/testcudaamd[01;32mjchen706@instinct[00m:[01;34m~/coding/amdcuda/samples/vecAdd/testcudaamd[00m$ exit
+
+Script done on 2022-11-07 06:25:02-05:00
