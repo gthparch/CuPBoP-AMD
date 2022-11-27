@@ -28,3 +28,24 @@ cudaError_t cudaGetDeviceProperties (cudaDeviceProp* prop, int  device)
   printf("Device clockRate: %d \n", prop->clockRate);
 }
 
+cudaError_t cudaMalloc (void ** devPtr, size_t size) {
+  printf("insideCudaMalloc\n");
+  HIP_CHECK(hipMalloc(devPtr, size));
+}
+cudaError_t cudaFree (void* ptr) {
+  printf("inside cudaFree\n");
+  HIP_CHECK(hipFree(ptr));
+}
+cudaError_t cudaHostAlloc (void** ptr, size_t size, unsigned int flag) {
+  printf("inside HostAlloc\n");
+  HIP_CHECK(hipHostMalloc(ptr, size, flag));
+}
+cudaError_t cudaMemcpy (void* dst, const void* src, size_t count, cudaMemcpyKind kind) {
+  printf("insideCudaMemcpy\n");
+  HIP_CHECK(hipMemcpy(dst, src, count, (hipMemcpyKind)kind))
+}
+cudaError_t cudaLaunchKernel (const void* func, dim3 gridDim, dim3 blockDim, void** args, size_t sharedMem, cudaStream_t stream) {
+  printf("insideCudaLaunchKernel\n");
+  HIP_CHECK(hipLaunchKernel(func, gridDim, blockDim, args, sharedMem, (hipStream_t) stream));
+}
+
