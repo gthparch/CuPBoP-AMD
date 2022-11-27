@@ -1,0 +1,1 @@
+/usr/bin/c++ -fPIC -g -shared -Wl,-soname,libcupbop-amd-kernel.so -o libcupbop-amd-kernel.so CMakeFiles/cupbop-amd-kernel.dir/kernel_translator.cpp.o CMakeFiles/cupbop-amd-kernel.dir/utils.cpp.o   -L/nethome/jchen706/opt/llvm/lib 

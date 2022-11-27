@@ -33,13 +33,18 @@ else()
 endif()
 
 find_package(LLVM REQUIRED CONFIG)
-add_definitions(${LLVM_DEFINITIONS})
 include_directories(${LLVM_INCLUDE_DIRS})
+add_definitions(${LLVM_DEFINITIONS})
+link_directories(${LLVM_LIBRARY_DIRS})
+include_directories(${LLVM_INCLUDE_DIRS})
+separate_arguments(LLVM_DEFINITIONS_LIST NATIVE_COMMAND ${LLVM_DEFINITIONS})
+add_definitions(${LLVM_DEFINITIONS_LIST})
+
 set(CMAKE_CXX_FLAGS "${LLVM_CXX_FLAG} ${CMAKE_CXX_FLAGS}")
 
 # using-ltinfo Errors
 set(GCC_COVERAGE_LINK_FLAGS
-    "-L${LLVM_LIB_PATH} ${LLVM_LINK_FLAG} -lz -lrt -ldl -lpthread -lm -lzstd")
+    "-L${LLVM_LIB_PATH} ${LLVM_LINK_FLAG} -lz -lrt -ldl -lpthread -lm")
 
 include_directories(include)
 add_subdirectory(compilation)

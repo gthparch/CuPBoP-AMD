@@ -1,5 +1,12 @@
 #include <stddef.h>
-extern "C" {
+#include <string.h> 
+#include <stdint.h>
+#include "hip/hip_runtime_api.h"
+
+// extern "C" {
+// typedef __int32 int32_t;
+// typedef unsigned __int32 uint32_t;
+
 enum cudaError_t {
   cudaSuccess,
   cudaErrorInvalidValue 
@@ -10,6 +17,17 @@ typedef struct CUuuid_st {                                /**< CUDA definition o
 } CUuuid;
 
 typedef  struct CUuuid_st cudaUUID_t;
+
+// typedef uint8_t CUstream_st*;
+typedef struct ihipStream_t* cudaStream_t;
+
+enum cudaMemcpyKind {
+  cudaMemcpyHostToHost,
+  cudaMemcpyHostToDevice,
+  cudaMemcpyDeviceToHost,
+  cudaMemcpyDeviceToDevice,
+  cudaMemcpyDefault,
+};
 
 struct cudaDeviceProp {
       char name[256];
@@ -91,4 +109,25 @@ struct cudaDeviceProp {
 cudaError_t cudaGetDevice(int *devPtr);
 
 cudaError_t cudaGetDeviceProperties (cudaDeviceProp* prop, int  device);
-}
+
+cudaError_t cudaDeviceReset ();
+
+cudaError_t cudaGetLastError ();
+
+cudaError_t cudaPeekAtLastError ();
+
+cudaError_t cudaGetDevice (int *devPtr);
+
+cudaError_t cudaGetDeviceProperties (cudaDeviceProp* prop, int  device );
+
+cudaError_t cudaMalloc (void ** devPtr, size_t size);
+
+cudaError_t cudaFree (void * ptr);
+
+cudaError_t cudaHostAlloc (void** ptr, size_t size, unsigned int flag);
+
+cudaError_t cudaMemcpy (void* dst, const void* src, size_t count, cudaMemcpyKind kind);
+
+cudaError_t cudaLaunchKernel (const void* func, dim3 gridDim, dim3 blockDim, void** args, size_t sharedMem, cudaStream_t stream);
+
+// }

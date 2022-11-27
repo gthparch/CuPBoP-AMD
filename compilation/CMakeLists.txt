@@ -9,17 +9,20 @@ set(LIB_NAME AMDCompilation)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_BUILD_TYPE Debug)
-# find_package(LLVM REQUIRED CONFIG)
-# add_definitions(${LLVM_DEFINITIONS})
-# include_directories(${LLVM_INCLUDE_DIRS})
+find_package(LLVM REQUIRED CONFIG)
+add_definitions(${LLVM_DEFINITIONS})
+include_directories(${LLVM_INCLUDE_DIRS})
 
-# set(GCC_COVERAGE_LINK_FLAGS
-#     "-L${LLVM_LIB_PATH} ${LLVM_LINK_FLAG} -lz -lrt -ldl -ltinfo -lpthread -lm")
+llvm_map_components_to_libnames(llvm_libs support core irreader passes analysis)
+
+
+set(GCC_COVERAGE_LINK_FLAGS
+    "-L${LLVM_LIB_PATH} ${LLVM_LINK_FLAG} -lz -lrt -ldl -lpthread -lm")
 include_directories(./include)
 
 add_subdirectory(kernel)
 
 add_executable(kernelTranslator KernelTranslation.cpp)
 
-target_link_libraries(kernelTranslator cupbop-amd-kernel
+target_link_libraries(kernelTranslator cupbop-amd-kernel ${llvm_libs}
                       ${GCC_COVERAGE_LINK_FLAGS})
