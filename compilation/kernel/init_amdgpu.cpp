@@ -11,12 +11,26 @@
 #include "llvm/IR/IntrinsicsNVPTX.h"
 #include "llvm/IR/CallingConv.h"
 
-#include "cupbop_amd.hpp"
-#include "kernel_translator.hpp"
+#include "init_amdgpu.hpp"
+#include "utils.hpp"
+
+
 
 using namespace llvm;
-using namespace cupbop::kernel;
-using namespace cupbop::amd::kernel;
+
+void remove_metadata(Module& M) {
+  SmallVector<std::pair<unsigned, MDNode *>, 4> MDs;
+  for (Module::iterator i = M.begin(), e = M.end(); i != e; ++i) {
+    Function *F = &(*i);
+    F->getAllMetadata(MDs);
+    for (auto &MD : MDs) {
+      
+      F->setMetadata(MD.first, NULL);
+    }
+    F->removeFnAttr("target-features");
+    F->removeFnAttr("target-cpu");
+  }
+}
 
 namespace {
     struct op_context {
@@ -39,17 +53,9 @@ namespace {
     }
 };
 
-void cupbop::amd::kernel::transform_metadata(Module& M) {
-    M.setDataLayout(
-        "e-p:64:64-p1:64:64-p2:32:32-p3:32:32-p4:64:64-p5"
-        ":32:32-p6:32:32-i64:64-v16:16-v24:32-v32:32-v48"
-        ":64-v96:128-v192:256-v256:256-v512:512-v1024"
-        ":1024-v2048:2048-n32:64-S32-A5-G1-ni:7"
-    );
-    M.setTargetTriple("amdgcn-amd-amdhsa");
-}
 
-void cupbop::amd::kernel::replace_intrinsics(Module& M, Function& kernel) {
+
+void replace_intrinsics(Module& M, Function& kernel) {
     std::unordered_map<Intrinsic::ID, ::intrinsic_replacer> knownIntrinsics = {
         { Intrinsic::nvvm_read_ptx_sreg_tid_x, direct_replacement(Intrinsic::amdgcn_workitem_id_x) },
         { Intrinsic::nvvm_read_ptx_sreg_tid_y, direct_replacement(Intrinsic::amdgcn_workitem_id_y) },
@@ -79,8 +85,33 @@ void cupbop::amd::kernel::replace_intrinsics(Module& M, Function& kernel) {
     }
 }
 
-void cupbop::amd::kernel::convert_kernel(Module& M, Function& kernel) {
+void convert_kernel(Module& M, Function& kernel) {
     kernel.setCallingConv(CallingConv::AMDGPU_KERNEL);
     kernel.removeFnAttr("target-cpu");
     kernel.removeFnAttr("target-features");
+}
+
+void insert_amdgpu_kernel(Module& M) {
+  std::vector<llvm::Function*> kernels = discover_cuda_kernels(M);
+
+  //Replace the Kernels 
+  for (auto* kernel : kernels) {
+      convert_kernel(M, *kernel);
+      replace_intrinsics(M, *kernel);
+  }
+
+}
+
+void init_amdgpu(Module& M) {
+
+  // metadata
+  remove_metadata(M);
+
+  // insert amdgpu_kernel to kernel function
+  insert_amdgpu_kernel(M);
+
+  
+
+
+
 }

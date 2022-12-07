@@ -10,12 +10,12 @@
 #include <llvm/Bitcode/BitcodeWriter.h>
 #include <llvm/Support/FileSystem.h>
 
-#include "cupbop_amd.hpp"
-#include "kernel_translator.hpp"
+// #include "cupbop_amd.hpp"
+// #include "kernel_translator.hpp"
+#include "init_amdgpu.hpp"
+#include "generate_amdgpu_format.hpp"
 
 using namespace llvm;
-using namespace cupbop::kernel;
-using namespace cupbop::amd::kernel;
 
 LLVMContext& getCupbopLLVMContext() {
     static LLVMContext context;
@@ -25,6 +25,7 @@ LLVMContext& getCupbopLLVMContext() {
 int main(const int argc, const char* argv[]) {
     assert(argc == 2);
 
+    // Parse File
     SMDiagnostic diagOut;
     auto M = parseIRFile(argv[1], diagOut, getCupbopLLVMContext());
 
@@ -33,17 +34,23 @@ int main(const int argc, const char* argv[]) {
         return 1;
     }
 
-    transform_metadata(*M);
+    // Remove Metadata
+    init_amdgpu(*M);
+   
+    // generate AMD GPU format
+    generate_amdgpu_format(*M);
 
-    std::vector<llvm::Function*> kernels = discover_cuda_kernels(*M);
+    // Optimize Kernel Code 
 
-    for (auto* kernel : kernels) {
-        convert_kernel(*M, *kernel);
-        replace_intrinsics(*M, *kernel);
-    }
 
+
+
+
+
+
+    //Write to Output
     std::error_code writeError;
-    auto outputFilename = std::string(argv[1]) + ".translated.bc";
+    auto outputFilename = std::string(argv[1]) + ".translated_test.bc";
     ToolOutputFile toolOutput (outputFilename.data(), writeError, sys::fs::OF_None);
     WriteBitcodeToFile(*M, toolOutput.os());
     toolOutput.keep();

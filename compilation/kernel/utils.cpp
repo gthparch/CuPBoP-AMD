@@ -1,12 +1,10 @@
 #include "llvm/IR/Module.h"
 
-#include "cupbop_amd.hpp"
-#include "kernel_translator.hpp"
+#include "utils.hpp"
 
-using namespace cupbop::kernel;
 using namespace llvm;
 
-std::vector<Function*> cupbop::kernel::discover_cuda_kernels(Module& M) {
+std::vector<Function*> discover_cuda_kernels(Module& M) {
     std::vector<Function*> kernels;
     auto* nvvmAnnotation = M.getNamedMetadata("nvvm.annotations");
     auto numKernels = nvvmAnnotation->getNumOperands();
