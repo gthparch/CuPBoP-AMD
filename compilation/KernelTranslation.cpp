@@ -10,10 +10,10 @@
 #include <llvm/Bitcode/BitcodeWriter.h>
 #include <llvm/Support/FileSystem.h>
 
-// #include "cupbop_amd.hpp"
-// #include "kernel_translator.hpp"
+#include "cupbop_amd.hpp"
 #include "init_amdgpu.hpp"
 #include "generate_amdgpu_format.hpp"
+#include "utils.hpp"
 
 using namespace llvm;
 
@@ -40,14 +40,12 @@ int main(const int argc, const char* argv[]) {
     // generate AMD GPU format
     generate_amdgpu_format(*M);
 
+    VerifyModule(*M);
+
     // Optimize Kernel Code 
 
 
-
-
-
-
-
+    
     //Write to Output
     std::error_code writeError;
     auto outputFilename = std::string(argv[1]) + ".translated_test.bc";
