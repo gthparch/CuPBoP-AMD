@@ -8,7 +8,11 @@
 #include <llvm/Bitcode/BitcodeWriter.h>
 #include <llvm/Support/FileSystem.h>
 
+#include <fstream>
+
 #include "fatbin_convert.hpp" 
+
+using namespace std;
 
 using namespace llvm;
 
@@ -24,6 +28,13 @@ void fatbin_convert(llvm::StringRef FileName, Module& M) {
   // convert fat binary to string 
   std::unique_ptr< MemoryBuffer > mb = std::move(*GpuBinaryOrErr);
   std::string str (mb->getBufferStart(), mb->getBufferEnd());
+
+
+  std::ofstream myfile;
+  myfile.open ("fatbintest.txt");
+  myfile << str;
+  myfile.close();
+  
 
   // check the string fat binary
 
