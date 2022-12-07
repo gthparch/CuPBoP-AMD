@@ -12,6 +12,14 @@ enum cudaError_t {
   cudaErrorInvalidValue 
 };
 
+enum cudaMemcpyKind {
+  cudaMemcpyHostToHost,
+  cudaMemcpyHostToDevice,
+  cudaMemcpyDeviceToHost,
+  cudaMemcpyDeviceToDevice,
+  cudaMemcpyDefault
+};
+
 typedef struct CUuuid_st {                                /**< CUDA definition of UUID */
     char bytes[16];
 } CUuuid;
@@ -20,14 +28,6 @@ typedef  struct CUuuid_st cudaUUID_t;
 
 // typedef uint8_t CUstream_st*;
 typedef struct ihipStream_t* cudaStream_t;
-
-enum cudaMemcpyKind {
-  cudaMemcpyHostToHost,
-  cudaMemcpyHostToDevice,
-  cudaMemcpyDeviceToHost,
-  cudaMemcpyDeviceToDevice,
-  cudaMemcpyDefault,
-};
 
 struct cudaDeviceProp {
       char name[256];
@@ -106,9 +106,6 @@ struct cudaDeviceProp {
       int accessPolicyMaxWindowSize;
 };
 
-cudaError_t cudaGetDevice(int *devPtr);
-
-cudaError_t cudaGetDeviceProperties (cudaDeviceProp* prop, int  device);
 
 cudaError_t cudaDeviceReset ();
 
@@ -130,4 +127,4 @@ cudaError_t cudaMemcpy (void* dst, const void* src, size_t count, cudaMemcpyKind
 
 cudaError_t cudaLaunchKernel (const void* func, dim3 gridDim, dim3 blockDim, void** args, size_t sharedMem, cudaStream_t stream);
 
-// }
+
