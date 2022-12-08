@@ -38,9 +38,14 @@ int main(const int argc, const char* argv[]) {
   fatbin_convert(argv[2], *M);
 
 
+  //Write to Output
+  std::error_code writeError;
+  auto outputFilename = std::string(argv[1]) + ".translated_test.bc";
+  ToolOutputFile toolOutput (outputFilename.data(), writeError, sys::fs::OF_None);
+  WriteBitcodeToFile(*M, toolOutput.os());
+  toolOutput.keep();
+
+
 
   return 0;
-
-
-
 }
