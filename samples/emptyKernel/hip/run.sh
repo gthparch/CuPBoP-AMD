@@ -17,6 +17,9 @@
 
 # run for hip to generate llvm
 
-hipcc empty.cu -c --save-temps -O3
-llvm-dis empty-hip-amdgcn-amd-amdhsa-gfx90a.bc
-llvm-dis empty-host-x86_64-unknown-linux-gnu.bc 
+hipcc empty.cu -c --save-temps -O3 -v
+# llvm-dis empty-hip-amdgcn-amd-amdhsa-gfx90a.bc
+# llvm-dis empty-host-x86_64-unknown-linux-gnu.bc 
+
+
+# /nethome/jchen706/coding/amdcuda/newbuild/compilation/hostTranslator empty-host-x86_64-unknown-linux-gnu.ll empty.cu-hip-amdgcn-amd-amdhsa.hipfb

@@ -83,7 +83,7 @@ void fatbin_convert(llvm::StringRef FileName, Module& M) {
   llvm::Constant *Zeros[] = {llvm::ConstantInt::get(SizeTy, 0),
                                llvm::ConstantInt::get(SizeTy, 0)};
  
-  std::set<llvm::GlobalVariable *> need_remove;
+  std::set<llvm::GlobalVariable*> need_remove;
 
 
   // assigned the str to global variable in the host llvm
@@ -111,11 +111,13 @@ void fatbin_convert(llvm::StringRef FileName, Module& M) {
           errs() << " No __cuda_fatbin_wrapper or bug. \n";
         }
 
+
+
     } else if (!global.getType()->isVoidTy()) {
        
         // remove cuda fatbinary
-        if(g->getSection() == ".nv_fatbin") {
-          need_remove.insert(g);
+        if(global.getSection() == ".nv_fatbin") {
+          need_remove.insert(&global);
         }
 
       }
@@ -126,4 +128,6 @@ void fatbin_convert(llvm::StringRef FileName, Module& M) {
     f->eraseFromParent();
   }
 
+
+  
 }

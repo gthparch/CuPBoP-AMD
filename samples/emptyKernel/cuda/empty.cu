@@ -1,4 +1,5 @@
 #include "cuda_runtime.h"
+#include "stdio.h"
 
 __global__ void empty(int* N) {
   *N = 10;
@@ -21,5 +22,5 @@ int main(int argc, char **argv) {
   }
 
   cudaFree(device_n);
-  return 0
+  return 0;
 }

@@ -49,3 +49,198 @@ cudaError_t cudaLaunchKernel (const void* func, dim3 gridDim, dim3 blockDim, voi
   HIP_CHECK(hipLaunchKernel(func, gridDim, blockDim, args, sharedMem, (hipStream_t) stream));
 }
 
+
+static callParams callParamTemp;
+/*
+  Internal Cuda Library Functions
+*/
+
+extern "C" {
+extern cudaError_t __cudaPopCallConfiguration(dim3 *gridDim,
+                                                        dim3 *blockDim,
+                                                        size_t *sharedMem,
+                                                        void **stream) {
+   printf("__cudaPopCallConfiguration: Grid: x:%d y:%d z:%d Block: %d, %d, %d ShMem: %lu\n",
+  gridDim->x, gridDim->y, gridDim->z, blockDim->x, blockDim->y, blockDim->z,
+  *sharedMem);
+
+  __hipPopCallConfiguration(gridDim, blockDim, sharedMem, (ihipStream_t**)stream);
+
+  // *gridDim = callParamTemp.gridDim;
+  // *blockDim = callParamTemp.blockDim;
+  // *sharedMem = callParamTemp.shareMem;
+  // *stream = callParamTemp.stream;
+
+  // printf("__cudaPopCallConfiguration After : Grid: x:%d y:%d z:%d Block: %d,
+  // %d, %d ShMem: %lu\n", gridDim->x, gridDim->y, gridDim->z, blockDim->x,
+  // blockDim->y, blockDim->z, *sharedMem);
+
+  // exit(1);
+
+  return cudaSuccess;
+}
+
+
+  
+extern  unsigned __cudaPushCallConfiguration(
+    dim3 gridDim, dim3 blockDim, size_t sharedMem = 0, void *stream = 0) {
+
+  
+
+
+  __hipPushCallConfiguration(gridDim, blockDim, sharedMem, (ihipStream_t*)stream);
+
+  // // memory checks allocations
+  // callParamTemp.gridDim = gridDim;
+
+  // // std::cout << "assign gridDim" << std::endl;
+
+  // callParamTemp.blockDim = blockDim;
+  // //  std::cout << "assign blockDim" << std::endl;
+  // callParamTemp.shareMem = sharedMem;
+  // //  std::cout << "assign shareMem" << std::endl;
+  // (callParamTemp.stream) = stream;
+printf("__cudaPushCallConfiguration Grid: x:%d y:%d z:%d Block: %d, %d, %d ShMem: %lu\n ",
+         gridDim.x, gridDim.y, gridDim.z, blockDim.x, blockDim.y, blockDim.z,
+         sharedMem);
+
+  // // return 0 continues the Pop
+  return cudaSuccess;
+
+}
+
+}
+
+
+// static void **__cudaFatCubinHandle;
+
+extern "C" {
+
+extern void** __cudaRegisterFatBinary(
+  void *fatCubin
+) {
+  return __hipRegisterFatBinary(fatCubin);
+}
+
+// seems to be in cuda 10 
+extern void __cudaRegisterFatBinaryEnd(
+  void **fatCubinHandle
+) {
+ printf("__cudaRegisterFatBinaryEnd Called\n");
+}
+
+extern void __cudaUnregisterFatBinary(
+  void **fatCubinHandle
+) {
+
+  __hipUnregisterFatBinary(fatCubinHandle);
+
+
+}
+
+extern void __cudaRegisterVar(
+        void **fatCubinHandle,
+        char  *hostVar,
+        char  *deviceAddress,
+  const char  *deviceName,
+        int    ext,
+        size_t size,
+        int    constant,
+        int    global
+) {
+
+
+__hipRegisterVar(fatCubinHandle,
+        hostVar,
+        deviceAddress,
+       (char*) deviceName,
+        ext,
+        size,
+        constant,
+        global);
+
+
+}
+
+// extern void __cudaRegisterManagedVar(
+//         void **fatCubinHandle,
+//         void **hostVarPtrAddress,
+//         char  *deviceAddress,
+//   const char  *deviceName,
+//         int    ext,
+//         size_t size,
+//         int    constant,
+//         int    global
+// ) {
+//   __hipRegisterManagedVar(fatCubinHandle,
+//         hostVarPtrAddress,
+//         deviceAddress,
+//         deviceName,
+//         ext,
+//         size);
+// }
+
+extern char __cudaInitModule(
+        void **fatCubinHandle
+
+) {
+  printf("__cudaInitModule Called\n");
+
+}
+
+extern void __cudaRegisterTexture(
+        void                    **fatCubinHandle,
+  const struct textureReference  *hostVar,
+  const void                    **deviceAddress,
+  const char                     *deviceName,
+        int                       dim,       
+        int                       norm,      
+        int                        ext        
+) {
+
+     printf("__cudaRegisterTexture Called\n");
+
+}
+
+extern void __cudaRegisterSurface(
+        void                    **fatCubinHandle,
+  const struct surfaceReference  *hostVar,
+  const void                    **deviceAddress,
+  const char                     *deviceName,
+        int                       dim,       
+        int                       ext        
+) {
+
+   printf("__cudaRegisterSurface Called\n");
+
+}
+
+extern void __cudaRegisterFunction(
+        void   **fatCubinHandle,
+  const char    *hostFun,
+        char    *deviceFun,
+  const char    *deviceName,
+        int      thread_limit,
+        uint3   *tid,
+        uint3   *bid,
+        dim3    *bDim,
+        dim3    *gDim,
+        int     *wSize
+) {
+
+   __hipRegisterFunction(
+     fatCubinHandle,
+     hostFun,
+     deviceFun,
+     deviceName,
+     thread_limit,
+     tid,
+     bid,
+     bDim,
+     gDim,
+     wSize
+   );
+
+}
+
+}
