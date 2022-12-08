@@ -119,7 +119,15 @@ extern "C" {
 extern void** __cudaRegisterFatBinary(
   void *fatCubin
 ) {
-  return __hipRegisterFatBinary(fatCubin);
+
+  printf("__cudaRegisterFatBinary %p \n", fatCubin);
+
+
+  void ** temp = __hipRegisterFatBinary(fatCubin);
+
+  printf("after __cudaRegisterFatBinary %p \n", temp);
+
+
 }
 
 // seems to be in cuda 10 
@@ -227,6 +235,9 @@ extern void __cudaRegisterFunction(
         dim3    *gDim,
         int     *wSize
 ) {
+
+   printf("__cudaRegisterFunction Called , hostFun: %s  deviceFun: %s deviceName: %s\n", hostFun, deviceFun, deviceName);
+
 
    __hipRegisterFunction(
      fatCubinHandle,

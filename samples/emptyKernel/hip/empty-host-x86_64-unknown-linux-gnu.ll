@@ -74,6 +74,7 @@ define internal void @__hip_module_ctor() {
   %2 = icmp eq ptr %1, null
   br i1 %2, label %3, label %5
 
+
 3:                                                ; preds = %0
   %4 = call ptr @__hipRegisterFatBinary(ptr @__hip_fatbin_wrapper)
   store ptr %4, ptr @__hip_gpubin_handle, align 8

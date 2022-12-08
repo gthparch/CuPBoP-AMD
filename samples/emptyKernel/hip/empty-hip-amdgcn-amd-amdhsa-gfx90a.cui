@@ -5,8 +5,11 @@
 # 1 "<command line>" 1
 # 1 "<built-in>" 2
 # 1 "empty.cu" 2
-# 1 "/nethome/jchen706/opt/include/hip/hip_runtime.h" 1 3
-# 48 "/nethome/jchen706/opt/include/hip/hip_runtime.h" 3
+# 1 "/nethome/jchen706/opt/hip/include/hip/hip_runtime.h" 1 3
+# 25 "/nethome/jchen706/opt/hip/include/hip/hip_runtime.h" 3
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+# 1 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h" 1 3
+# 48 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h" 3
 # 1 "/nethome/jchen706/opt/llvm/lib/clang/16.0.0/include/stdint.h" 1 3
 # 52 "/nethome/jchen706/opt/llvm/lib/clang/16.0.0/include/stdint.h" 3
 # 1 "/usr/include/stdint.h" 1 3 4
@@ -222,7 +225,7 @@ typedef unsigned long int uintptr_t;
 typedef __intmax_t intmax_t;
 typedef __uintmax_t uintmax_t;
 # 53 "/nethome/jchen706/opt/llvm/lib/clang/16.0.0/include/stdint.h" 2 3
-# 49 "/nethome/jchen706/opt/include/hip/hip_runtime.h" 2 3
+# 49 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h" 2 3
 # 1 "/usr/include/stdio.h" 1 3 4
 # 27 "/usr/include/stdio.h" 3 4
 # 1 "/usr/include/bits/libc-header-start.h" 1 3 4
@@ -1035,7 +1038,7 @@ extern __inline __attribute__ ((__gnu_inline__)) int
 
 
 }
-# 50 "/nethome/jchen706/opt/include/hip/hip_runtime.h" 2 3
+# 50 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h" 2 3
 # 1 "/usr/lib/gcc/x86_64-redhat-linux/8/../../../../include/c++/8/stdlib.h" 1 3
 # 36 "/usr/lib/gcc/x86_64-redhat-linux/8/../../../../include/c++/8/stdlib.h" 3
 # 1 "/usr/lib/gcc/x86_64-redhat-linux/8/../../../../include/c++/8/cstdlib" 1 3
@@ -2647,7 +2650,7 @@ using std::system;
 
 using std::wcstombs;
 using std::wctomb;
-# 51 "/nethome/jchen706/opt/include/hip/hip_runtime.h" 2 3
+# 51 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h" 2 3
 # 1 "/usr/include/assert.h" 1 3 4
 # 64 "/usr/include/assert.h" 3 4
 extern "C" {
@@ -2670,7 +2673,7 @@ extern void __assert (const char *__assertion, const char *__file, int __line)
 
 
 }
-# 52 "/nethome/jchen706/opt/include/hip/hip_runtime.h" 2 3
+# 52 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h" 2 3
 
 
 # 1 "/usr/lib/gcc/x86_64-redhat-linux/8/../../../../include/c++/8/thread" 1 3
@@ -31397,33 +31400,48 @@ namespace std __attribute__ ((__visibility__ ("default")))
 
 
 }
-# 55 "/nethome/jchen706/opt/include/hip/hip_runtime.h" 2 3
+# 55 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h" 2 3
 
 
 
-# 1 "/nethome/jchen706/opt/include/hip/hip_version.h" 1 3
-# 59 "/nethome/jchen706/opt/include/hip/hip_runtime.h" 2 3
-# 1 "/nethome/jchen706/opt/include/hip/hip_common.h" 1 3
-# 60 "/nethome/jchen706/opt/include/hip/hip_runtime.h" 2 3
+# 1 "/nethome/jchen706/opt/hip/include/hip/hip_version.h" 1 3
+# 25 "/nethome/jchen706/opt/hip/include/hip/hip_version.h" 3
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+# 1 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_version.h" 1 3
+# 27 "/nethome/jchen706/opt/hip/include/hip/hip_version.h" 2 3
+# 59 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h" 2 3
+# 1 "/nethome/jchen706/opt/hip/include/hip/hip_common.h" 1 3
+# 25 "/nethome/jchen706/opt/hip/include/hip/hip_common.h" 3
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+# 1 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_common.h" 1 3
+# 27 "/nethome/jchen706/opt/hip/include/hip/hip_common.h" 2 3
+# 60 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h" 2 3
 
 
-# 1 "/nethome/jchen706/opt/include/hip/amd_detail/amd_hip_runtime.h" 1 3
-# 32 "/nethome/jchen706/opt/include/hip/amd_detail/amd_hip_runtime.h" 3
-# 1 "/nethome/jchen706/opt/include/hip/amd_detail/amd_hip_common.h" 1 3
-# 33 "/nethome/jchen706/opt/include/hip/amd_detail/amd_hip_runtime.h" 2 3
+# 1 "/nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h" 1 3
+# 25 "/nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h" 3
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+# 1 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h" 1 3
+# 32 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h" 3
+# 1 "/nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_common.h" 1 3
+# 25 "/nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_common.h" 3
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+# 1 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_common.h" 1 3
+# 27 "/nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_common.h" 2 3
+# 33 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h" 2 3
 
 
 extern "C" {
-# 46 "/nethome/jchen706/opt/include/hip/amd_detail/amd_hip_runtime.h" 3
+# 46 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h" 3
 const char* amd_dbgapi_get_build_name();
-# 55 "/nethome/jchen706/opt/include/hip/amd_detail/amd_hip_runtime.h" 3
+# 55 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h" 3
 const char* amd_dbgapi_get_git_hash();
-# 64 "/nethome/jchen706/opt/include/hip/amd_detail/amd_hip_runtime.h" 3
+# 64 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h" 3
 size_t amd_dbgapi_get_build_id();
 
 
 }
-# 76 "/nethome/jchen706/opt/include/hip/amd_detail/amd_hip_runtime.h" 3
+# 76 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h" 3
 # 1 "/usr/lib/gcc/x86_64-redhat-linux/8/../../../../include/c++/8/cmath" 1 3
 # 40 "/usr/lib/gcc/x86_64-redhat-linux/8/../../../../include/c++/8/cmath" 3
 
@@ -35456,10 +35474,13 @@ namespace std __attribute__ ((__visibility__ ("default")))
 
 
 }
-# 77 "/nethome/jchen706/opt/include/hip/amd_detail/amd_hip_runtime.h" 2 3
-# 105 "/nethome/jchen706/opt/include/hip/amd_detail/amd_hip_runtime.h" 3
-# 1 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 1 3
-# 34 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 77 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h" 2 3
+# 105 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h" 3
+# 1 "/nethome/jchen706/opt/hip/include/hip/hip_runtime_api.h" 1 3
+# 25 "/nethome/jchen706/opt/hip/include/hip/hip_runtime_api.h" 3
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+# 1 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 1 3
+# 34 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 # 1 "/usr/include/string.h" 1 3 4
 # 26 "/usr/include/string.h" 3 4
 # 1 "/usr/include/bits/libc-header-start.h" 1 3 4
@@ -35901,7 +35922,7 @@ extern "C++" const char *basename (const char *__filename)
      throw () __asm ("basename") __attribute__ ((__nonnull__ (1)));
 # 499 "/usr/include/string.h" 3 4
 }
-# 35 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 2 3
+# 35 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 2 3
 
 
 
@@ -35946,7 +35967,7 @@ typedef struct {
 typedef struct hipUUID_t {
     char bytes[16];
 } hipUUID;
-# 87 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 87 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 typedef struct hipDeviceProp_t {
     char name[256];
     size_t totalGlobalMem;
@@ -36066,7 +36087,7 @@ typedef struct hipPointerAttribute_t {
     unsigned allocationFlags;
 
 } hipPointerAttribute_t;
-# 231 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 231 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 typedef enum hipError_t {
     hipSuccess = 0,
     hipErrorInvalidValue = 1,
@@ -36182,7 +36203,7 @@ typedef enum hipError_t {
 
     hipErrorTbd
 } hipError_t;
-# 354 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 354 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 typedef enum hipDeviceAttribute_t {
     hipDeviceAttributeCudaCompatibleBegin = 0,
 
@@ -36320,16 +36341,23 @@ enum hipComputeMode {
     hipComputeModeProhibited = 2,
     hipComputeModeExclusiveProcess = 3
 };
-# 499 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 499 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 # 1 "/nethome/jchen706/opt/llvm/lib/clang/16.0.0/include/stddef.h" 1 3
-# 500 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 2 3
+# 500 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 2 3
 
 
 
-# 1 "/nethome/jchen706/opt/include/hip/amd_detail/host_defines.h" 1 3
-# 504 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 2 3
-# 1 "/nethome/jchen706/opt/include/hip/driver_types.h" 1 3
-# 40 "/nethome/jchen706/opt/include/hip/driver_types.h" 3
+# 1 "/nethome/jchen706/opt/hip/include/hip/amd_detail/host_defines.h" 1 3
+# 25 "/nethome/jchen706/opt/hip/include/hip/amd_detail/host_defines.h" 3
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+# 1 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/host_defines.h" 1 3
+# 27 "/nethome/jchen706/opt/hip/include/hip/amd_detail/host_defines.h" 2 3
+# 504 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 2 3
+# 1 "/nethome/jchen706/opt/hip/include/hip/driver_types.h" 1 3
+# 25 "/nethome/jchen706/opt/hip/include/hip/driver_types.h" 3
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+# 1 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/driver_types.h" 1 3
+# 40 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/driver_types.h" 3
 typedef void* hipDeviceptr_t;
 typedef enum hipChannelFormatKind {
     hipChannelFormatKindSigned = 0,
@@ -36763,9 +36791,13 @@ typedef enum hipPointer_attribute {
 
 
 } hipPointer_attribute;
-# 505 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 2 3
-# 1 "/nethome/jchen706/opt/include/hip/texture_types.h" 1 3
-# 37 "/nethome/jchen706/opt/include/hip/texture_types.h" 3
+# 27 "/nethome/jchen706/opt/hip/include/hip/driver_types.h" 2 3
+# 505 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 2 3
+# 1 "/nethome/jchen706/opt/hip/include/hip/texture_types.h" 1 3
+# 25 "/nethome/jchen706/opt/hip/include/hip/texture_types.h" 3
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+# 1 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/texture_types.h" 1 3
+# 37 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/texture_types.h" 3
 # 1 "/nethome/jchen706/opt/llvm/lib/clang/16.0.0/include/limits.h" 1 3
 # 21 "/nethome/jchen706/opt/llvm/lib/clang/16.0.0/include/limits.h" 3
 # 1 "/usr/include/limits.h" 1 3 4
@@ -36798,13 +36830,22 @@ typedef enum hipPointer_attribute {
 # 65 "/usr/include/bits/xopen_lim.h" 2 3 4
 # 192 "/usr/include/limits.h" 2 3 4
 # 22 "/nethome/jchen706/opt/llvm/lib/clang/16.0.0/include/limits.h" 2 3
-# 38 "/nethome/jchen706/opt/include/hip/texture_types.h" 2 3
-# 1 "/nethome/jchen706/opt/include/hip/channel_descriptor.h" 1 3
-# 32 "/nethome/jchen706/opt/include/hip/channel_descriptor.h" 3
-# 1 "/nethome/jchen706/opt/include/hip/amd_detail/amd_channel_descriptor.h" 1 3
-# 28 "/nethome/jchen706/opt/include/hip/amd_detail/amd_channel_descriptor.h" 3
-# 1 "/nethome/jchen706/opt/include/hip/amd_detail/amd_hip_vector_types.h" 1 3
-# 135 "/nethome/jchen706/opt/include/hip/amd_detail/amd_hip_vector_types.h" 3
+# 38 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/texture_types.h" 2 3
+# 1 "/nethome/jchen706/opt/hip/include/hip/channel_descriptor.h" 1 3
+# 25 "/nethome/jchen706/opt/hip/include/hip/channel_descriptor.h" 3
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+# 1 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/channel_descriptor.h" 1 3
+# 32 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/channel_descriptor.h" 3
+# 1 "/nethome/jchen706/opt/hip/include/hip/amd_detail/amd_channel_descriptor.h" 1 3
+# 25 "/nethome/jchen706/opt/hip/include/hip/amd_detail/amd_channel_descriptor.h" 3
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+# 1 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_channel_descriptor.h" 1 3
+# 28 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_channel_descriptor.h" 3
+# 1 "/nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_vector_types.h" 1 3
+# 25 "/nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_vector_types.h" 3
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+# 1 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_vector_types.h" 1 3
+# 135 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_vector_types.h" 3
     namespace hip_impl {
         template<typename, typename, unsigned int> struct Scalar_accessor;
     }
@@ -36860,14 +36901,14 @@ typedef enum hipPointer_attribute {
 
                 return is;
             }
-# 209 "/nethome/jchen706/opt/include/hip/amd_detail/amd_hip_vector_types.h" 3
+# 209 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_vector_types.h" 3
             Vector data;
 
             __attribute__((host)) __attribute__((device))
             operator T() const noexcept { return data[idx]; }
             __attribute__((host)) __attribute__((device))
             operator T() const volatile noexcept { return data[idx]; }
-# 239 "/nethome/jchen706/opt/include/hip/amd_detail/amd_hip_vector_types.h" 3
+# 239 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_vector_types.h" 3
             __attribute__((host)) __attribute__((device))
             operator T&() noexcept {
                 return reinterpret_cast<
@@ -37989,7 +38030,7 @@ typedef enum hipPointer_attribute {
     {
         return HIP_vector_type<T, n>{x} <<= y;
     }
-# 1388 "/nethome/jchen706/opt/include/hip/amd_detail/amd_hip_vector_types.h" 3
+# 1388 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_vector_types.h" 3
 using uchar1 = HIP_vector_type<unsigned char, 1>; using uchar2 = HIP_vector_type<unsigned char, 2>; using uchar3 = HIP_vector_type<unsigned char, 3>; using uchar4 = HIP_vector_type<unsigned char, 4>;;
 using char1 = HIP_vector_type<char, 1>; using char2 = HIP_vector_type<char, 2>; using char3 = HIP_vector_type<char, 3>; using char4 = HIP_vector_type<char, 4>;;
 using ushort1 = HIP_vector_type<unsigned short, 1>; using ushort2 = HIP_vector_type<unsigned short, 2>; using ushort3 = HIP_vector_type<unsigned short, 3>; using ushort4 = HIP_vector_type<unsigned short, 4>;;
@@ -38002,7 +38043,7 @@ using ulonglong1 = HIP_vector_type<unsigned long long, 1>; using ulonglong2 = HI
 using longlong1 = HIP_vector_type<long long, 1>; using longlong2 = HIP_vector_type<long long, 2>; using longlong3 = HIP_vector_type<long long, 3>; using longlong4 = HIP_vector_type<long long, 4>;;
 using float1 = HIP_vector_type<float, 1>; using float2 = HIP_vector_type<float, 2>; using float3 = HIP_vector_type<float, 3>; using float4 = HIP_vector_type<float, 4>;;
 using double1 = HIP_vector_type<double, 1>; using double2 = HIP_vector_type<double, 2>; using double3 = HIP_vector_type<double, 3>; using double4 = HIP_vector_type<double, 4>;;
-# 2335 "/nethome/jchen706/opt/include/hip/amd_detail/amd_hip_vector_types.h" 3
+# 2335 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_vector_types.h" 3
 template<typename T, typename U>
 __attribute__((host)) __attribute__((device))
 inline __attribute__((always_inline))
@@ -38113,7 +38154,7 @@ mapFrom(const U &u) {
     return mapElem<T>(d.u4);
   }
 }
-# 2482 "/nethome/jchen706/opt/include/hip/amd_detail/amd_hip_vector_types.h" 3
+# 2482 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_vector_types.h" 3
 static inline __attribute__((host)) __attribute__((device)) uchar1 make_uchar1(unsigned char x) { uchar1 r{x}; return r; };
 static inline __attribute__((host)) __attribute__((device)) uchar2 make_uchar2(unsigned char x, unsigned char y) { uchar2 r{x, y}; return r; };
 static inline __attribute__((host)) __attribute__((device)) uchar3 make_uchar3(unsigned char x, unsigned char y, unsigned char z) { uchar3 r{x, y, z}; return r; };
@@ -38173,7 +38214,8 @@ static inline __attribute__((host)) __attribute__((device)) longlong1 make_longl
 static inline __attribute__((host)) __attribute__((device)) longlong2 make_longlong2(signed long long x, signed long long y) { longlong2 r{x, y}; return r; };
 static inline __attribute__((host)) __attribute__((device)) longlong3 make_longlong3(signed long long x, signed long long y, signed long long z) { longlong3 r{x, y, z}; return r; };
 static inline __attribute__((host)) __attribute__((device)) longlong4 make_longlong4(signed long long x, signed long long y, signed long long z, signed long long w) { longlong4 r{x, y, z, w}; return r; };
-# 29 "/nethome/jchen706/opt/include/hip/amd_detail/amd_channel_descriptor.h" 2 3
+# 27 "/nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_vector_types.h" 2 3
+# 29 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_channel_descriptor.h" 2 3
 
 
 
@@ -38241,7 +38283,7 @@ inline hipChannelFormatDesc hipCreateChannelDesc<char2>() {
     int e = (int)sizeof(signed char) * 8;
     return hipCreateChannelDesc(e, e, 0, 0, hipChannelFormatKindSigned);
 }
-# 111 "/nethome/jchen706/opt/include/hip/amd_detail/amd_channel_descriptor.h" 3
+# 111 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_channel_descriptor.h" 3
 template <>
 inline hipChannelFormatDesc hipCreateChannelDesc<uchar4>() {
     int e = (int)sizeof(unsigned char) * 8;
@@ -38289,7 +38331,7 @@ inline hipChannelFormatDesc hipCreateChannelDesc<short2>() {
     int e = (int)sizeof(signed short) * 8;
     return hipCreateChannelDesc(e, e, 0, 0, hipChannelFormatKindSigned);
 }
-# 173 "/nethome/jchen706/opt/include/hip/amd_detail/amd_channel_descriptor.h" 3
+# 173 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_channel_descriptor.h" 3
 template <>
 inline hipChannelFormatDesc hipCreateChannelDesc<ushort4>() {
     int e = (int)sizeof(unsigned short) * 8;
@@ -38337,7 +38379,7 @@ inline hipChannelFormatDesc hipCreateChannelDesc<int2>() {
     int e = (int)sizeof(signed int) * 8;
     return hipCreateChannelDesc(e, e, 0, 0, hipChannelFormatKindSigned);
 }
-# 235 "/nethome/jchen706/opt/include/hip/amd_detail/amd_channel_descriptor.h" 3
+# 235 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_channel_descriptor.h" 3
 template <>
 inline hipChannelFormatDesc hipCreateChannelDesc<uint4>() {
     int e = (int)sizeof(unsigned int) * 8;
@@ -38367,7 +38409,7 @@ inline hipChannelFormatDesc hipCreateChannelDesc<float2>() {
     int e = (int)sizeof(float) * 8;
     return hipCreateChannelDesc(e, e, 0, 0, hipChannelFormatKindFloat);
 }
-# 273 "/nethome/jchen706/opt/include/hip/amd_detail/amd_channel_descriptor.h" 3
+# 273 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_channel_descriptor.h" 3
 template <>
 inline hipChannelFormatDesc hipCreateChannelDesc<float4>() {
     int e = (int)sizeof(float) * 8;
@@ -38409,7 +38451,7 @@ inline hipChannelFormatDesc hipCreateChannelDesc<long2>() {
     int e = (int)sizeof(signed long) * 8;
     return hipCreateChannelDesc(e, e, 0, 0, hipChannelFormatKindSigned);
 }
-# 329 "/nethome/jchen706/opt/include/hip/amd_detail/amd_channel_descriptor.h" 3
+# 329 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_channel_descriptor.h" 3
 template <>
 inline hipChannelFormatDesc hipCreateChannelDesc<ulong4>() {
     int e = (int)sizeof(unsigned long) * 8;
@@ -38421,9 +38463,11 @@ inline hipChannelFormatDesc hipCreateChannelDesc<long4>() {
     int e = (int)sizeof(signed long) * 8;
     return hipCreateChannelDesc(e, e, e, e, hipChannelFormatKindSigned);
 }
-# 33 "/nethome/jchen706/opt/include/hip/channel_descriptor.h" 2 3
-# 39 "/nethome/jchen706/opt/include/hip/texture_types.h" 2 3
-# 62 "/nethome/jchen706/opt/include/hip/texture_types.h" 3
+# 27 "/nethome/jchen706/opt/hip/include/hip/amd_detail/amd_channel_descriptor.h" 2 3
+# 33 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/channel_descriptor.h" 2 3
+# 27 "/nethome/jchen706/opt/hip/include/hip/channel_descriptor.h" 2 3
+# 39 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/texture_types.h" 2 3
+# 62 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/texture_types.h" 3
 struct __hip_texture;
 typedef struct __hip_texture* hipTextureObject_t;
 
@@ -38484,7 +38528,7 @@ typedef struct hipTextureDesc {
     float minMipmapLevelClamp;
     float maxMipmapLevelClamp;
 }hipTextureDesc;
-# 136 "/nethome/jchen706/opt/include/hip/texture_types.h" 3
+# 136 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/texture_types.h" 3
 typedef textureReference* hipTexRef;
 
 template <class T, int texType = 0x01,
@@ -38524,9 +38568,13 @@ struct __attribute__((device_builtin_texture_type)) texture : public textureRefe
         maxMipmapLevelClamp = 0;
     }
 };
-# 506 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 2 3
-# 1 "/nethome/jchen706/opt/include/hip/surface_types.h" 1 3
-# 33 "/nethome/jchen706/opt/include/hip/surface_types.h" 3
+# 27 "/nethome/jchen706/opt/hip/include/hip/texture_types.h" 2 3
+# 506 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 2 3
+# 1 "/nethome/jchen706/opt/hip/include/hip/surface_types.h" 1 3
+# 25 "/nethome/jchen706/opt/hip/include/hip/surface_types.h" 3
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+# 1 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/surface_types.h" 1 3
+# 33 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/surface_types.h" 3
 struct __hip_surface;
 typedef struct __hip_surface* hipSurfaceObject_t;
 
@@ -38545,8 +38593,9 @@ enum hipSurfaceBoundaryMode {
     hipBoundaryModeTrap = 1,
     hipBoundaryModeClamp = 2
 };
-# 507 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 2 3
-# 523 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 27 "/nethome/jchen706/opt/hip/include/hip/surface_types.h" 2 3
+# 507 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 2 3
+# 523 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 #pragma GCC visibility push (default)
 
 
@@ -38602,7 +38651,7 @@ enum hipLimit_t {
     hipLimitPrintfFifoSize = 0x01,
     hipLimitMallocHeapSize = 0x02,
 };
-# 710 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 710 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 typedef enum hipMemoryAdvise {
     hipMemAdviseSetReadMostly = 1,
 
@@ -38659,7 +38708,7 @@ typedef enum hipMemRangeAttribute {
 
 typedef enum hipMemPoolAttr
 {
-# 774 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 774 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
     hipMemPoolReuseFollowEventDependencies = 0x1,
 
 
@@ -38674,7 +38723,7 @@ typedef enum hipMemPoolAttr
 
 
     hipMemPoolReuseAllowInternalDependencies = 0x3,
-# 796 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 796 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
     hipMemPoolAttrReleaseThreshold = 0x4,
 
 
@@ -39063,8 +39112,11 @@ typedef enum hipGraphInstantiateFlags {
   hipGraphInstantiateFlagAutoFreeOnLaunch =
       1,
 } hipGraphInstantiateFlags;
-# 1 "/nethome/jchen706/opt/include/hip/amd_detail/amd_hip_runtime_pt_api.h" 1 3
-# 65 "/nethome/jchen706/opt/include/hip/amd_detail/amd_hip_runtime_pt_api.h" 3
+# 1 "/nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime_pt_api.h" 1 3
+# 25 "/nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime_pt_api.h" 3
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+# 1 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime_pt_api.h" 1 3
+# 65 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime_pt_api.h" 3
 hipError_t hipMemcpy_spt(void* dst, const void* src, size_t sizeBytes, hipMemcpyKind kind);
 
 hipError_t hipMemcpyToSymbol_spt(const void* symbol, const void* src, size_t sizeBytes,
@@ -39116,12 +39168,13 @@ hipError_t hipLaunchKernel_spt(const void* function_address,
                            size_t sharedMemBytes, hipStream_t stream);
 
 }
-# 1185 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 2 3
-# 1218 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 27 "/nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime_pt_api.h" 2 3
+# 1185 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 2 3
+# 1218 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipInit(unsigned int flags);
-# 1234 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 1234 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipDriverGetVersion(int* driverVersion);
-# 1249 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 1249 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipRuntimeGetVersion(int* runtimeVersion);
 
 
@@ -39131,16 +39184,16 @@ hipError_t hipRuntimeGetVersion(int* runtimeVersion);
 
 
 hipError_t hipDeviceGet(hipDevice_t* device, int ordinal);
-# 1266 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 1266 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipDeviceComputeCapability(int* major, int* minor, hipDevice_t device);
-# 1275 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 1275 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipDeviceGetName(char* name, int len, hipDevice_t device);
-# 1287 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 1287 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipDeviceGetUuid(hipUUID* uuid, hipDevice_t device);
-# 1297 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 1297 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipDeviceGetP2PAttribute(int* value, hipDeviceP2PAttr attr,
                                     int srcDevice, int dstDevice);
-# 1307 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 1307 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipDeviceGetPCIBusId(char* pciBusId, int len, int device);
 
 
@@ -39158,33 +39211,33 @@ hipError_t hipDeviceGetByPCIBusId(int* device, const char* pciBusId);
 
 
 hipError_t hipDeviceTotalMem(size_t* bytes, hipDevice_t device);
-# 1343 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 1343 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipDeviceSynchronize(void);
-# 1355 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 1355 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipDeviceReset(void);
-# 1387 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 1387 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipSetDevice(int deviceId);
-# 1401 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 1401 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipGetDevice(int* deviceId);
-# 1414 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 1414 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipGetDeviceCount(int* count);
-# 1424 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 1424 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipDeviceGetAttribute(int* pi, hipDeviceAttribute_t attr, int deviceId);
-# 1439 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 1439 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipDeviceGetDefaultMemPool(hipMemPool_t* mem_pool, int device);
-# 1461 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 1461 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipDeviceSetMemPool(int device, hipMemPool_t mem_pool);
-# 1481 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 1481 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipDeviceGetMemPool(hipMemPool_t* mem_pool, int device);
-# 1495 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 1495 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipGetDeviceProperties(hipDeviceProp_t* prop, int deviceId);
-# 1506 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 1506 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipDeviceSetCacheConfig(hipFuncCache_t cacheConfig);
-# 1517 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 1517 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipDeviceGetCacheConfig(hipFuncCache_t* cacheConfig);
-# 1528 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 1528 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipDeviceGetLimit(size_t* pValue, enum hipLimit_t limit);
-# 1540 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 1540 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipDeviceGetSharedMemConfig(hipSharedMemConfig* pConfig);
 
 
@@ -39194,306 +39247,306 @@ hipError_t hipDeviceGetSharedMemConfig(hipSharedMemConfig* pConfig);
 
 
 hipError_t hipGetDeviceFlags(unsigned int* flags);
-# 1560 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 1560 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipDeviceSetSharedMemConfig(hipSharedMemConfig config);
-# 1585 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 1585 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipSetDeviceFlags(unsigned flags);
-# 1594 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 1594 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipChooseDevice(int* device, const hipDeviceProp_t* prop);
-# 1607 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 1607 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipExtGetLinkTypeAndHopCount(int device1, int device2, uint32_t* linktype, uint32_t* hopcount);
-# 1634 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 1634 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipIpcGetMemHandle(hipIpcMemHandle_t* handle, void* devPtr);
-# 1671 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 1671 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipIpcOpenMemHandle(void** devPtr, hipIpcMemHandle_t handle, unsigned int flags);
-# 1690 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 1690 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipIpcCloseMemHandle(void* devPtr);
-# 1706 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 1706 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipIpcGetEventHandle(hipIpcEventHandle_t* handle, hipEvent_t event);
-# 1723 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 1723 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipIpcOpenEventHandle(hipEvent_t* event, hipIpcEventHandle_t handle);
-# 1749 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 1749 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipFuncSetAttribute(const void* func, hipFuncAttribute attr, int value);
-# 1760 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 1760 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipFuncSetCacheConfig(const void* func, hipFuncCache_t config);
-# 1773 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 1773 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipFuncSetSharedMemConfig(const void* func, hipSharedMemConfig config);
-# 1796 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 1796 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipGetLastError(void);
-# 1807 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 1807 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipPeekAtLastError(void);
-# 1816 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 1816 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 const char* hipGetErrorName(hipError_t hip_error);
-# 1827 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 1827 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 const char* hipGetErrorString(hipError_t hipError);
-# 1858 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 1858 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipStreamCreate(hipStream_t* stream);
-# 1875 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 1875 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipStreamCreateWithFlags(hipStream_t* stream, unsigned int flags);
-# 1893 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 1893 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipStreamCreateWithPriority(hipStream_t* stream, unsigned int flags, int priority);
-# 1907 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 1907 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipDeviceGetStreamPriorityRange(int* leastPriority, int* greatestPriority);
-# 1926 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 1926 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipStreamDestroy(hipStream_t stream);
-# 1942 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 1942 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipStreamQuery(hipStream_t stream);
-# 1962 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 1962 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipStreamSynchronize(hipStream_t stream);
-# 1982 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 1982 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipStreamWaitEvent(hipStream_t stream, hipEvent_t event, unsigned int flags);
-# 1996 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 1996 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipStreamGetFlags(hipStream_t stream, unsigned int* flags);
-# 2010 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 2010 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipStreamGetPriority(hipStream_t stream, int* priority);
-# 2030 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 2030 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipExtStreamCreateWithCUMask(hipStream_t* stream, uint32_t cuMaskSize, const uint32_t* cuMask);
-# 2043 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 2043 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipExtStreamGetCUMask(hipStream_t stream, uint32_t cuMaskSize, uint32_t* cuMask);
 
 
 
 typedef void (*hipStreamCallback_t)(hipStream_t stream, hipError_t status, void* userData);
-# 2063 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 2063 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipStreamAddCallback(hipStream_t stream, hipStreamCallback_t callback, void* userData,
                                 unsigned int flags);
-# 2108 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 2108 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipStreamWaitValue32(hipStream_t stream, void* ptr, uint32_t value, unsigned int flags,
                                 uint32_t mask = 0xFFFFFFFF);
-# 2142 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 2142 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipStreamWaitValue64(hipStream_t stream, void* ptr, uint64_t value, unsigned int flags,
                                 uint64_t mask = 0xFFFFFFFFFFFFFFFF);
-# 2163 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 2163 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipStreamWriteValue32(hipStream_t stream, void* ptr, uint32_t value, unsigned int flags);
-# 2183 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 2183 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipStreamWriteValue64(hipStream_t stream, void* ptr, uint64_t value, unsigned int flags);
-# 2217 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 2217 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipEventCreateWithFlags(hipEvent_t* event, unsigned flags);
-# 2229 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 2229 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipEventCreate(hipEvent_t* event);
-# 2258 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 2258 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipEventRecord(hipEvent_t event, hipStream_t stream = __null);
-# 2278 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 2278 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipEventDestroy(hipEvent_t event);
-# 2296 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 2296 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipEventSynchronize(hipEvent_t event);
-# 2332 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 2332 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipEventElapsedTime(float* ms, hipEvent_t start, hipEvent_t stop);
-# 2348 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 2348 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipEventQuery(hipEvent_t event);
-# 2376 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 2376 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipPointerGetAttributes(hipPointerAttribute_t* attributes, const void* ptr);
-# 2391 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 2391 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipPointerGetAttribute(void* data, hipPointer_attribute attribute,
                                   hipDeviceptr_t ptr);
-# 2409 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 2409 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipDrvPointerGetAttributes(unsigned int numAttributes, hipPointer_attribute* attributes,
                                       void** data, hipDeviceptr_t ptr);
-# 2421 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 2421 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipImportExternalSemaphore(hipExternalSemaphore_t* extSem_out,
                                       const hipExternalSemaphoreHandleDesc* semHandleDesc);
-# 2435 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 2435 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipSignalExternalSemaphoresAsync(const hipExternalSemaphore_t* extSemArray,
                                             const hipExternalSemaphoreSignalParams* paramsArray,
                                             unsigned int numExtSems, hipStream_t stream);
-# 2450 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 2450 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipWaitExternalSemaphoresAsync(const hipExternalSemaphore_t* extSemArray,
                                               const hipExternalSemaphoreWaitParams* paramsArray,
                                               unsigned int numExtSems, hipStream_t stream);
-# 2462 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 2462 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipDestroyExternalSemaphore(hipExternalSemaphore_t extSem);
-# 2474 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 2474 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipImportExternalMemory(hipExternalMemory_t* extMem_out, const hipExternalMemoryHandleDesc* memHandleDesc);
-# 2486 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 2486 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipExternalMemoryGetMappedBuffer(void **devPtr, hipExternalMemory_t extMem, const hipExternalMemoryBufferDesc *bufferDesc);
-# 2496 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 2496 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipDestroyExternalMemory(hipExternalMemory_t extMem);
-# 2510 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 2510 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipMalloc(void** ptr, size_t size);
-# 2525 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 2525 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipExtMallocWithFlags(void** ptr, size_t sizeBytes, unsigned int flags);
-# 2538 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 2538 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 __attribute__ ((deprecated("use hipHostMalloc instead")))
 hipError_t hipMallocHost(void** ptr, size_t size);
-# 2552 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 2552 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 __attribute__ ((deprecated("use hipHostMalloc instead")))
 hipError_t hipMemAllocHost(void** ptr, size_t size);
-# 2567 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 2567 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipHostMalloc(void** ptr, size_t size, unsigned int flags);
-# 2587 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 2587 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipMallocManaged(void** dev_ptr,
                             size_t size,
                             unsigned int flags = 0x01);
-# 2600 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 2600 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipMemPrefetchAsync(const void* dev_ptr,
                                size_t count,
                                int device,
                                hipStream_t stream = 0);
-# 2614 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 2614 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipMemAdvise(const void* dev_ptr,
                         size_t count,
                         hipMemoryAdvise advice,
                         int device);
-# 2630 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 2630 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipMemRangeGetAttribute(void* data,
                                    size_t data_size,
                                    hipMemRangeAttribute attribute,
                                    const void* dev_ptr,
                                    size_t count);
-# 2649 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 2649 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipMemRangeGetAttributes(void** data,
                                     size_t* data_sizes,
                                     hipMemRangeAttribute* attributes,
                                     size_t num_attributes,
                                     const void* dev_ptr,
                                     size_t count);
-# 2667 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 2667 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipStreamAttachMemAsync(hipStream_t stream,
                                    void* dev_ptr,
                                    size_t length = 0,
                                    unsigned int flags = 0x04);
-# 2727 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 2727 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipMallocAsync(void** dev_ptr, size_t size, hipStream_t stream);
-# 2750 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 2750 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipFreeAsync(void* dev_ptr, hipStream_t stream);
-# 2776 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 2776 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipMemPoolTrimTo(hipMemPool_t mem_pool, size_t min_bytes_to_hold);
-# 2813 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 2813 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipMemPoolSetAttribute(hipMemPool_t mem_pool, hipMemPoolAttr attr, void* value);
-# 2850 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 2850 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipMemPoolGetAttribute(hipMemPool_t mem_pool, hipMemPoolAttr attr, void* value);
-# 2866 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 2866 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipMemPoolSetAccess(hipMemPool_t mem_pool, const hipMemAccessDesc* desc_list, size_t count);
-# 2884 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 2884 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipMemPoolGetAccess(hipMemAccessFlags* flags, hipMemPool_t mem_pool, hipMemLocation* location);
-# 2906 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 2906 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipMemPoolCreate(hipMemPool_t* mem_pool, const hipMemPoolProps* pool_props);
-# 2931 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 2931 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipMemPoolDestroy(hipMemPool_t mem_pool);
-# 2963 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 2963 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipMallocFromPoolAsync(void** dev_ptr, size_t size, hipMemPool_t mem_pool, hipStream_t stream);
-# 2988 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 2988 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipMemPoolExportToShareableHandle(
     void* shared_handle,
     hipMemPool_t mem_pool,
     hipMemAllocationHandleType handle_type,
     unsigned int flags);
-# 3014 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 3014 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipMemPoolImportFromShareableHandle(
     hipMemPool_t* mem_pool,
     void* shared_handle,
     hipMemAllocationHandleType handle_type,
     unsigned int flags);
-# 3036 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 3036 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipMemPoolExportPointer(hipMemPoolPtrExportData* export_data, void* dev_ptr);
-# 3063 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 3063 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipMemPoolImportPointer(
     void** dev_ptr,
     hipMemPool_t mem_pool,
     hipMemPoolPtrExportData* export_data);
-# 3084 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 3084 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 __attribute__ ((deprecated("use hipHostMalloc instead")))
 hipError_t hipHostAlloc(void** ptr, size_t size, unsigned int flags);
-# 3097 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 3097 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipHostGetDevicePointer(void** devPtr, void* hstPtr, unsigned int flags);
-# 3107 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 3107 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipHostGetFlags(unsigned int* flagsPtr, void* hostPtr);
-# 3144 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 3144 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipHostRegister(void* hostPtr, size_t sizeBytes, unsigned int flags);
-# 3153 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 3153 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipHostUnregister(void* hostPtr);
-# 3172 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 3172 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipMallocPitch(void** ptr, size_t* pitch, size_t width, size_t height);
-# 3194 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 3194 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipMemAllocPitch(hipDeviceptr_t* dptr, size_t* pitch, size_t widthInBytes, size_t height, unsigned int elementSizeBytes);
-# 3208 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 3208 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipFree(void* ptr);
-# 3218 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 3218 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 __attribute__ ((deprecated("use hipHostFree instead")))
 hipError_t hipFreeHost(void* ptr);
-# 3233 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 3233 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipHostFree(void* ptr);
-# 3263 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 3263 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipMemcpy(void* dst, const void* src, size_t sizeBytes, hipMemcpyKind kind);
 
 hipError_t hipMemcpyWithStream(void* dst, const void* src, size_t sizeBytes,
                                hipMemcpyKind kind, hipStream_t stream);
-# 3284 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 3284 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipMemcpyHtoD(hipDeviceptr_t dst, void* src, size_t sizeBytes);
-# 3302 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 3302 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipMemcpyDtoH(void* dst, hipDeviceptr_t src, size_t sizeBytes);
-# 3320 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 3320 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipMemcpyDtoD(hipDeviceptr_t dst, hipDeviceptr_t src, size_t sizeBytes);
-# 3338 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 3338 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipMemcpyHtoDAsync(hipDeviceptr_t dst, void* src, size_t sizeBytes, hipStream_t stream);
-# 3356 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 3356 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipMemcpyDtoHAsync(void* dst, hipDeviceptr_t src, size_t sizeBytes, hipStream_t stream);
-# 3374 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 3374 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipMemcpyDtoDAsync(hipDeviceptr_t dst, hipDeviceptr_t src, size_t sizeBytes,
                               hipStream_t stream);
-# 3391 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 3391 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipModuleGetGlobal(hipDeviceptr_t* dptr, size_t* bytes,
     hipModule_t hmod, const char* name);
-# 3403 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 3403 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipGetSymbolAddress(void** devPtr, const void* symbol);
-# 3414 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 3414 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipGetSymbolSize(size_t* size, const void* symbol);
-# 3434 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 3434 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipMemcpyToSymbol(const void* symbol, const void* src,
                              size_t sizeBytes, size_t offset = 0,
                              hipMemcpyKind kind = hipMemcpyHostToDevice);
-# 3451 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 3451 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipMemcpyToSymbolAsync(const void* symbol, const void* src,
                                   size_t sizeBytes, size_t offset,
                                   hipMemcpyKind kind, hipStream_t stream = 0);
-# 3467 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 3467 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipMemcpyFromSymbol(void* dst, const void* symbol,
                                size_t sizeBytes, size_t offset = 0,
                                hipMemcpyKind kind = hipMemcpyDeviceToHost);
-# 3484 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 3484 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipMemcpyFromSymbolAsync(void* dst, const void* symbol,
                                     size_t sizeBytes, size_t offset,
                                     hipMemcpyKind kind,
                                     hipStream_t stream = 0);
-# 3516 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 3516 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipMemcpyAsync(void* dst, const void* src, size_t sizeBytes, hipMemcpyKind kind,
                           hipStream_t stream = 0);
-# 3527 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 3527 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipMemset(void* dst, int value, size_t sizeBytes);
-# 3537 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 3537 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipMemsetD8(hipDeviceptr_t dest, unsigned char value, size_t count);
-# 3553 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 3553 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipMemsetD8Async(hipDeviceptr_t dest, unsigned char value, size_t count, hipStream_t stream = 0);
-# 3563 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 3563 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipMemsetD16(hipDeviceptr_t dest, unsigned short value, size_t count);
-# 3579 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 3579 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipMemsetD16Async(hipDeviceptr_t dest, unsigned short value, size_t count, hipStream_t stream = 0);
-# 3589 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 3589 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipMemsetD32(hipDeviceptr_t dest, int value, size_t count);
-# 3605 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 3605 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipMemsetAsync(void* dst, int value, size_t sizeBytes, hipStream_t stream = 0);
-# 3621 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 3621 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipMemsetD32Async(hipDeviceptr_t dst, int value, size_t count,
                              hipStream_t stream = 0);
-# 3633 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 3633 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipMemset2D(void* dst, size_t pitch, int value, size_t width, size_t height);
-# 3645 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 3645 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipMemset2DAsync(void* dst, size_t pitch, int value, size_t width, size_t height,hipStream_t stream = 0);
-# 3654 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 3654 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipMemset3D(hipPitchedPtr pitchedDevPtr, int value, hipExtent extent );
-# 3664 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 3664 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipMemset3DAsync(hipPitchedPtr pitchedDevPtr, int value, hipExtent extent ,hipStream_t stream = 0);
-# 3674 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 3674 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipMemGetInfo(size_t* free, size_t* total);
 hipError_t hipMemPtrGetInfo(void* ptr, size_t* size);
-# 3688 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 3688 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipMallocArray(hipArray** array, const hipChannelFormatDesc* desc, size_t width,
                           size_t height = 0, unsigned int flags = 0x00);
 hipError_t hipArrayCreate(hipArray** pHandle, const HIP_ARRAY_DESCRIPTOR* pAllocateArray);
 hipError_t hipArrayDestroy(hipArray* array);
 hipError_t hipArray3DCreate(hipArray** array, const HIP_ARRAY3D_DESCRIPTOR* pAllocateArray);
 hipError_t hipMalloc3D(hipPitchedPtr* pitchedDevPtr, hipExtent extent);
-# 3702 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 3702 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipFreeArray(hipArray* array);
 
 
@@ -39503,192 +39556,192 @@ hipError_t hipFreeArray(hipArray* array);
 
 
 hipError_t hipFreeMipmappedArray(hipMipmappedArray_t mipmappedArray);
-# 3722 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 3722 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipMalloc3DArray(hipArray** array, const struct hipChannelFormatDesc* desc,
                             struct hipExtent extent, unsigned int flags);
-# 3735 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 3735 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipMallocMipmappedArray(
     hipMipmappedArray_t *mipmappedArray,
     const struct hipChannelFormatDesc* desc,
     struct hipExtent extent,
     unsigned int numLevels,
     unsigned int flags = 0);
-# 3750 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 3750 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipGetMipmappedArrayLevel(
     hipArray_t *levelArray,
     hipMipmappedArray_const_t mipmappedArray,
     unsigned int level);
-# 3770 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 3770 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipMemcpy2D(void* dst, size_t dpitch, const void* src, size_t spitch, size_t width,
                        size_t height, hipMemcpyKind kind);
-# 3781 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 3781 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipMemcpyParam2D(const hip_Memcpy2D* pCopy);
-# 3792 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 3792 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipMemcpyParam2DAsync(const hip_Memcpy2D* pCopy, hipStream_t stream = 0);
-# 3810 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 3810 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipMemcpy2DAsync(void* dst, size_t dpitch, const void* src, size_t spitch, size_t width,
                             size_t height, hipMemcpyKind kind, hipStream_t stream = 0);
-# 3829 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 3829 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipMemcpy2DToArray(hipArray* dst, size_t wOffset, size_t hOffset, const void* src,
                               size_t spitch, size_t width, size_t height, hipMemcpyKind kind);
-# 3849 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 3849 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipMemcpy2DToArrayAsync(hipArray* dst, size_t wOffset, size_t hOffset, const void* src,
                                    size_t spitch, size_t width, size_t height, hipMemcpyKind kind,
                                    hipStream_t stream = 0);
-# 3867 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 3867 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 __attribute__ ((deprecated("This API is marked as deprecated and may not be supported in future releases. For more details please refer https://github.com/ROCm-Developer-Tools/HIP/blob/master/docs/markdown/hip_deprecated_api_list.md")))
 hipError_t hipMemcpyToArray(hipArray* dst, size_t wOffset, size_t hOffset, const void* src,
                             size_t count, hipMemcpyKind kind);
-# 3885 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 3885 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 __attribute__ ((deprecated("This API is marked as deprecated and may not be supported in future releases. For more details please refer https://github.com/ROCm-Developer-Tools/HIP/blob/master/docs/markdown/hip_deprecated_api_list.md")))
 hipError_t hipMemcpyFromArray(void* dst, hipArray_const_t srcArray, size_t wOffset, size_t hOffset,
                               size_t count, hipMemcpyKind kind);
-# 3905 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 3905 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipMemcpy2DFromArray( void* dst, size_t dpitch, hipArray_const_t src, size_t wOffset, size_t hOffset, size_t width, size_t height, hipMemcpyKind kind);
-# 3924 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 3924 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipMemcpy2DFromArrayAsync( void* dst, size_t dpitch, hipArray_const_t src, size_t wOffset, size_t hOffset, size_t width, size_t height, hipMemcpyKind kind, hipStream_t stream = 0);
-# 3938 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 3938 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipMemcpyAtoH(void* dst, hipArray* srcArray, size_t srcOffset, size_t count);
-# 3952 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 3952 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipMemcpyHtoA(hipArray* dstArray, size_t dstOffset, const void* srcHost, size_t count);
-# 3963 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 3963 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipMemcpy3D(const struct hipMemcpy3DParms* p);
-# 3975 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 3975 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipMemcpy3DAsync(const struct hipMemcpy3DParms* p, hipStream_t stream = 0);
-# 3986 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 3986 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipDrvMemcpy3D(const HIP_MEMCPY3D* pCopy);
-# 3998 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 3998 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipDrvMemcpy3DAsync(const HIP_MEMCPY3D* pCopy, hipStream_t stream);
-# 4027 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 4027 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipDeviceCanAccessPeer(int* canAccessPeer, int deviceId, int peerDeviceId);
-# 4044 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 4044 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipDeviceEnablePeerAccess(int peerDeviceId, unsigned int flags);
-# 4056 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 4056 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipDeviceDisablePeerAccess(int peerDeviceId);
-# 4069 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 4069 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipMemGetAddressRange(hipDeviceptr_t* pbase, size_t* psize, hipDeviceptr_t dptr);
-# 4085 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 4085 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipMemcpyPeer(void* dst, int dstDeviceId, const void* src, int srcDeviceId,
                          size_t sizeBytes);
-# 4099 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 4099 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipMemcpyPeerAsync(void* dst, int dstDeviceId, const void* src, int srcDevice,
                               size_t sizeBytes, hipStream_t stream = 0);
-# 4132 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 4132 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 __attribute__ ((deprecated("This API is marked as deprecated and may not be supported in future releases. For more details please refer https://github.com/ROCm-Developer-Tools/HIP/blob/master/docs/markdown/hip_deprecated_api_list.md")))
 hipError_t hipCtxCreate(hipCtx_t* ctx, unsigned int flags, hipDevice_t device);
-# 4144 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 4144 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 __attribute__ ((deprecated("This API is marked as deprecated and may not be supported in future releases. For more details please refer https://github.com/ROCm-Developer-Tools/HIP/blob/master/docs/markdown/hip_deprecated_api_list.md")))
 hipError_t hipCtxDestroy(hipCtx_t ctx);
-# 4156 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 4156 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 __attribute__ ((deprecated("This API is marked as deprecated and may not be supported in future releases. For more details please refer https://github.com/ROCm-Developer-Tools/HIP/blob/master/docs/markdown/hip_deprecated_api_list.md")))
 hipError_t hipCtxPopCurrent(hipCtx_t* ctx);
-# 4168 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 4168 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 __attribute__ ((deprecated("This API is marked as deprecated and may not be supported in future releases. For more details please refer https://github.com/ROCm-Developer-Tools/HIP/blob/master/docs/markdown/hip_deprecated_api_list.md")))
 hipError_t hipCtxPushCurrent(hipCtx_t ctx);
-# 4180 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 4180 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 __attribute__ ((deprecated("This API is marked as deprecated and may not be supported in future releases. For more details please refer https://github.com/ROCm-Developer-Tools/HIP/blob/master/docs/markdown/hip_deprecated_api_list.md")))
 hipError_t hipCtxSetCurrent(hipCtx_t ctx);
-# 4192 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 4192 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 __attribute__ ((deprecated("This API is marked as deprecated and may not be supported in future releases. For more details please refer https://github.com/ROCm-Developer-Tools/HIP/blob/master/docs/markdown/hip_deprecated_api_list.md")))
 hipError_t hipCtxGetCurrent(hipCtx_t* ctx);
-# 4204 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 4204 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 __attribute__ ((deprecated("This API is marked as deprecated and may not be supported in future releases. For more details please refer https://github.com/ROCm-Developer-Tools/HIP/blob/master/docs/markdown/hip_deprecated_api_list.md")))
 hipError_t hipCtxGetDevice(hipDevice_t* device);
-# 4223 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 4223 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 __attribute__ ((deprecated("This API is marked as deprecated and may not be supported in future releases. For more details please refer https://github.com/ROCm-Developer-Tools/HIP/blob/master/docs/markdown/hip_deprecated_api_list.md")))
 hipError_t hipCtxGetApiVersion(hipCtx_t ctx, int* apiVersion);
-# 4238 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 4238 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 __attribute__ ((deprecated("This API is marked as deprecated and may not be supported in future releases. For more details please refer https://github.com/ROCm-Developer-Tools/HIP/blob/master/docs/markdown/hip_deprecated_api_list.md")))
 hipError_t hipCtxGetCacheConfig(hipFuncCache_t* cacheConfig);
-# 4253 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 4253 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 __attribute__ ((deprecated("This API is marked as deprecated and may not be supported in future releases. For more details please refer https://github.com/ROCm-Developer-Tools/HIP/blob/master/docs/markdown/hip_deprecated_api_list.md")))
 hipError_t hipCtxSetCacheConfig(hipFuncCache_t cacheConfig);
-# 4268 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 4268 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 __attribute__ ((deprecated("This API is marked as deprecated and may not be supported in future releases. For more details please refer https://github.com/ROCm-Developer-Tools/HIP/blob/master/docs/markdown/hip_deprecated_api_list.md")))
 hipError_t hipCtxSetSharedMemConfig(hipSharedMemConfig config);
-# 4283 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 4283 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 __attribute__ ((deprecated("This API is marked as deprecated and may not be supported in future releases. For more details please refer https://github.com/ROCm-Developer-Tools/HIP/blob/master/docs/markdown/hip_deprecated_api_list.md")))
 hipError_t hipCtxGetSharedMemConfig(hipSharedMemConfig* pConfig);
-# 4296 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 4296 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 __attribute__ ((deprecated("This API is marked as deprecated and may not be supported in future releases. For more details please refer https://github.com/ROCm-Developer-Tools/HIP/blob/master/docs/markdown/hip_deprecated_api_list.md")))
 hipError_t hipCtxSynchronize(void);
-# 4308 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 4308 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 __attribute__ ((deprecated("This API is marked as deprecated and may not be supported in future releases. For more details please refer https://github.com/ROCm-Developer-Tools/HIP/blob/master/docs/markdown/hip_deprecated_api_list.md")))
 hipError_t hipCtxGetFlags(unsigned int* flags);
-# 4329 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 4329 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 __attribute__ ((deprecated("This API is marked as deprecated and may not be supported in future releases. For more details please refer https://github.com/ROCm-Developer-Tools/HIP/blob/master/docs/markdown/hip_deprecated_api_list.md")))
 hipError_t hipCtxEnablePeerAccess(hipCtx_t peerCtx, unsigned int flags);
-# 4347 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 4347 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 __attribute__ ((deprecated("This API is marked as deprecated and may not be supported in future releases. For more details please refer https://github.com/ROCm-Developer-Tools/HIP/blob/master/docs/markdown/hip_deprecated_api_list.md")))
 hipError_t hipCtxDisablePeerAccess(hipCtx_t peerCtx);
-# 4365 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 4365 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipDevicePrimaryCtxGetState(hipDevice_t dev, unsigned int* flags, int* active);
-# 4378 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 4378 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipDevicePrimaryCtxRelease(hipDevice_t dev);
-# 4390 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 4390 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipDevicePrimaryCtxRetain(hipCtx_t* pctx, hipDevice_t dev);
-# 4401 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 4401 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipDevicePrimaryCtxReset(hipDevice_t dev);
-# 4413 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 4413 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipDevicePrimaryCtxSetFlags(hipDevice_t dev, unsigned int flags);
-# 4436 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 4436 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipModuleLoad(hipModule_t* module, const char* fname);
-# 4446 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 4446 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipModuleUnload(hipModule_t module);
-# 4457 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 4457 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipModuleGetFunction(hipFunction_t* function, hipModule_t module, const char* kname);
-# 4466 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 4466 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipFuncGetAttributes(struct hipFuncAttributes* attr, const void* func);
-# 4476 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 4476 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipFuncGetAttribute(int* value, hipFunction_attribute attrib, hipFunction_t hfunc);
-# 4486 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 4486 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipModuleGetTexRef(textureReference** texRef, hipModule_t hmod, const char* name);
-# 4496 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 4496 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipModuleLoadData(hipModule_t* module, const void* image);
-# 4509 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 4509 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipModuleLoadDataEx(hipModule_t* module, const void* image, unsigned int numOptions,
                                hipJitOption* options, void** optionValues);
-# 4539 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 4539 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipModuleLaunchKernel(hipFunction_t f, unsigned int gridDimX, unsigned int gridDimY,
                                  unsigned int gridDimZ, unsigned int blockDimX,
                                  unsigned int blockDimY, unsigned int blockDimZ,
                                  unsigned int sharedMemBytes, hipStream_t stream,
                                  void** kernelParams, void** extra);
-# 4562 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 4562 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipLaunchCooperativeKernel(const void* f, dim3 gridDim, dim3 blockDimX,
                                       void** kernelParams, unsigned int sharedMemBytes,
                                       hipStream_t stream);
-# 4575 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 4575 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipLaunchCooperativeKernelMultiDevice(hipLaunchParams* launchParamsList,
                                                  int numDevices, unsigned int flags);
-# 4588 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 4588 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipExtLaunchMultiKernelMultiDevice(hipLaunchParams* launchParamsList,
                                               int numDevices, unsigned int flags);
-# 4616 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 4616 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipModuleOccupancyMaxPotentialBlockSize(int* gridSize, int* blockSize,
                                              hipFunction_t f, size_t dynSharedMemPerBlk,
                                              int blockSizeLimit);
-# 4635 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 4635 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipModuleOccupancyMaxPotentialBlockSizeWithFlags(int* gridSize, int* blockSize,
                                              hipFunction_t f, size_t dynSharedMemPerBlk,
                                              int blockSizeLimit, unsigned int flags);
-# 4646 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 4646 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipModuleOccupancyMaxActiveBlocksPerMultiprocessor(
    int* numBlocks, hipFunction_t f, int blockSize, size_t dynSharedMemPerBlk);
-# 4657 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 4657 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipModuleOccupancyMaxActiveBlocksPerMultiprocessorWithFlags(
    int* numBlocks, hipFunction_t f, int blockSize, size_t dynSharedMemPerBlk, unsigned int flags);
-# 4667 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 4667 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipOccupancyMaxActiveBlocksPerMultiprocessor(
    int* numBlocks, const void* f, int blockSize, size_t dynSharedMemPerBlk);
-# 4678 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 4678 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipOccupancyMaxActiveBlocksPerMultiprocessorWithFlags(
    int* numBlocks, const void* f, int blockSize, size_t dynSharedMemPerBlk, unsigned int flags = 0x00);
-# 4694 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 4694 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipOccupancyMaxPotentialBlockSize(int* gridSize, int* blockSize,
                                              const void* f, size_t dynSharedMemPerBlk,
                                              int blockSizeLimit);
-# 4717 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 4717 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 __attribute__ ((deprecated("use roctracer/rocTX instead")))
 hipError_t hipProfilerStart();
 
@@ -39698,23 +39751,23 @@ hipError_t hipProfilerStart();
 
 __attribute__ ((deprecated("use roctracer/rocTX instead")))
 hipError_t hipProfilerStop();
-# 4753 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 4753 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipConfigureCall(dim3 gridDim, dim3 blockDim, size_t sharedMem = 0, hipStream_t stream = 0);
-# 4764 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 4764 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipSetupArgument(const void* arg, size_t size, size_t offset);
-# 4773 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 4773 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipLaunchByPtr(const void* func);
-# 4790 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 4790 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t __hipPushCallConfiguration(dim3 gridDim,
                                       dim3 blockDim,
                                       size_t sharedMem = 0,
                                       hipStream_t stream = 0);
-# 4813 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 4813 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t __hipPopCallConfiguration(dim3 *gridDim,
                                      dim3 *blockDim,
                                      size_t *sharedMem,
                                      hipStream_t *stream);
-# 4832 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 4832 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipLaunchKernel(const void* function_address,
                            dim3 numBlocks,
                            dim3 dimBlocks,
@@ -39729,40 +39782,40 @@ hipError_t hipLaunchKernel(const void* function_address,
 
 
 hipError_t hipDrvMemcpy2DUnaligned(const hip_Memcpy2D* pCopy);
-# 4867 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 4867 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipExtLaunchKernel(const void* function_address, dim3 numBlocks, dim3 dimBlocks,
                               void** args, size_t sharedMemBytes, hipStream_t stream,
                               hipEvent_t startEvent, hipEvent_t stopEvent, int flags);
-# 4892 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 4892 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipBindTextureToMipmappedArray(
     const textureReference* tex,
     hipMipmappedArray_const_t mipmappedArray,
     const hipChannelFormatDesc* desc);
-# 4906 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 4906 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
  hipError_t hipGetTextureReference(
     const textureReference** texref,
     const void* symbol);
-# 4921 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 4921 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipCreateTextureObject(
     hipTextureObject_t* pTexObject,
     const hipResourceDesc* pResDesc,
     const hipTextureDesc* pTexDesc,
     const struct hipResourceViewDesc* pResViewDesc);
-# 4935 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 4935 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipDestroyTextureObject(hipTextureObject_t textureObject);
-# 4946 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 4946 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipGetChannelDesc(
     hipChannelFormatDesc* desc,
     hipArray_const_t array);
-# 4959 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 4959 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipGetTextureObjectResourceDesc(
     hipResourceDesc* pResDesc,
     hipTextureObject_t textureObject);
-# 4972 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 4972 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipGetTextureObjectResourceViewDesc(
     struct hipResourceViewDesc* pResViewDesc,
     hipTextureObject_t textureObject);
-# 4985 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 4985 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipGetTextureObjectTextureDesc(
     hipTextureDesc* pTexDesc,
     hipTextureObject_t textureObject);
@@ -39804,7 +39857,7 @@ hipError_t hipTexObjectGetResourceViewDesc(
 hipError_t hipTexObjectGetTextureDesc(
     HIP_TEXTURE_DESC* pTexDesc,
     hipTextureObject_t texObject);
-# 5034 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 5034 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 __attribute__ ((deprecated("This API is marked as deprecated and may not be supported in future releases. For more details please refer https://github.com/ROCm-Developer-Tools/HIP/blob/master/docs/markdown/hip_deprecated_api_list.md")))
 hipError_t hipBindTexture(
     size_t* offset,
@@ -39891,7 +39944,7 @@ __attribute__ ((deprecated("This API is marked as deprecated and may not be supp
 hipError_t hipTexRefSetMaxAnisotropy(
     textureReference* texRef,
     unsigned int maxAniso);
-# 5134 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 5134 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 __attribute__ ((deprecated("This API is marked as deprecated and may not be supported in future releases. For more details please refer https://github.com/ROCm-Developer-Tools/HIP/blob/master/docs/markdown/hip_deprecated_api_list.md")))
 hipError_t hipTexRefSetBorderColor(
     textureReference* texRef,
@@ -39920,7 +39973,7 @@ hipError_t hipMipmappedArrayGetLevel(
     hipArray_t* pLevelArray,
     hipMipmappedArray_t hMipMappedArray,
     unsigned int level);
-# 5192 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 5192 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipRegisterApiCallback(uint32_t id, void* fun, void* arg);
 hipError_t hipRemoveApiCallback(uint32_t id);
 hipError_t hipRegisterActivityCallback(uint32_t id, void* fun, void* arg);
@@ -39929,198 +39982,198 @@ const char* hipApiName(uint32_t id);
 const char* hipKernelNameRef(const hipFunction_t f);
 const char* hipKernelNameRefByPtr(const void* hostFunction, hipStream_t stream);
 int hipGetStreamDeviceId(hipStream_t stream);
-# 5226 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 5226 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipStreamBeginCapture(hipStream_t stream, hipStreamCaptureMode mode);
-# 5240 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 5240 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipStreamEndCapture(hipStream_t stream, hipGraph_t* pGraph);
-# 5255 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 5255 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipStreamGetCaptureInfo(hipStream_t stream, hipStreamCaptureStatus* pCaptureStatus,
                                    unsigned long long* pId);
-# 5274 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 5274 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipStreamGetCaptureInfo_v2(hipStream_t stream, hipStreamCaptureStatus* captureStatus_out,
                                       unsigned long long* id_out = 0,
                                       hipGraph_t* graph_out = 0,
                                       const hipGraphNode_t** dependencies_out = 0,
                                       size_t* numDependencies_out = 0);
-# 5292 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 5292 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipStreamIsCapturing(hipStream_t stream, hipStreamCaptureStatus* pCaptureStatus);
-# 5306 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 5306 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipStreamUpdateCaptureDependencies(hipStream_t stream, hipGraphNode_t* dependencies,
                                               size_t numDependencies,
                                               unsigned int flags = 0);
-# 5321 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 5321 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipLaunchHostFunc(hipStream_t stream, hipHostFn_t fn, void* userData);
-# 5333 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 5333 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipThreadExchangeStreamCaptureMode(hipStreamCaptureMode* mode);
-# 5347 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 5347 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipGraphCreate(hipGraph_t* pGraph, unsigned int flags);
-# 5360 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 5360 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipGraphDestroy(hipGraph_t graph);
-# 5375 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 5375 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipGraphAddDependencies(hipGraph_t graph, const hipGraphNode_t* from,
                                    const hipGraphNode_t* to, size_t numDependencies);
-# 5391 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 5391 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipGraphRemoveDependencies(hipGraph_t graph, const hipGraphNode_t* from,
                                       const hipGraphNode_t* to, size_t numDependencies);
-# 5411 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 5411 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipGraphGetEdges(hipGraph_t graph, hipGraphNode_t* from, hipGraphNode_t* to,
                             size_t* numEdges);
-# 5430 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 5430 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipGraphGetNodes(hipGraph_t graph, hipGraphNode_t* nodes, size_t* numNodes);
-# 5448 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 5448 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipGraphGetRootNodes(hipGraph_t graph, hipGraphNode_t* pRootNodes,
                                 size_t* pNumRootNodes);
-# 5467 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 5467 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipGraphNodeGetDependencies(hipGraphNode_t node, hipGraphNode_t* pDependencies,
                                        size_t* pNumDependencies);
-# 5487 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 5487 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipGraphNodeGetDependentNodes(hipGraphNode_t node, hipGraphNode_t* pDependentNodes,
                                          size_t* pNumDependentNodes);
-# 5501 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 5501 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipGraphNodeGetType(hipGraphNode_t node, hipGraphNodeType* pType);
-# 5513 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 5513 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipGraphDestroyNode(hipGraphNode_t node);
-# 5526 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 5526 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipGraphClone(hipGraph_t* pGraphClone, hipGraph_t originalGraph);
-# 5540 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 5540 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipGraphNodeFindInClone(hipGraphNode_t* pNode, hipGraphNode_t originalNode,
                                    hipGraph_t clonedGraph);
-# 5559 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 5559 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipGraphInstantiate(hipGraphExec_t* pGraphExec, hipGraph_t graph,
                                hipGraphNode_t* pErrorNode, char* pLogBuffer, size_t bufferSize);
-# 5574 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 5574 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipGraphInstantiateWithFlags(hipGraphExec_t* pGraphExec, hipGraph_t graph,
                                         unsigned long long flags);
-# 5587 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 5587 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipGraphLaunch(hipGraphExec_t graphExec, hipStream_t stream);
-# 5599 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 5599 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipGraphExecDestroy(hipGraphExec_t graphExec);
-# 5615 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 5615 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipGraphExecUpdate(hipGraphExec_t hGraphExec, hipGraph_t hGraph,
                               hipGraphNode_t* hErrorNode_out,
                               hipGraphExecUpdateResult* updateResult_out);
-# 5631 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 5631 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipGraphAddKernelNode(hipGraphNode_t* pGraphNode, hipGraph_t graph,
                                  const hipGraphNode_t* pDependencies, size_t numDependencies,
                                  const hipKernelNodeParams* pNodeParams);
-# 5644 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 5644 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipGraphKernelNodeGetParams(hipGraphNode_t node, hipKernelNodeParams* pNodeParams);
-# 5655 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 5655 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipGraphKernelNodeSetParams(hipGraphNode_t node, const hipKernelNodeParams* pNodeParams);
-# 5667 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 5667 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipGraphExecKernelNodeSetParams(hipGraphExec_t hGraphExec, hipGraphNode_t node,
                                            const hipKernelNodeParams* pNodeParams);
-# 5682 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 5682 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipGraphAddMemcpyNode(hipGraphNode_t* pGraphNode, hipGraph_t graph,
                                  const hipGraphNode_t* pDependencies, size_t numDependencies,
                                  const hipMemcpy3DParms* pCopyParams);
-# 5694 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 5694 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipGraphMemcpyNodeGetParams(hipGraphNode_t node, hipMemcpy3DParms* pNodeParams);
-# 5705 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 5705 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipGraphMemcpyNodeSetParams(hipGraphNode_t node, const hipMemcpy3DParms* pNodeParams);
-# 5717 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 5717 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipGraphKernelNodeSetAttribute(hipGraphNode_t hNode, hipKernelNodeAttrID attr,
                                           const hipKernelNodeAttrValue* value);
-# 5729 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 5729 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipGraphKernelNodeGetAttribute(hipGraphNode_t hNode, hipKernelNodeAttrID attr,
                                           hipKernelNodeAttrValue* value);
-# 5741 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 5741 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipGraphExecMemcpyNodeSetParams(hipGraphExec_t hGraphExec, hipGraphNode_t node,
                                            hipMemcpy3DParms* pNodeParams);
-# 5759 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 5759 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipGraphAddMemcpyNode1D(hipGraphNode_t* pGraphNode, hipGraph_t graph,
                                    const hipGraphNode_t* pDependencies, size_t numDependencies,
                                    void* dst, const void* src, size_t count, hipMemcpyKind kind);
-# 5775 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 5775 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipGraphMemcpyNodeSetParams1D(hipGraphNode_t node, void* dst, const void* src,
                                          size_t count, hipMemcpyKind kind);
-# 5792 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 5792 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipGraphExecMemcpyNodeSetParams1D(hipGraphExec_t hGraphExec, hipGraphNode_t node,
                                              void* dst, const void* src, size_t count,
                                              hipMemcpyKind kind);
-# 5812 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 5812 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipGraphAddMemcpyNodeFromSymbol(hipGraphNode_t* pGraphNode, hipGraph_t graph,
                                            const hipGraphNode_t* pDependencies,
                                            size_t numDependencies, void* dst, const void* symbol,
                                            size_t count, size_t offset, hipMemcpyKind kind);
-# 5830 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 5830 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipGraphMemcpyNodeSetParamsFromSymbol(hipGraphNode_t node, void* dst, const void* symbol,
                                                  size_t count, size_t offset, hipMemcpyKind kind);
-# 5848 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 5848 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipGraphExecMemcpyNodeSetParamsFromSymbol(hipGraphExec_t hGraphExec, hipGraphNode_t node,
                                                      void* dst, const void* symbol, size_t count,
                                                      size_t offset, hipMemcpyKind kind);
-# 5868 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 5868 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipGraphAddMemcpyNodeToSymbol(hipGraphNode_t* pGraphNode, hipGraph_t graph,
                                          const hipGraphNode_t* pDependencies,
                                          size_t numDependencies, const void* symbol,
                                          const void* src, size_t count, size_t offset,
                                          hipMemcpyKind kind);
-# 5887 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 5887 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipGraphMemcpyNodeSetParamsToSymbol(hipGraphNode_t node, const void* symbol,
                                                const void* src, size_t count, size_t offset,
                                                hipMemcpyKind kind);
-# 5906 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 5906 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipGraphExecMemcpyNodeSetParamsToSymbol(hipGraphExec_t hGraphExec, hipGraphNode_t node,
                                                    const void* symbol, const void* src,
                                                    size_t count, size_t offset, hipMemcpyKind kind);
-# 5922 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 5922 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipGraphAddMemsetNode(hipGraphNode_t* pGraphNode, hipGraph_t graph,
                                  const hipGraphNode_t* pDependencies, size_t numDependencies,
                                  const hipMemsetParams* pMemsetParams);
-# 5935 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 5935 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipGraphMemsetNodeGetParams(hipGraphNode_t node, hipMemsetParams* pNodeParams);
-# 5946 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 5946 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipGraphMemsetNodeSetParams(hipGraphNode_t node, const hipMemsetParams* pNodeParams);
-# 5958 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 5958 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipGraphExecMemsetNodeSetParams(hipGraphExec_t hGraphExec, hipGraphNode_t node,
                                            const hipMemsetParams* pNodeParams);
-# 5973 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 5973 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipGraphAddHostNode(hipGraphNode_t* pGraphNode, hipGraph_t graph,
                                const hipGraphNode_t* pDependencies, size_t numDependencies,
                                const hipHostNodeParams* pNodeParams);
-# 5986 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 5986 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipGraphHostNodeGetParams(hipGraphNode_t node, hipHostNodeParams* pNodeParams);
-# 5997 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 5997 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipGraphHostNodeSetParams(hipGraphNode_t node, const hipHostNodeParams* pNodeParams);
-# 6009 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 6009 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipGraphExecHostNodeSetParams(hipGraphExec_t hGraphExec, hipGraphNode_t node,
                                          const hipHostNodeParams* pNodeParams);
-# 6024 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 6024 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipGraphAddChildGraphNode(hipGraphNode_t* pGraphNode, hipGraph_t graph,
                                      const hipGraphNode_t* pDependencies, size_t numDependencies,
                                      hipGraph_t childGraph);
-# 6037 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 6037 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipGraphChildGraphNodeGetGraph(hipGraphNode_t node, hipGraph_t* pGraph);
-# 6049 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 6049 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipGraphExecChildGraphNodeSetParams(hipGraphExec_t hGraphExec, hipGraphNode_t node,
                                                hipGraph_t childGraph);
-# 6063 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 6063 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipGraphAddEmptyNode(hipGraphNode_t* pGraphNode, hipGraph_t graph,
                                 const hipGraphNode_t* pDependencies, size_t numDependencies);
-# 6079 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 6079 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipGraphAddEventRecordNode(hipGraphNode_t* pGraphNode, hipGraph_t graph,
                                       const hipGraphNode_t* pDependencies, size_t numDependencies,
                                       hipEvent_t event);
-# 6092 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 6092 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipGraphEventRecordNodeGetEvent(hipGraphNode_t node, hipEvent_t* event_out);
-# 6103 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 6103 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipGraphEventRecordNodeSetEvent(hipGraphNode_t node, hipEvent_t event);
-# 6115 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 6115 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipGraphExecEventRecordNodeSetEvent(hipGraphExec_t hGraphExec, hipGraphNode_t hNode,
                                                hipEvent_t event);
-# 6130 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 6130 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipGraphAddEventWaitNode(hipGraphNode_t* pGraphNode, hipGraph_t graph,
                                     const hipGraphNode_t* pDependencies, size_t numDependencies,
                                     hipEvent_t event);
-# 6144 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 6144 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipGraphEventWaitNodeGetEvent(hipGraphNode_t node, hipEvent_t* event_out);
-# 6155 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 6155 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipGraphEventWaitNodeSetEvent(hipGraphNode_t node, hipEvent_t event);
-# 6167 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 6167 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipGraphExecEventWaitNodeSetEvent(hipGraphExec_t hGraphExec, hipGraphNode_t hNode,
                                              hipEvent_t event);
-# 6179 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 6179 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 typedef struct hipMemAllocationProp {
     unsigned char compressionType;
     hipMemLocation location;
@@ -40211,35 +40264,35 @@ typedef struct hipArrayMapInfo {
      unsigned int flags;
      unsigned int reserved[2];
 } hipArrayMapInfo;
-# 6287 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 6287 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipMemAddressFree(void* devPtr, size_t size);
-# 6301 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 6301 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipMemAddressReserve(void** ptr, size_t size, size_t alignment, void* addr, unsigned long long flags);
-# 6314 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 6314 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipMemCreate(hipMemGenericAllocationHandle_t* handle, size_t size, const hipMemAllocationProp* prop, unsigned long long flags);
-# 6327 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 6327 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipMemExportToShareableHandle(void* shareableHandle, hipMemGenericAllocationHandle_t handle, hipMemAllocationHandleType handleType, unsigned long long flags);
-# 6339 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 6339 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipMemGetAccess(unsigned long long* flags, const hipMemLocation* location, void* ptr);
-# 6351 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 6351 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipMemGetAllocationGranularity(size_t* granularity, const hipMemAllocationProp* prop, hipMemAllocationGranularity_flags option);
-# 6362 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 6362 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipMemGetAllocationPropertiesFromHandle(hipMemAllocationProp* prop, hipMemGenericAllocationHandle_t handle);
-# 6374 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 6374 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipMemImportFromShareableHandle(hipMemGenericAllocationHandle_t* handle, void* osHandle, hipMemAllocationHandleType shHandleType);
-# 6388 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 6388 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipMemMap(void* ptr, size_t size, size_t offset, hipMemGenericAllocationHandle_t handle, unsigned long long flags);
-# 6400 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 6400 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipMemMapArrayAsync(hipArrayMapInfo* mapInfoList, unsigned int count, hipStream_t stream);
-# 6410 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 6410 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipMemRelease(hipMemGenericAllocationHandle_t handle);
-# 6421 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 6421 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipMemRetainAllocationHandle(hipMemGenericAllocationHandle_t* handle, void* addr);
-# 6434 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 6434 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipMemSetAccess(void* ptr, size_t size, const hipMemAccessDesc* desc, size_t count);
-# 6445 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 6445 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 hipError_t hipMemUnmap(void* ptr, size_t size);
-# 6459 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 6459 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 typedef unsigned int GLuint;
 typedef unsigned int GLenum;
 
@@ -40483,7 +40536,7 @@ static inline hipError_t hipMallocFromPoolAsync(
 
 
 #pragma GCC visibility pop
-# 6727 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 3
+# 6727 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime_api.h" 3
 template <class T>
 static inline hipError_t hipMalloc(T** devPtr, size_t size) {
     return hipMalloc((void**)devPtr, size);
@@ -40502,13 +40555,17 @@ static inline hipError_t hipMallocManaged(T** devPtr, size_t size,
                                        unsigned int flags = 0x01) {
     return hipMallocManaged((void**)devPtr, size, flags);
 }
-# 106 "/nethome/jchen706/opt/include/hip/amd_detail/amd_hip_runtime.h" 2 3
+# 27 "/nethome/jchen706/opt/hip/include/hip/hip_runtime_api.h" 2 3
+# 106 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h" 2 3
 extern int HIP_TRACE_API;
 
 
 
-# 1 "/nethome/jchen706/opt/include/hip/amd_detail/hip_ldg.h" 1 3
-# 30 "/nethome/jchen706/opt/include/hip/amd_detail/hip_ldg.h" 3
+# 1 "/nethome/jchen706/opt/hip/include/hip/amd_detail/hip_ldg.h" 1 3
+# 25 "/nethome/jchen706/opt/hip/include/hip/amd_detail/hip_ldg.h" 3
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+# 1 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/hip_ldg.h" 1 3
+# 30 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/hip_ldg.h" 3
 __attribute__((device)) inline static char __ldg(const char* ptr) { return *ptr; }
 
 __attribute__((device)) inline static char2 __ldg(const char2* ptr) { return *ptr; }
@@ -40576,14 +40633,18 @@ __attribute__((device)) inline static float4 __ldg(const float4* ptr) { return p
 __attribute__((device)) inline static double __ldg(const double* ptr) { return ptr[0]; }
 
 __attribute__((device)) inline static double2 __ldg(const double2* ptr) { return ptr[0]; }
-# 111 "/nethome/jchen706/opt/include/hip/amd_detail/amd_hip_runtime.h" 2 3
+# 27 "/nethome/jchen706/opt/hip/include/hip/amd_detail/hip_ldg.h" 2 3
+# 111 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h" 2 3
 
-# 1 "/nethome/jchen706/opt/include/hip/amd_detail/amd_hip_atomic.h" 1 3
-# 25 "/nethome/jchen706/opt/include/hip/amd_detail/amd_hip_atomic.h" 3
-# 1 "/nethome/jchen706/opt/include/hip/amd_detail/amd_device_functions.h" 1 3
-# 27 "/nethome/jchen706/opt/include/hip/amd_detail/amd_device_functions.h" 3
-# 1 "/nethome/jchen706/opt/include/hip/amd_detail/math_fwd.h" 1 3
-# 27 "/nethome/jchen706/opt/include/hip/amd_detail/math_fwd.h" 3
+# 1 "/nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_atomic.h" 1 3
+# 25 "/nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_atomic.h" 3
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+# 1 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_atomic.h" 1 3
+# 25 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_atomic.h" 3
+# 1 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_device_functions.h" 1 3
+# 27 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_device_functions.h" 3
+# 1 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/math_fwd.h" 1 3
+# 27 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/math_fwd.h" 3
     extern "C" {
 
 
@@ -41271,19 +41332,25 @@ double __llvm_amdgcn_rsq_f64(double) __asm("llvm.amdgcn.rsq.f64");
 
 
     }
-# 28 "/nethome/jchen706/opt/include/hip/amd_detail/amd_device_functions.h" 2 3
+# 28 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_device_functions.h" 2 3
 
 
-# 1 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 1 3
-# 31 "/nethome/jchen706/opt/include/hip/amd_detail/amd_device_functions.h" 2 3
+
 # 1 "/nethome/jchen706/opt/llvm/lib/clang/16.0.0/include/stddef.h" 1 3
-# 32 "/nethome/jchen706/opt/include/hip/amd_detail/amd_device_functions.h" 2 3
+# 32 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_device_functions.h" 2 3
 
 
-# 1 "/nethome/jchen706/opt/include/hip/hip_vector_types.h" 1 3
-# 35 "/nethome/jchen706/opt/include/hip/amd_detail/amd_device_functions.h" 2 3
-# 1 "/nethome/jchen706/opt/include/hip/amd_detail/device_library_decls.h" 1 3
-# 36 "/nethome/jchen706/opt/include/hip/amd_detail/device_library_decls.h" 3
+# 1 "/nethome/jchen706/opt/hip/include/hip/hip_vector_types.h" 1 3
+# 25 "/nethome/jchen706/opt/hip/include/hip/hip_vector_types.h" 3
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+# 1 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_vector_types.h" 1 3
+# 27 "/nethome/jchen706/opt/hip/include/hip/hip_vector_types.h" 2 3
+# 35 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_device_functions.h" 2 3
+# 1 "/nethome/jchen706/opt/hip/include/hip/amd_detail/device_library_decls.h" 1 3
+# 25 "/nethome/jchen706/opt/hip/include/hip/amd_detail/device_library_decls.h" 3
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+# 1 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/device_library_decls.h" 1 3
+# 36 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/device_library_decls.h" 3
 typedef unsigned char uchar;
 typedef unsigned short ushort;
 typedef unsigned int uint;
@@ -41373,19 +41440,24 @@ typedef enum __memory_order
 
 extern "C" __attribute__((device)) void
 __atomic_work_item_fence(__cl_mem_fence_flags, __memory_order, __memory_scope);
-# 36 "/nethome/jchen706/opt/include/hip/amd_detail/amd_device_functions.h" 2 3
-# 1 "/nethome/jchen706/opt/include/hip/amd_detail/llvm_intrinsics.h" 1 3
-# 35 "/nethome/jchen706/opt/include/hip/amd_detail/llvm_intrinsics.h" 3
+# 27 "/nethome/jchen706/opt/hip/include/hip/amd_detail/device_library_decls.h" 2 3
+# 36 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_device_functions.h" 2 3
+# 1 "/nethome/jchen706/opt/hip/include/hip/amd_detail/llvm_intrinsics.h" 1 3
+# 25 "/nethome/jchen706/opt/hip/include/hip/amd_detail/llvm_intrinsics.h" 3
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+# 1 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/llvm_intrinsics.h" 1 3
+# 35 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/llvm_intrinsics.h" 3
 __attribute__((device))
 unsigned __llvm_amdgcn_groupstaticsize() __asm("llvm.amdgcn.groupstaticsize");
 
 __attribute__((device))
 int __llvm_amdgcn_ds_swizzle(int index, int pattern) __asm("llvm.amdgcn.ds.swizzle");
-# 37 "/nethome/jchen706/opt/include/hip/amd_detail/amd_device_functions.h" 2 3
+# 27 "/nethome/jchen706/opt/hip/include/hip/amd_detail/llvm_intrinsics.h" 2 3
+# 37 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_device_functions.h" 2 3
 
 
 extern "C" __attribute__((device)) int printf(const char *fmt, ...);
-# 50 "/nethome/jchen706/opt/include/hip/amd_detail/amd_device_functions.h" 3
+# 50 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_device_functions.h" 3
 __attribute__((device)) static inline unsigned int __popc(unsigned int input) {
     return __builtin_popcount(input);
 }
@@ -41726,8 +41798,8 @@ __attribute__((device)) static inline int __hip_move_dpp_N(int src) {
 }
 
 
-# 1 "/nethome/jchen706/opt/include/hip/amd_detail/amd_warp_functions.h" 1 3
-# 26 "/nethome/jchen706/opt/include/hip/amd_detail/amd_warp_functions.h" 3
+# 1 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_warp_functions.h" 1 3
+# 26 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_warp_functions.h" 3
 static constexpr int warpSize = 64;
 
 __attribute__((device))
@@ -42145,7 +42217,7 @@ unsigned long long __shfl_xor(unsigned long long var, int lane_mask, int width =
     unsigned long long tmp1; __builtin_memcpy(&tmp1, &tmp0, sizeof(tmp0));
     return tmp1;
 }
-# 391 "/nethome/jchen706/opt/include/hip/amd_detail/amd_device_functions.h" 2 3
+# 391 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_device_functions.h" 2 3
 
 
 
@@ -42259,7 +42331,7 @@ __attribute__((device)) static inline long long int __double_as_longlong(double 
 
     return tmp;
 }
-# 519 "/nethome/jchen706/opt/include/hip/amd_detail/amd_device_functions.h" 3
+# 519 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_device_functions.h" 3
 __attribute__((device)) static inline int __float2int_rd(float x) { return (int)__ocml_floor_f32(x); }
 __attribute__((device)) static inline int __float2int_rn(float x) { return (int)__ocml_rint_f32(x); }
 __attribute__((device)) static inline int __float2int_ru(float x) { return (int)__ocml_ceil_f32(x); }
@@ -42559,7 +42631,7 @@ __attribute__((weak))
 void abort() {
     return __builtin_trap();
 }
-# 831 "/nethome/jchen706/opt/include/hip/amd_detail/amd_device_functions.h" 3
+# 831 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_device_functions.h" 3
 extern "C" __attribute__((device)) __attribute__((noinline)) __attribute__((weak))
 void __assert_fail(const char *assertion,
                    const char *file,
@@ -42567,7 +42639,7 @@ void __assert_fail(const char *assertion,
                    const char *function)
 {
   const char fmt[] = "%s:%u: %s: Device-side assertion `%s' failed.\n";
-# 856 "/nethome/jchen706/opt/include/hip/amd_detail/amd_device_functions.h" 3
+# 856 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_device_functions.h" 3
   auto msg = __ockl_fprintf_stderr_begin();
   int len = 0;
   do { const char *tmp = fmt; while (*tmp++); len = tmp - fmt; } while (0);
@@ -42648,7 +42720,7 @@ int __syncthreads_or(int predicate)
 {
   return __ockl_wgred_or_i32(!!predicate);
 }
-# 976 "/nethome/jchen706/opt/include/hip/amd_detail/amd_device_functions.h" 3
+# 976 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_device_functions.h" 3
 __attribute__((device))
 inline
 unsigned __smid(void)
@@ -42661,7 +42733,7 @@ unsigned __smid(void)
 
     return (se_id << 4) + cu_id;
 }
-# 1000 "/nethome/jchen706/opt/include/hip/amd_detail/amd_device_functions.h" 3
+# 1000 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_device_functions.h" 3
 static inline __attribute__((device)) void* __hip_hc_memcpy(void* dst, const void* src, size_t size) {
     auto dstPtr = static_cast<unsigned char*>(dst);
     auto srcPtr = static_cast<const unsigned char*>(src);
@@ -42720,10 +42792,10 @@ static inline __attribute__((device)) void* memset(void* ptr, int val, size_t si
     unsigned char val8 = static_cast<unsigned char>(val);
     return __hip_hc_memset(ptr, val8, size);
 }
-# 26 "/nethome/jchen706/opt/include/hip/amd_detail/amd_hip_atomic.h" 2 3
-# 38 "/nethome/jchen706/opt/include/hip/amd_detail/amd_hip_atomic.h" 3
-# 1 "/nethome/jchen706/opt/include/hip/amd_detail/amd_hip_unsafe_atomics.h" 1 3
-# 52 "/nethome/jchen706/opt/include/hip/amd_detail/amd_hip_unsafe_atomics.h" 3
+# 26 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_atomic.h" 2 3
+# 38 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_atomic.h" 3
+# 1 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_unsafe_atomics.h" 1 3
+# 52 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_unsafe_atomics.h" 3
 __attribute__((device)) inline float unsafeAtomicAdd(float* addr, float value) {
 
 
@@ -42747,7 +42819,7 @@ __attribute__((device)) inline float unsafeAtomicAdd(float* addr, float value) {
 
 
 }
-# 102 "/nethome/jchen706/opt/include/hip/amd_detail/amd_hip_unsafe_atomics.h" 3
+# 102 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_unsafe_atomics.h" 3
 __attribute__((device)) inline double unsafeAtomicAdd(double* addr, double value) {
 
 
@@ -42758,9 +42830,9 @@ __attribute__((device)) inline double unsafeAtomicAdd(double* addr, double value
 
 
 }
-# 127 "/nethome/jchen706/opt/include/hip/amd_detail/amd_hip_unsafe_atomics.h" 3
+# 127 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_unsafe_atomics.h" 3
 __attribute__((device)) inline float safeAtomicAdd(float* addr, float value) {
-# 158 "/nethome/jchen706/opt/include/hip/amd_detail/amd_hip_unsafe_atomics.h" 3
+# 158 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_unsafe_atomics.h" 3
   return __hip_atomic_fetch_add(addr, value, 0, 5);
 
 
@@ -42768,7 +42840,7 @@ __attribute__((device)) inline float safeAtomicAdd(float* addr, float value) {
 
 
 }
-# 180 "/nethome/jchen706/opt/include/hip/amd_detail/amd_hip_unsafe_atomics.h" 3
+# 180 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_unsafe_atomics.h" 3
 __attribute__((device)) inline double safeAtomicAdd(double* addr, double value) {
 
 
@@ -42777,9 +42849,9 @@ __attribute__((device)) inline double safeAtomicAdd(double* addr, double value) 
 
 
   return __hip_atomic_fetch_add(addr, value, 0, 5);
-# 217 "/nethome/jchen706/opt/include/hip/amd_detail/amd_hip_unsafe_atomics.h" 3
+# 217 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_unsafe_atomics.h" 3
 }
-# 39 "/nethome/jchen706/opt/include/hip/amd_detail/amd_hip_atomic.h" 2 3
+# 39 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_atomic.h" 2 3
 
 __attribute__((device))
 inline
@@ -43538,13 +43610,23 @@ inline
 unsigned long long atomicXor_system(unsigned long long* address, unsigned long long val) {
   return __hip_atomic_fetch_xor(address, val, 0, 5);
 }
-# 113 "/nethome/jchen706/opt/include/hip/amd_detail/amd_hip_runtime.h" 2 3
+# 27 "/nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_atomic.h" 2 3
+# 113 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h" 2 3
 
-
-# 1 "/nethome/jchen706/opt/include/hip/amd_detail/amd_surface_functions.h" 1 3
-# 30 "/nethome/jchen706/opt/include/hip/amd_detail/amd_surface_functions.h" 3
-# 1 "/nethome/jchen706/opt/include/hip/amd_detail/ockl_image.h" 1 3
-# 27 "/nethome/jchen706/opt/include/hip/amd_detail/ockl_image.h" 3
+# 1 "/nethome/jchen706/opt/hip/include/hip/amd_detail/amd_device_functions.h" 1 3
+# 25 "/nethome/jchen706/opt/hip/include/hip/amd_detail/amd_device_functions.h" 3
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+# 115 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h" 2 3
+# 1 "/nethome/jchen706/opt/hip/include/hip/amd_detail/amd_surface_functions.h" 1 3
+# 25 "/nethome/jchen706/opt/hip/include/hip/amd_detail/amd_surface_functions.h" 3
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+# 1 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_surface_functions.h" 1 3
+# 30 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_surface_functions.h" 3
+# 1 "/nethome/jchen706/opt/hip/include/hip/amd_detail/ockl_image.h" 1 3
+# 25 "/nethome/jchen706/opt/hip/include/hip/amd_detail/ockl_image.h" 3
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+# 1 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/ockl_image.h" 1 3
+# 27 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/ockl_image.h" 3
 extern "C" {
 
 
@@ -43694,7 +43776,8 @@ __attribute__((device)) int __ockl_image_channel_order_CM(unsigned int __attribu
 __attribute__((device)) int __ockl_image_channel_order_CMa(unsigned int __attribute__((address_space(4)))* i);
 
 };
-# 31 "/nethome/jchen706/opt/include/hip/amd_detail/amd_surface_functions.h" 2 3
+# 27 "/nethome/jchen706/opt/hip/include/hip/amd_detail/ockl_image.h" 2 3
+# 31 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_surface_functions.h" 2 3
 
 
 
@@ -43727,10 +43810,10 @@ struct __hip_is_isurf_channel_type<HIP_vector_type<T, rank>>
 
 
 static __attribute__((host)) __attribute__((device)) inline __attribute__((always_inline)) int __hipGetPixelAddr(int x, int format, int order) {
-# 84 "/nethome/jchen706/opt/include/hip/amd_detail/amd_surface_functions.h" 3
+# 84 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_surface_functions.h" 3
     static const int FormatLUT[] = { 0, 1, 0, 1, 3, 1, 1, 1, 0, 1, 2, 0, 1, 2, 1, 2 };
     x = FormatLUT[format] == 3 ? x / FormatLUT[format] : x >> FormatLUT[format];
-# 112 "/nethome/jchen706/opt/include/hip/amd_detail/amd_surface_functions.h" 3
+# 112 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_surface_functions.h" 3
     static const int OrderLUT[] = { 0, 0, 1, 1, 3, 1, 3, 2, 2, 2, 2, 2, 3, 2, 2, 2, 0, 0, 0, 0 };
     return x = OrderLUT[order] == 3 ? x / OrderLUT[order] : x >> OrderLUT[order];
 }
@@ -43990,12 +44073,20 @@ static __attribute__((device)) void surfCubemapLayeredwrite(T* data, hipSurfaceO
     auto tmp = __hipMapToNativeFloat4(data);
     __ockl_image_store_lod_CM(i, int2(x, y).data, face, layer, tmp);
 }
-# 116 "/nethome/jchen706/opt/include/hip/amd_detail/amd_hip_runtime.h" 2 3
-# 1 "/nethome/jchen706/opt/include/hip/amd_detail/texture_fetch_functions.h" 1 3
-# 28 "/nethome/jchen706/opt/include/hip/amd_detail/texture_fetch_functions.h" 3
-# 1 "/nethome/jchen706/opt/include/hip/hip_texture_types.h" 1 3
-# 29 "/nethome/jchen706/opt/include/hip/amd_detail/texture_fetch_functions.h" 2 3
-# 39 "/nethome/jchen706/opt/include/hip/amd_detail/texture_fetch_functions.h" 3
+# 27 "/nethome/jchen706/opt/hip/include/hip/amd_detail/amd_surface_functions.h" 2 3
+# 116 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h" 2 3
+# 1 "/nethome/jchen706/opt/hip/include/hip/amd_detail/texture_fetch_functions.h" 1 3
+# 25 "/nethome/jchen706/opt/hip/include/hip/amd_detail/texture_fetch_functions.h" 3
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+# 1 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/texture_fetch_functions.h" 1 3
+# 28 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/texture_fetch_functions.h" 3
+# 1 "/nethome/jchen706/opt/hip/include/hip/hip_texture_types.h" 1 3
+# 25 "/nethome/jchen706/opt/hip/include/hip/hip_texture_types.h" 3
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+# 1 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_texture_types.h" 1 3
+# 27 "/nethome/jchen706/opt/hip/include/hip/hip_texture_types.h" 2 3
+# 29 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/texture_fetch_functions.h" 2 3
+# 39 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/texture_fetch_functions.h" 3
 template<typename T>
 struct __hip_is_tex_channel_type
 {
@@ -44344,9 +44435,13 @@ static inline __attribute__((always_inline)) __attribute__((device)) __hip_tex2d
     }
     return {};
 }
-# 117 "/nethome/jchen706/opt/include/hip/amd_detail/amd_hip_runtime.h" 2 3
-# 1 "/nethome/jchen706/opt/include/hip/amd_detail/texture_indirect_functions.h" 1 3
-# 39 "/nethome/jchen706/opt/include/hip/amd_detail/texture_indirect_functions.h" 3
+# 27 "/nethome/jchen706/opt/hip/include/hip/amd_detail/texture_fetch_functions.h" 2 3
+# 117 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h" 2 3
+# 1 "/nethome/jchen706/opt/hip/include/hip/amd_detail/texture_indirect_functions.h" 1 3
+# 25 "/nethome/jchen706/opt/hip/include/hip/amd_detail/texture_indirect_functions.h" 3
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+# 1 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/texture_indirect_functions.h" 1 3
+# 39 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/texture_indirect_functions.h" 3
 template<typename T>
 struct __hip_is_itex_channel_type
 {
@@ -44810,8 +44905,9 @@ static __attribute__((device)) void texCubemapLayeredGrad(T *ptr, hipTextureObje
 {
     *ptr = texCubemapLayeredGrad<T>(textureObject, x, y, z, layer, dPdx, dPdy);
 }
-# 118 "/nethome/jchen706/opt/include/hip/amd_detail/amd_hip_runtime.h" 2 3
-# 170 "/nethome/jchen706/opt/include/hip/amd_detail/amd_hip_runtime.h" 3
+# 27 "/nethome/jchen706/opt/hip/include/hip/amd_detail/texture_indirect_functions.h" 2 3
+# 118 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h" 2 3
+# 170 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h" 3
 __attribute__((host)) inline void* __get_dynamicgroupbaseptr() { return nullptr; }
 
 
@@ -44829,7 +44925,7 @@ __attribute__((device)) float __hip_ds_swizzlef_N(float src);
 
 template <int dpp_ctrl, int row_mask, int bank_mask, bool bound_ctrl>
 __attribute__((device)) int __hip_move_dpp_N(int src);
-# 202 "/nethome/jchen706/opt/include/hip/amd_detail/amd_hip_runtime.h" 3
+# 202 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h" 3
 typedef int hipLaunchParm;
 
 template <std::size_t n, typename... Ts,
@@ -44859,11 +44955,7 @@ std::tuple<Formals...> validateArgsCountType(void (*kernel)(Formals...), std::tu
     std::tuple<Formals...> to_formals{std::move(actuals)};
     return to_formals;
 }
-# 254 "/nethome/jchen706/opt/include/hip/amd_detail/amd_hip_runtime.h" 3
-# 1 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 1 3
-# 255 "/nethome/jchen706/opt/include/hip/amd_detail/amd_hip_runtime.h" 2 3
-
-
+# 257 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h" 3
 extern "C" __attribute__((device)) __attribute__((const)) size_t __ockl_get_local_id(uint);
 extern "C" __attribute__((device)) __attribute__((const)) size_t __ockl_get_group_id(uint);
 extern "C" __attribute__((device)) __attribute__((const)) size_t __ockl_get_local_size(uint);
@@ -44890,7 +44982,7 @@ struct __HIP_ThreadIdx {
     return __ockl_get_local_id(x);
   }
 };
-# 295 "/nethome/jchen706/opt/include/hip/amd_detail/amd_hip_runtime.h" 3
+# 295 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h" 3
 template <typename F>
 struct __HIP_Coordinates {
   using R = decltype(F{}(0));
@@ -44986,10 +45078,13 @@ extern "C" __attribute__((device)) __attribute__((const)) size_t __ockl_get_num_
 
 
 
-# 1 "/nethome/jchen706/opt/include/hip/amd_detail/amd_math_functions.h" 1 3
-# 25 "/nethome/jchen706/opt/include/hip/amd_detail/amd_math_functions.h" 3
-# 1 "/nethome/jchen706/opt/include/hip/amd_detail/hip_fp16_math_fwd.h" 1 3
-# 31 "/nethome/jchen706/opt/include/hip/amd_detail/hip_fp16_math_fwd.h" 3
+# 1 "/nethome/jchen706/opt/hip/include/hip/amd_detail/amd_math_functions.h" 1 3
+# 25 "/nethome/jchen706/opt/hip/include/hip/amd_detail/amd_math_functions.h" 3
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+# 1 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_math_functions.h" 1 3
+# 25 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_math_functions.h" 3
+# 1 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/hip_fp16_math_fwd.h" 1 3
+# 31 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/hip_fp16_math_fwd.h" 3
 extern "C"
 {
     __attribute__((device)) __attribute__((const)) _Float16 __ocml_ceil_f16(_Float16);
@@ -45045,7 +45140,7 @@ extern "C"
     __attribute__((device)) __attribute__((const)) __2f16 __ocml_sqrt_2f16(__2f16);
     __attribute__((device)) __attribute__((const)) __2f16 __ocml_trunc_2f16(__2f16);
 }
-# 26 "/nethome/jchen706/opt/include/hip/amd_detail/amd_math_functions.h" 2 3
+# 26 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_math_functions.h" 2 3
 
 
 
@@ -50346,8 +50441,8 @@ namespace std __attribute__ ((__visibility__ ("default")))
 # 5844 "/usr/lib/gcc/x86_64-redhat-linux/8/../../../../include/c++/8/bits/stl_algo.h" 3
 }
 # 63 "/usr/lib/gcc/x86_64-redhat-linux/8/../../../../include/c++/8/algorithm" 2 3
-# 33 "/nethome/jchen706/opt/include/hip/amd_detail/amd_math_functions.h" 2 3
-# 64 "/nethome/jchen706/opt/include/hip/amd_detail/amd_math_functions.h" 3
+# 33 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_math_functions.h" 2 3
+# 64 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_math_functions.h" 3
 static __attribute__((device))
 inline
 uint64_t __make_mantissa_base8(const char* tagp)
@@ -50859,30 +50954,30 @@ float __expf(float x) { return __ocml_native_exp_f32(x); }
 static __attribute__((device))
 inline
 float __fadd_rn(float x, float y) { return x + y; }
-# 586 "/nethome/jchen706/opt/include/hip/amd_detail/amd_math_functions.h" 3
+# 586 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_math_functions.h" 3
 static __attribute__((device))
 inline
 float __fdiv_rn(float x, float y) { return x / y; }
-# 597 "/nethome/jchen706/opt/include/hip/amd_detail/amd_math_functions.h" 3
+# 597 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_math_functions.h" 3
 static __attribute__((device))
 inline
 float __fdividef(float x, float y) { return x / y; }
-# 608 "/nethome/jchen706/opt/include/hip/amd_detail/amd_math_functions.h" 3
+# 608 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_math_functions.h" 3
 static __attribute__((device))
 inline
 float __fmaf_rn(float x, float y, float z)
 {
     return __ocml_fma_f32(x, y, z);
 }
-# 631 "/nethome/jchen706/opt/include/hip/amd_detail/amd_math_functions.h" 3
+# 631 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_math_functions.h" 3
 static __attribute__((device))
 inline
 float __fmul_rn(float x, float y) { return x * y; }
-# 645 "/nethome/jchen706/opt/include/hip/amd_detail/amd_math_functions.h" 3
+# 645 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_math_functions.h" 3
 static __attribute__((device))
 inline
 float __frcp_rn(float x) { return __llvm_amdgcn_rcp_f32(x); }
-# 656 "/nethome/jchen706/opt/include/hip/amd_detail/amd_math_functions.h" 3
+# 656 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_math_functions.h" 3
 static __attribute__((device))
 inline
 float __frsqrt_rn(float x) { return __llvm_amdgcn_rsq_f32(x); }
@@ -50894,11 +50989,11 @@ float __frsqrt_rn(float x) { return __llvm_amdgcn_rsq_f32(x); }
 static __attribute__((device))
 inline
 float __fsqrt_rn(float x) { return __ocml_native_sqrt_f32(x); }
-# 678 "/nethome/jchen706/opt/include/hip/amd_detail/amd_math_functions.h" 3
+# 678 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_math_functions.h" 3
 static __attribute__((device))
 inline
 float __fsub_rn(float x, float y) { return x - y; }
-# 689 "/nethome/jchen706/opt/include/hip/amd_detail/amd_math_functions.h" 3
+# 689 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_math_functions.h" 3
 static __attribute__((device))
 inline
 float __log10f(float x) { return __ocml_native_log10_f32(x); }
@@ -51331,34 +51426,34 @@ double yn(int n, double x)
 static __attribute__((device))
 inline
 double __dadd_rn(double x, double y) { return x + y; }
-# 1132 "/nethome/jchen706/opt/include/hip/amd_detail/amd_math_functions.h" 3
+# 1132 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_math_functions.h" 3
 static __attribute__((device))
 inline
 double __ddiv_rn(double x, double y) { return x / y; }
-# 1146 "/nethome/jchen706/opt/include/hip/amd_detail/amd_math_functions.h" 3
+# 1146 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_math_functions.h" 3
 static __attribute__((device))
 inline
 double __dmul_rn(double x, double y) { return x * y; }
-# 1160 "/nethome/jchen706/opt/include/hip/amd_detail/amd_math_functions.h" 3
+# 1160 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_math_functions.h" 3
 static __attribute__((device))
 inline
 double __drcp_rn(double x) { return __llvm_amdgcn_rcp_f64(x); }
-# 1174 "/nethome/jchen706/opt/include/hip/amd_detail/amd_math_functions.h" 3
+# 1174 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_math_functions.h" 3
 static __attribute__((device))
 inline
 double __dsqrt_rn(double x) { return __ocml_sqrt_f64(x); }
-# 1188 "/nethome/jchen706/opt/include/hip/amd_detail/amd_math_functions.h" 3
+# 1188 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_math_functions.h" 3
 static __attribute__((device))
 inline
 double __dsub_rn(double x, double y) { return x - y; }
-# 1205 "/nethome/jchen706/opt/include/hip/amd_detail/amd_math_functions.h" 3
+# 1205 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_math_functions.h" 3
 static __attribute__((device))
 inline
 double __fma_rn(double x, double y, double z)
 {
     return __ocml_fma_f64(x, y, z);
 }
-# 1229 "/nethome/jchen706/opt/include/hip/amd_detail/amd_math_functions.h" 3
+# 1229 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_math_functions.h" 3
 static __attribute__((device))
 inline
 int abs(int x)
@@ -51400,14 +51495,14 @@ static __attribute__((device))
 inline float fma(float x, float y, float z) {
     return fmaf(x, y, z);
 }
-# 1278 "/nethome/jchen706/opt/include/hip/amd_detail/amd_math_functions.h" 3
+# 1278 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_math_functions.h" 3
 template<bool __B, class __T = void>
 struct __hip_enable_if {};
 
 template <class __T> struct __hip_enable_if<true, __T> {
   typedef __T type;
 };
-# 1340 "/nethome/jchen706/opt/include/hip/amd_detail/amd_math_functions.h" 3
+# 1340 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_math_functions.h" 3
 static __attribute__((device)) inline float acos(float x) { return acosf(x); } template <typename __T> static __attribute__((device)) typename __hip_enable_if<std::numeric_limits<__T>::is_integer, double>::type acos(__T __x) { return ::acos((double)__x); }
 static __attribute__((device)) inline float acosh(float x) { return acoshf(x); } template <typename __T> static __attribute__((device)) typename __hip_enable_if<std::numeric_limits<__T>::is_integer, double>::type acosh(__T __x) { return ::acosh((double)__x); }
 static __attribute__((device)) inline float asin(float x) { return asinf(x); } template <typename __T> static __attribute__((device)) typename __hip_enable_if<std::numeric_limits<__T>::is_integer, double>::type asin(__T __x) { return ::asin((double)__x); }
@@ -51468,7 +51563,7 @@ static __attribute__((device)) inline float tan(float x) { return tanf(x); } tem
 static __attribute__((device)) inline float tanh(float x) { return tanhf(x); } template <typename __T> static __attribute__((device)) typename __hip_enable_if<std::numeric_limits<__T>::is_integer, double>::type tanh(__T __x) { return ::tanh((double)__x); }
 static __attribute__((device)) inline float tgamma(float x) { return tgammaf(x); } template <typename __T> static __attribute__((device)) typename __hip_enable_if<std::numeric_limits<__T>::is_integer, double>::type tgamma(__T __x) { return ::tgamma((double)__x); }
 static __attribute__((device)) inline float trunc(float x) { return truncf(x); } template <typename __T> static __attribute__((device)) typename __hip_enable_if<std::numeric_limits<__T>::is_integer, double>::type trunc(__T __x) { return ::trunc((double)__x); };
-# 1409 "/nethome/jchen706/opt/include/hip/amd_detail/amd_math_functions.h" 3
+# 1409 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_math_functions.h" 3
 static __attribute__((device)) inline float scalbn(float x, int y) { return scalbnf(x, y); }
 static __attribute__((device)) inline float ldexp(float x, int y) { return ldexpf(x, y); }
 
@@ -51547,11 +51642,12 @@ static __attribute__((device))
 inline _Float16 pow(_Float16 base, int iexp) {
   return __ocml_pown_f16(base, iexp);
 }
-# 1502 "/nethome/jchen706/opt/include/hip/amd_detail/amd_math_functions.h" 3
-# 1 "/nethome/jchen706/opt/include/hip/amd_detail/amd_hip_runtime.h" 1 3
-# 1503 "/nethome/jchen706/opt/include/hip/amd_detail/amd_math_functions.h" 2 3
-# 391 "/nethome/jchen706/opt/include/hip/amd_detail/amd_hip_runtime.h" 2 3
-# 426 "/nethome/jchen706/opt/include/hip/amd_detail/amd_hip_runtime.h" 3
+# 1502 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_math_functions.h" 3
+# 1 "/nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h" 1 3
+# 1503 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_math_functions.h" 2 3
+# 27 "/nethome/jchen706/opt/hip/include/hip/amd_detail/amd_math_functions.h" 2 3
+# 391 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h" 2 3
+# 426 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h" 3
 # 1 "/nethome/jchen706/opt/llvm/lib/clang/16.0.0/include/__clang_cuda_math_forward_declares.h" 1 3
 # 26 "/nethome/jchen706/opt/llvm/lib/clang/16.0.0/include/__clang_cuda_math_forward_declares.h" 3
 static __inline__ __attribute__((always_inline)) __attribute__((device)) long abs(long);
@@ -51797,7 +51893,7 @@ using ::trunc;
 
 
 }
-# 427 "/nethome/jchen706/opt/include/hip/amd_detail/amd_hip_runtime.h" 2 3
+# 427 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h" 2 3
 # 1 "/nethome/jchen706/opt/llvm/lib/clang/16.0.0/include/__clang_cuda_complex_builtins.h" 1 3
 # 86 "/nethome/jchen706/opt/llvm/lib/clang/16.0.0/include/__clang_cuda_complex_builtins.h" 3
 extern "C" {
@@ -51974,7 +52070,7 @@ __attribute__((device)) inline float _Complex __divsc3(float __a, float __b, flo
 
 
 }
-# 428 "/nethome/jchen706/opt/include/hip/amd_detail/amd_hip_runtime.h" 2 3
+# 428 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h" 2 3
 
 
 
@@ -52013,7 +52109,7 @@ min(const __T &__a, const __T &__b) {
 }
 # 113 "/nethome/jchen706/opt/llvm/lib/clang/16.0.0/include/cuda_wrappers/algorithm" 3
 }
-# 434 "/nethome/jchen706/opt/include/hip/amd_detail/amd_hip_runtime.h" 2 3
+# 434 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h" 2 3
 # 1 "/nethome/jchen706/opt/llvm/lib/clang/16.0.0/include/cuda_wrappers/complex" 1 3
 # 36 "/nethome/jchen706/opt/llvm/lib/clang/16.0.0/include/cuda_wrappers/complex" 3
 # 1 "/usr/lib/gcc/x86_64-redhat-linux/8/../../../../include/c++/8/cmath" 1 3
@@ -62971,7 +63067,7 @@ inline namespace complex_literals {
 
 
 #pragma clang force_cuda_host_device end
-# 435 "/nethome/jchen706/opt/include/hip/amd_detail/amd_hip_runtime.h" 2 3
+# 435 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h" 2 3
 # 1 "/nethome/jchen706/opt/llvm/lib/clang/16.0.0/include/cuda_wrappers/new" 1 3
 # 44 "/nethome/jchen706/opt/llvm/lib/clang/16.0.0/include/cuda_wrappers/new" 3
 __attribute__((device)) inline void *operator new(long unsigned int size) {
@@ -63032,13 +63128,15 @@ __attribute__((device)) inline void *operator new[](long unsigned int, void *__p
 }
 __attribute__((device)) inline void operator delete(void *, void *) noexcept {}
 __attribute__((device)) inline void operator delete[](void *, void *) noexcept {}
-# 436 "/nethome/jchen706/opt/include/hip/amd_detail/amd_hip_runtime.h" 2 3
-# 63 "/nethome/jchen706/opt/include/hip/hip_runtime.h" 2 3
-# 113 "/nethome/jchen706/opt/include/hip/hip_runtime.h" 3
-# 1 "/nethome/jchen706/opt/include/hip/hip_runtime_api.h" 1 3
-# 114 "/nethome/jchen706/opt/include/hip/hip_runtime.h" 2 3
-# 1 "/nethome/jchen706/opt/include/hip/library_types.h" 1 3
-# 30 "/nethome/jchen706/opt/include/hip/library_types.h" 3
+# 436 "/nethome/jchen706/opt/hip/include/hip/amd_detail/../../../../include/hip/amd_detail/amd_hip_runtime.h" 2 3
+# 27 "/nethome/jchen706/opt/hip/include/hip/amd_detail/amd_hip_runtime.h" 2 3
+# 63 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h" 2 3
+# 114 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h" 3
+# 1 "/nethome/jchen706/opt/hip/include/hip/library_types.h" 1 3
+# 25 "/nethome/jchen706/opt/hip/include/hip/library_types.h" 3
+#pragma message("This file is deprecated. Use file from include path /opt/rocm-ver/include/ and prefix with hip")
+# 1 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/library_types.h" 1 3
+# 30 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/library_types.h" 3
 typedef enum hipDataType {
   HIP_R_16F = 2,
   HIP_R_32F = 0,
@@ -63053,7 +63151,9 @@ typedef enum hipLibraryPropertyType {
   HIP_LIBRARY_MINOR_VERSION,
   HIP_LIBRARY_PATCH_LEVEL
 } hipLibraryPropertyType;
-# 115 "/nethome/jchen706/opt/include/hip/hip_runtime.h" 2 3
+# 27 "/nethome/jchen706/opt/hip/include/hip/library_types.h" 2 3
+# 115 "/nethome/jchen706/opt/hip/include/hip/../../../include/hip/hip_runtime.h" 2 3
+# 27 "/nethome/jchen706/opt/hip/include/hip/hip_runtime.h" 2 3
 # 2 "empty.cu" 2
 
 __attribute__((global)) void vecAdd(int *N) {
