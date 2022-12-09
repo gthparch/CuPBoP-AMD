@@ -60,9 +60,9 @@ extern cudaError_t __cudaPopCallConfiguration(dim3 *gridDim,
                                                         dim3 *blockDim,
                                                         size_t *sharedMem,
                                                         void **stream) {
-   printf("__cudaPopCallConfiguration: Grid: x:%d y:%d z:%d Block: %d, %d, %d ShMem: %lu\n",
-  gridDim->x, gridDim->y, gridDim->z, blockDim->x, blockDim->y, blockDim->z,
-  *sharedMem);
+  //  printf("__cudaPopCallConfiguration: Grid: x:%d y:%d z:%d Block: %d, %d, %d ShMem: %lu\n",
+  // gridDim->x, gridDim->y, gridDim->z, blockDim->x, blockDim->y, blockDim->z,
+  // *sharedMem);
 
   __hipPopCallConfiguration(gridDim, blockDim, sharedMem, (ihipStream_t**)stream);
 
@@ -71,9 +71,8 @@ extern cudaError_t __cudaPopCallConfiguration(dim3 *gridDim,
   // *sharedMem = callParamTemp.shareMem;
   // *stream = callParamTemp.stream;
 
-  // printf("__cudaPopCallConfiguration After : Grid: x:%d y:%d z:%d Block: %d,
-  // %d, %d ShMem: %lu\n", gridDim->x, gridDim->y, gridDim->z, blockDim->x,
-  // blockDim->y, blockDim->z, *sharedMem);
+  printf("__cudaPopCallConfiguration After : Grid: x:%d y:%d z:%d Block: %d, %d, %d ShMem: %lu\n", gridDim->x, gridDim->y, gridDim->z, blockDim->x,
+  blockDim->y, blockDim->z, *sharedMem);
 
   // exit(1);
 
@@ -122,12 +121,11 @@ extern void** __cudaRegisterFatBinary(
 
   printf("__cudaRegisterFatBinary %p \n", fatCubin);
 
-
   void ** temp = __hipRegisterFatBinary(fatCubin);
 
   printf("after __cudaRegisterFatBinary %p \n", temp);
 
-
+  return temp;
 }
 
 // seems to be in cuda 10 
@@ -236,7 +234,7 @@ extern void __cudaRegisterFunction(
         int     *wSize
 ) {
 
-   printf("__cudaRegisterFunction Called , hostFun: %s  deviceFun: %s deviceName: %s\n", hostFun, deviceFun, deviceName);
+   printf("__cudaRegisterFunction Called , hostFun: %s  deviceFun: %s deviceName: %s , fatbin: %p\n", hostFun, deviceFun, deviceName, fatCubinHandle);
 
 
    __hipRegisterFunction(
