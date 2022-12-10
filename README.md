@@ -276,6 +276,25 @@ Move or Copy amdgcn $HOME/ROCm-Device-Libs/install/amdgcn to $HOME/opt/amdgcn.
 cp -av -r $HOME/ROCm-Device-Libs/install/amdgcn $HOME/opt/
 ```
 
+
+We also may need to copy the HSA Runtimes or other missing files to $HOME/opt/.
+
+```
+cp -av /opt/rocm-5.2.0/lib/libhsa-runtime64.so* $HOME/opt/lib
+
+cp -av -r /opt/rocm-5.2.0/lib64/* $HOME/opt/lib64
+
+cp /opt/rocm-5.2.0/include/hsakmt* $HOME/opt/include
+
+cp /opt/rocm-5.2.0/bin/rocminfo $HOME/opt/bin
+
+cp -r -av /opt/rocm-5.2.0/amdgcn/ $HOME/opt
+
+cp -av /opt/rocm-5.2.0/include/hip $HOME/opt/include/hip
+
+```
+
+
 The final paths will be the in the section "Runtime Build Path if building from source" from above.
 
 
