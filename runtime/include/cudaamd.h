@@ -3,7 +3,7 @@
 #include <stdint.h>
 #include "hip/hip_runtime_api.h"
 
-// extern "C" {
+extern "C" {
 // typedef __int32 int32_t;
 // typedef unsigned __int32 uint32_t;
 
@@ -106,6 +106,17 @@ struct cudaDeviceProp {
       int accessPolicyMaxWindowSize;
 };
 
+typedef struct callParams {
+  dim3 gridDim;
+  dim3 blockDim;
+  size_t shareMem;
+  void *stream;
+} callParams;
+
+
+cudaError_t cudaGetDevice(int *devPtr);
+
+cudaError_t cudaGetDeviceProperties (cudaDeviceProp* prop, int  device);
 
 cudaError_t cudaDeviceReset ();
 
@@ -128,3 +139,54 @@ cudaError_t cudaMemcpy (void* dst, const void* src, size_t count, cudaMemcpyKind
 cudaError_t cudaLaunchKernel (const void* func, dim3 gridDim, dim3 blockDim, void** args, size_t sharedMem, cudaStream_t stream);
 
 
+void** __hipRegisterFatBinary(const void* data);
+
+
+void __hipRegisterFunction(
+  void** modules,
+  const void*  hostFunction,
+  char*        deviceFunction,
+  const char*  deviceName,
+  unsigned int threadLimit,
+  uint3*       tid,
+  uint3*       bid,
+  dim3*        blockDim,
+  dim3*        gridDim,
+  int*         wSize);
+
+void __hipRegisterVar(
+  void** modules,   // The device modules containing code object
+  void*       var,       // The shadow variable in host code
+  char*       hostVar,   // Variable name in host code
+  char*       deviceVar, // Variable name in device code
+  int         ext,       // Whether this variable is external
+  size_t      size,      // Size of the variable
+  int         constant,  // Whether this variable is constant
+  int         global);
+
+
+void __hipRegisterManagedVar(void *hipModule,   // Pointer to hip module returned from __hipRegisterFatbinary
+                                        void **pointer,    // Pointer to a chunk of managed memory with size \p size and alignment \p align
+                                                           // HIP runtime allocates such managed memory and assign it to \p pointer
+                                        void *init_value,  // Initial value to be copied into \p pointer
+                                        const char *name,  // Name of the variable in code object
+                                        size_t size,
+                                        unsigned align);
+
+
+void __hipRegisterTexture(void** modules,      // The device modules containing code object
+                                     void* var,        // The shadow variable in host code
+                                     char* hostVar,    // Variable name in host code
+                                     char* deviceVar,  // Variable name in device code
+                                     int type, int norm, int ext);
+
+
+void __hipRegisterSurface(void** modules,      // The device modules containing code object
+void* var,        // The shadow variable in host code
+char* hostVar,    // Variable name in host code
+char* deviceVar,  // Variable name in device code
+int type, int ext); 
+
+
+void __hipUnregisterFatBinary(void** modules);
+}

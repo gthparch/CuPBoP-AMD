@@ -39,8 +39,26 @@ int main(const int argc, const char* argv[]) {
 
 
 
+
+  // remove currently unused functions:
+
+  // std::set<Function*> need_remove;
+
+  
+
+
+
+
+
+
+  //Write to Output
+  std::error_code writeError;
+  auto outputFilename = std::string(argv[1]) + ".translated_test.bc";
+  ToolOutputFile toolOutput (outputFilename.data(), writeError, sys::fs::OF_None);
+  WriteBitcodeToFile(*M, toolOutput.os());
+  toolOutput.keep();
+
+
+
   return 0;
-
-
-
 }
