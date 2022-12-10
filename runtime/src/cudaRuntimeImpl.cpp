@@ -85,8 +85,6 @@ extern  unsigned __cudaPushCallConfiguration(
     dim3 gridDim, dim3 blockDim, size_t sharedMem = 0, void *stream = 0) {
 
   
-
-
   __hipPushCallConfiguration(gridDim, blockDim, sharedMem, (ihipStream_t*)stream);
 
   // // memory checks allocations
