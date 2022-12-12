@@ -21,7 +21,7 @@ file(GLOB proj_HEADERS "include/*.h")
 file(GLOB proj_SOURCES "src/*.cpp")
 
 set(GCC_COVERAGE_LINK_FLAGS
-    "-L${LLVM_LIB_PATH} ${LLVM_LINK_FLAG} -lz -lrt -ldl -ltinfo -lpthread -lm")
+    "-L${LLVM_LIB_PATH} ${LLVM_LINK_FLAG} -fno-rtti -lz -lrt -ldl -ltinfo -lpthread -lm")
 
 # Add core library.
 add_library(${LIB_NAME} SHARED ${proj_HEADERS} ${proj_SOURCES})

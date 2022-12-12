@@ -39,12 +39,13 @@ link_directories(${LLVM_LIBRARY_DIRS})
 include_directories(${LLVM_INCLUDE_DIRS})
 separate_arguments(LLVM_DEFINITIONS_LIST NATIVE_COMMAND ${LLVM_DEFINITIONS})
 add_definitions(${LLVM_DEFINITIONS_LIST})
+add_compile_options(-fno-rtti)
 
 set(CMAKE_CXX_FLAGS "${LLVM_CXX_FLAG} ${CMAKE_CXX_FLAGS}")
 
 # using-ltinfo Errors
 set(GCC_COVERAGE_LINK_FLAGS
-    "-L${LLVM_LIB_PATH} ${LLVM_LINK_FLAG} -lz -lrt -ldl -lpthread -lm")
+    "-L${LLVM_LIB_PATH} ${LLVM_LINK_FLAG} -fno-rtti -lz -lrt -ldl -lpthread -lm")
 
 include_directories(include)
 add_subdirectory(compilation)

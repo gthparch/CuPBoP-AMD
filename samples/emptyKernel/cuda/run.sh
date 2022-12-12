@@ -1,7 +1,6 @@
 # ROCM_PATH="/nethome/jchen706/opt"
 # HIP_PATH="/nethome/jchen706/opt/hip"
 
-
 # run clang to generate llvm
 
 # clang++ main.cu -c  --cuda-path=/nethome/jchen706/cuda-11.5 -L/nethome/jchen706/cuda-11.5/lib64 -lcudart_static -ldl -lrt -pthread -save-temps -v
@@ -18,10 +17,7 @@ llvm-dis empty-cuda-nvptx64-nvidia-cuda-sm_35.ll.translated.bc
 
 # -L$HIP_PATH/lib -lamdhip64 -L$ROCM_PATH/lib -lhsa-runtime64 -ldl -lnuma
 
-
-
 # rm *.hipfb *.o *.s *.cui *.txt *.out *.cubin *.fatbin
-
 
 # clang++ empty.cu -c  --cuda-path=/nethome/jchen706/cuda-11.5 -L/nethome/jchen706/cuda-11.5/lib64 -lcudart_static -ldl -lrt -pthread -save-temps -v
 # llvm-dis empty-cuda-nvptx64-nvidia-cuda-sm_35.bc

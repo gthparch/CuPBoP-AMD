@@ -22,7 +22,12 @@ void transform_metadata(Module& M) {
         ":64-v96:128-v192:256-v256:256-v512:512-v1024"
         ":1024-v2048:2048-n32:64-S32-A5-G1-ni:7"
     );
+
     M.setTargetTriple("amdgcn-amd-amdhsa");
+
+    // set module flags
+
+
 }
 
 

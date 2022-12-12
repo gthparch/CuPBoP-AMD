@@ -14,6 +14,7 @@
 #include "init_amdgpu.hpp"
 #include "generate_amdgpu_format.hpp"
 #include "utils.hpp"
+#include "convert_address_space.hpp"
 
 using namespace llvm;
 
@@ -40,12 +41,12 @@ int main(const int argc, const char* argv[]) {
     // generate AMD GPU format
     generate_amdgpu_format(*M);
 
+    address_space_pass(*M);
+
     VerifyModule(*M);
 
     // Optimize Kernel Code 
 
-
-    
     //Write to Output
     std::error_code writeError;
     auto outputFilename = std::string(argv[1]) + ".translated_test.bc";

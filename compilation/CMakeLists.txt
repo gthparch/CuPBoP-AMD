@@ -17,7 +17,7 @@ llvm_map_components_to_libnames(llvm_libs support core irreader passes analysis)
 
 
 set(GCC_COVERAGE_LINK_FLAGS
-    "-L${LLVM_LIB_PATH} ${LLVM_LINK_FLAG} -lz -lrt -ldl -lpthread -lm")
+    "-L${LLVM_LIB_PATH} ${LLVM_LINK_FLAG} -fno-rtti -lz -lrt -ldl -lpthread -lm")
 
 include_directories(./kernel/include/)
 add_subdirectory(kernel)

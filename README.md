@@ -247,7 +247,7 @@ cp -av -r $HOME/hipamd/newinstall/share $HOME/opt/share
 
 
 
-Next we need to install and build Rocm Device Libs.
+Next we need to install and build ROCm Device Libs.
  
 ```
 git clone https://github.com/RadeonOpenCompute/ROCm-Device-Libs.git -b amd-stg-open 
