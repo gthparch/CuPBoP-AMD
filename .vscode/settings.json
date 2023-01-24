@@ -78,5 +78,15 @@
         "ios": "cpp",
         "locale": "cpp",
         "queue": "cpp"
-    }
+    },
+    "cmake.configureArgs": [
+        "-DHIP_COMMON_DIR=${env:HOME}/prefix/opt/ROCm-OpenCL-Runtime",
+        "-DLLVM_CONFIG_PATH=${env:HOME}/prefix/opt/llvm/bin/llvm-config",
+        "-DHIP_COMMON_DIR=${env:HOME}/prefix/opt/HIP",
+        "-DAMD_OPENCL_PATH=${env:HOME}/prefix/opt/ROCm-OpenCL-Runtime",
+        "-DROCCLR_PATH=${env:HOME}/prefix/opt/ROCclr",
+        "-DROCM_PATH=${env:HOME}/prefix/opt",
+        "-DCMAKE_PREFIX_PATH=${env:HOME}/prefix/opt",
+        "-DCMAKE_BUILD_TYPE=Debug",
+    ]
 }

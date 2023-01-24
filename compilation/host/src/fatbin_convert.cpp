@@ -1,5 +1,4 @@
 
-
 #include "clang/AST/Decl.h"
 #include "llvm/ADT/StringRef.h"
 
@@ -79,7 +78,8 @@ void fatbin_convert(llvm::StringRef FileName, Module& M) {
   // gets 0x0 for some reason
   // llvm::GlobalVariable* cuda_fatbin_wrapper = M.getGlobalVariable("__cuda_fatbin_wrapper");
   
-  llvm::IntegerType *SizeTy;
+  // TODO: proper size types
+  llvm::IntegerType *SizeTy = llvm::Type::getInt32Ty(M.getContext());
   llvm::Constant *Zeros[] = {llvm::ConstantInt::get(SizeTy, 0),
                                llvm::ConstantInt::get(SizeTy, 0)};
  

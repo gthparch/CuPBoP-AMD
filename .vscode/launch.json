@@ -1,6 +1,33 @@
 {
     "version": "0.2.0",
     "configurations": [
+    {
+        "name": "(gdb) Launch",
+        "type": "cppdbg",
+        "request": "launch",
+        "program": "/nethome/xzhou381/amdcuda/build/compilation/hostTranslator",
+        "args": [
+            "/nethome/xzhou381/amdcuda/samples/emptyKernel/cuda/empty-host-x86_64-unknown-linux-gnu.ll",
+            "/nethome/xzhou381/amdcuda/samples/emptyKernel/cuda/empty.cpp-hip-amdgcn-amd-amdhsa.hipfb",
+        ],
+        "stopAtEntry": false,
+        "cwd": "${workspaceFolder}",
+        "environment": [],
+        "externalConsole": false,
+        "MIMode": "gdb",
+        "setupCommands": [
+            {
+                "description": "Enable pretty-printing for gdb",
+                "text": "-enable-pretty-printing",
+                "ignoreFailures": true
+            },
+            {
+                "description": "Set Disassembly Flavor to Intel",
+                "text": "-gdb-set disassembly-flavor intel",
+                "ignoreFailures": true
+            }
+        ]
+    },
         {
             "name": "Translate vecAdd",
             "type": "cppdbg",
