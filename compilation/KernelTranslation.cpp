@@ -15,6 +15,7 @@
 #include "generate_amdgpu_format.hpp"
 #include "utils.hpp"
 #include "convert_address_space.hpp"
+#include "convert_grid_block.hpp"
 
 using namespace llvm;
 
@@ -46,6 +47,10 @@ int main(const int argc, const char* argv[]) {
     VerifyModule(*M);
 
     // Optimize Kernel Code 
+    
+    grid_block_pass(*M);
+
+    VerifyModule(*M);
 
     //Write to Output
     std::error_code writeError;
