@@ -1,5 +1,5 @@
 /**
- *  Add a Pass Manager for Address Space Casting
+ *  Add a Pass Manager for Grid and Block Conversion
  * 
  */
 
@@ -125,10 +125,10 @@ static RegisterPass<GridBlockPass>
 
 void grid_block_pass(Module& M) {
 
-//  
+// First we need to add the functions to get the grid blocks
+// from the device  
 
 
-//
 
 
 
@@ -141,20 +141,6 @@ llvm::legacy::PassManager passManager;
 llvm::PassManagerBuilder passManagerBuilder;
 auto Registry = PassRegistry::getPassRegistry();
 
-
-// We can add passes at certain extension points.
-passManagerBuilder.addExtension(
-  PassManagerBuilder::EP_CGSCCOptimizerLate,
-  [](const llvm::PassManagerBuilder& passManagerBuilder,
-     llvm::legacy::PassManagerBase& passManager)
-  {
-    passManager.add(createInferAddressSpacesPass());
-
-
-  });
-
-  passManagerBuilder.populateModulePassManager(passManager);
-  passManager.run(M);
 
  std::vector<std::string> passes;
  passes.push_back("grid-block-conversion");
