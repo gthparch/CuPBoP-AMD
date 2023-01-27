@@ -153,6 +153,7 @@ if [[ "${AMDCUDA_INPUT##*.}" = "cu" ]] || [[ "${AMDCUDA_INPUT##*.}" = "cpp" ]]; 
         -lcudart_static -ldl -lrt -pthread -save-temps -v
     
     AMDCUDA_INPUT_PROGNAME="${AMDCUDA_INPUT%.*}"
+    echo ">>>>> $AMDCUDA_INPUT_PROGNAME"
 fi
 
 # derive related names & other info
@@ -177,12 +178,12 @@ for linked_bc in "${AMDCUDA_LINKED_BYTECODE[@]}"; do
 done
 
 # locate host and kernel IRs
-find_raw_ir "${AMDCUDA_INPUT}-host"
+find_raw_ir "${AMDCUDA_INPUT_PROGNAME}-host"
 AMDCUDA_INPUT_HOST_IR="$FOUND_IR"
 postprocess_ir "$AMDCUDA_INPUT_HOST_IR"
 echo "[*] Found host IR at $AMDCUDA_INPUT_HOST_IR"
 
-find_raw_ir "${AMDCUDA_INPUT}-cuda"
+find_raw_ir "${AMDCUDA_INPUT_PROGNAME}-cuda"
 AMDCUDA_INPUT_KERN_IR="$FOUND_IR"
 postprocess_ir "$AMDCUDA_INPUT_KERN_IR"
 echo "[*] Found device IR at $AMDCUDA_INPUT_KERN_IR"
