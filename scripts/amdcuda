@@ -1,0 +1,388 @@
+#!/bin/bash
+
+set -e
+
+# ====== amdcuda script configurations ======
+
+# Set custom llvm prefix here
+# LLVM_PREFIX=""
+# CUDA_PREFIX=""
+# DEVICE_LIB_PATH=""
+
+# Set this variable to 1 to always disassemble intermediate and translated IRs
+AMDCUDA_INSPECT_IR=1
+
+# ===========================================
+
+# ====== defs ======
+
+AMDCUDA_INPUT="$1"
+
+AMDCUDA_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )/.." &> /dev/null && pwd )
+AMDCUDA_RT_DIR="$AMDCUDA_DIR/build/runtime"
+AMDCUDA_HOST_TTOR="$AMDCUDA_DIR/build/compilation/hostTranslator"
+AMDCUDA_KERN_TTOR="$AMDCUDA_DIR/build/compilation/kernelTranslator"
+
+if [[ -z "$LLVM_PREFIX" ]]; then
+    LLVM_PREFIX="$(dirname "$(dirname "$(which clang)")")"
+    echo "[*] Using LLVM defined in PATH: $LLVM_PREFIX"
+fi
+
+AMDCUDA_CLANG="$LLVM_PREFIX/bin/clang"
+AMDCUDA_CLANGXX="$LLVM_PREFIX/bin/clang++"
+AMDCUDA_LLVM_DIS="$LLVM_PREFIX/bin/llvm-dis"
+AMDCUDA_LLVM_AS="$LLVM_PREFIX/bin/llvm-as"
+AMDCUDA_LLC="$LLVM_PREFIX/bin/llc"
+AMDCUDA_LLD="$LLVM_PREFIX/bin/lld"
+AMDCUDA_LD="$LLVM_PREFIX/bin/ld.lld"
+AMDCUDA_CLANG_OFFLOAD_BUNDLER="$LLVM_PREFIX/bin/clang-offload-bundler"
+AMDCUDA_CLANG_RES_DIR="$(realpath "$LLVM_PREFIX/lib/clang/"*)"
+AMDCUDA_CLANGRT_DIR="$(realpath "$AMDCUDA_CLANG_RES_DIR/lib/"*)"
+
+# TODO: dynamically generate this list
+AMDCUDA_LINKED_BYTECODE=(
+    hip.bc ocml.bc ockl.bc oclc_daz_opt_off.bc oclc_unsafe_math_off.bc
+    oclc_finite_only_off.bc oclc_correctly_rounded_sqrt_on.bc oclc_wavefrontsize64_on.bc
+    oclc_isa_version_90a.bc oclc_abi_version_400.bc
+)
+AMDCUDA_KERN_ASSEMBLER_FLAGS=(
+    -save-temps=cwd -disable-free
+    -clear-ast-before-backend -disable-llvm-verifier
+    -discard-value-names -mrelocation-model pic -pic-level 1
+    -fhalf-no-semantic-interposition
+    -mframe-pointer=none
+    -fno-rounding-math
+    -mconstructor-aliases
+    -aux-target-cpu x86-64
+    -fcuda-is-device -mllvm
+    -amdgpu-internalize-symbols
+    -fcuda-allow-variadic-functions
+    -fvisibility=hidden
+    -fapply-global-visibility-to-externs
+)
+
+if [[ -z "$AMDCUDA_INPUT" ]]; then
+    cat <<EOF
+Usage: $0 <source.cu|bc>
+EOF
+    exit 1
+fi
+
+# verify valid device lib path
+if [[ ! -z "$DEVICE_LIB_PATH" ]]; then
+    echo "[*] Will look for device-side bytecodes to link to in $DEVICE_LIB_PATH"
+elif [[ ! -z "$HIP_DEVICE_LIB_PATH" ]]; then
+    export DEVICE_LIB_PATH="$HIP_DEVICE_LIB_PATH"
+    echo "[*] Using HIP_DEVICE_LIB_PATH = $HIP_DEVICE_LIB_PATH"
+elif [[ -d "/opt/rocm/amdgcn/bitcode" ]]; then
+    export DEVICE_LIB_PATH="/opt/rocm/amdgcn/bitcode"
+    echo "[*] DEVICE_LIB_PATH not set, using device libs provided by the system."
+else
+    echo "[!] DEVICE_LIB_PATH is undefined and amdcuda couldn't find a system-provided version."
+    exit 1
+fi
+
+# verify valid clang-rt built-ins
+if [[ ! -f "$AMDCUDA_CLANGRT_DIR/libclang_rt.builtins.a" ]]; then
+    echo "[!] Unable to find libclang_rt.builtins.a in clang's resource directory. Is this version of clang not built with the runtime builtins?"
+    exit 1
+fi
+
+# verify HIP_PATH is set and valid
+if [[ -z "$HIP_PATH" ]] || [[ ! -d "$HIP_PATH" ]]; then
+    echo "[!] HIP_PATH must be set and points to a directory where HIP is."
+    exit 1
+fi
+
+# verify ROCM_PATH is set and valid
+if [[ -z "$ROCM_PATH" ]] || [[ ! -d "$ROCM_PATH" ]]; then
+    echo "[!] ROCM_PATH must be set and points to a directory where the rocm installation is."
+    exit 1
+fi
+
+AMDCUDA_INPUT_PROGNAME="${AMDCUDA_INPUT}"
+
+# ====== helper fns ======
+
+find_raw_ir() {
+    FOUND_IR=`find . -maxdepth 1 \( \
+        -name $1'*.bc' -o -name $1'*.ll' \
+    \) ! -name '*.translated*' | head -n 1`
+
+    if [[ -z "$FOUND_IR" ]]; then
+        echo "[!] Unable to find input file: $1"
+        exit 1
+    fi
+
+    FOUND_IR="$(realpath "$FOUND_IR")"
+}
+
+find_translated_ir() {
+    FOUND_IR=""
+    local raw_ir_filename="$1"
+
+    if [[ -f "${raw_ir_filename}.translated_test.bc" ]]; then
+        FOUND_IR="${raw_ir_filename}.translated_test.bc"
+    elif [[ -f "${raw_ir_filename}.translated.bc" ]]; then
+        FOUND_IR="${raw_ir_filename}.translated.bc"
+    else
+        exit 1
+    fi
+}
+
+postprocess_ir() {
+    local ir_name=$1
+    if [[ "${ir_name:0-3}" = ".bc" ]] && [[ "$AMDCUDA_INSPECT_IR" = "1" ]]; then
+        "$AMDCUDA_LLVM_DIS" "$ir_name"
+    fi
+}
+
+# ===========================================
+
+if [[ "${AMDCUDA_INPUT:0-3}" = ".cu" ]]; then
+    if [[ ! -d "${CUDA_PREFIX}" ]]; then
+        echo "[!] Cannot accept a CUDA source file as input: CUDA_PREFIX is undefined."
+    fi
+
+    echo "[*] Compiling original program to IR..."
+    "$AMDCUDA_CLANGXX" \
+        "$AMDCUDA_INPUT" -c \
+        "--cuda-path=$CUDA_PREFIX" \
+        "-L${CUDA_PREFIX}/lib64" \
+        -lcudart_static -ldl -lrt -pthread -save-temps -v
+    
+    AMDCUDA_INPUT_PROGNAME="${AMDCUDA_INPUT:0:-3}"
+fi
+
+# derive related names & other info
+AMDCUDA_INPUT_MAIN_FILENAME="${AMDCUDA_INPUT_PROGNAME}.cu"
+AMDCUDA_OUTPUT_KERNEL_ASSEMBLY="${AMDCUDA_INPUT_PROGNAME}-cuda.translated.s"
+AMDCUDA_OUTPUT_KERNEL_OBJECT="${AMDCUDA_INPUT_PROGNAME}-cuda.translated.o"
+AMDCUDA_OUTPUT_KERNEL_LINKED="${AMDCUDA_INPUT_PROGNAME}-cuda.translated.out"
+AMDCUDA_OUTPUT_KERNEL_FATBIN="${AMDCUDA_INPUT_PROGNAME}-cuda.translated.hipfb"
+AMDCUDA_EXTRACTED_RT_BUILTINS="libbc-clang_rt.builtins.amdgcn.a"
+AMDCUDA_OUTPUT_HOST_ASSEMBLY="${AMDCUDA_INPUT_PROGNAME}-host.translated.s"
+AMDCUDA_OUTPUT_HOST_OBJECT="${AMDCUDA_INPUT_PROGNAME}-host.translated.o"
+AMDCUDA_OUTPUT_HOST_LINKED="${AMDCUDA_INPUT_PROGNAME}.translated"
+
+for linked_bc in "${AMDCUDA_LINKED_BYTECODE[@]}"; do
+    if [[ -f "${DEVICE_LIB_PATH}/${linked_bc}" ]]; then
+        AMDCUDA_KERN_ASSEMBLER_FLAGS+=(
+            "-mlink-builtin-bitcode" "${DEVICE_LIB_PATH}/${linked_bc}"
+        )
+    else
+        echo "[!] Bitcode $linked_bc not found under DEVICE_LIB_PATH...compilation will continue but may fail as a result."
+    fi
+done
+
+# locate host and kernel IRs
+find_raw_ir "${AMDCUDA_INPUT}-host"
+AMDCUDA_INPUT_HOST_IR="$FOUND_IR"
+postprocess_ir "$AMDCUDA_INPUT_HOST_IR"
+echo "[*] Found host IR at $AMDCUDA_INPUT_HOST_IR"
+
+find_raw_ir "${AMDCUDA_INPUT}-cuda"
+AMDCUDA_INPUT_KERN_IR="$FOUND_IR"
+postprocess_ir "$AMDCUDA_INPUT_KERN_IR"
+echo "[*] Found device IR at $AMDCUDA_INPUT_KERN_IR"
+
+# translate kernel
+echo "[*] Translating kernel IR..."
+"$AMDCUDA_KERN_TTOR" "$AMDCUDA_INPUT_KERN_IR"
+
+find_translated_ir "$AMDCUDA_INPUT_KERN_IR"
+AMDCUDA_TRANSLATED_KERN_IR="$FOUND_IR"
+postprocess_ir "$AMDCUDA_TRANSLATED_KERN_IR"
+
+# compile translated kernel
+echo "[*] Compiling translated kernel IR to assembly..."
+"$AMDCUDA_CLANG" \
+    -cc1 -triple amdgcn-amd-amdhsa \
+    -aux-triple x86_64-unknown-linux-gnu -S \
+    -main-file-name "$AMDCUDA_INPUT_MAIN_FILENAME" \
+    "$AMDCUDA_KERN_ASSEMBLER_FLAGS[@]" \
+    -target-cpu gfx90a \
+    -mllvm \
+    -treat-scalable-fixed-error-as-warning \
+    -debugger-tuning=gdb \
+    -v \
+    -resource-dir "$AMDCUDA_CLANG_RES_DIR" \
+    -O3 \
+    -fno-autolink "-fdebug-compilation-dir=$(pwd)" \
+    -ferror-limit 19 \
+    -fhip-new-launch-api \
+    -fgnuc-version=4.2.1 \
+    -fcolor-diagnostics \
+    -vectorize-loops \
+    -vectorize-slp \
+    -mllvm \
+    -amdgpu-early-inline-all=true \
+    -mllvm \
+    -amdgpu-function-calls=false \
+    -cuid=7426647a80c85315 \
+    -fcuda-allow-variadic-functions \
+    -faddrsig \
+    -o "$AMDCUDA_OUTPUT_KERNEL_ASSEMBLY" \
+    -x ir \
+    "$AMDCUDA_TRANSLATED_KERN_IR"
+
+echo "[*] Aseembling compiled kernel..."
+"$AMDCUDA_CLANG" \
+    -cc1as \
+    -triple amdgcn-amd-amdhsa \
+    -filetype obj \
+    -main-file-name "$AMDCUDA_INPUT_MAIN_FILENAME" \
+    -target-cpu gfx90a \
+    "-fdebug-compilation-dir=$(pwd)" \
+    -dwarf-version=5 \
+    -mrelocation-model pic \
+    --mrelax-relocations \
+    -mllvm \
+    -amdgpu-early-inline-all=true \
+    -mllvm \
+    -amdgpu-function-calls=false \
+    -o "$AMDCUDA_OUTPUT_KERNEL_OBJECT" \
+    "$AMDCUDA_OUTPUT_KERNEL_ASSEMBLY"
+
+echo "[*] Extracting libbc-clang runtime built-ins..."
+"$AMDCUDA_CLANG_OFFLOAD_BUNDLER" \
+    -unbundle \
+    -type=a \
+    "-input=$AMDCUDA_CLANGRT_DIR/libclang_rt.builtins.a" \
+    -targets=hip-amdgcn-amd-amdhsa-gfx90a \
+    "-output=$AMDCUDA_EXTRACTED_RT_BUILTINS" \
+    -allow-missing-bundles \
+    -hip-openmp-compatible
+
+echo "[*] Linking kernel..."
+"$AMDCUDA_LLD" \
+    -flavor gnu \
+    --no-undefined \
+    -shared \
+    -plugin-opt=-amdgpu-internalize-symbols \
+    -plugin-opt=mcpu=gfx90a \
+    -plugin-opt=O3 \
+    -plugin-opt=-amdgpu-early-inline-all=true \
+    -plugin-opt=-amdgpu-function-calls=false \
+    -save-temps \
+    -o "$AMDCUDA_OUTPUT_KERNEL_LINKED" \
+    "$AMDCUDA_OUTPUT_KERNEL_OBJECT" "$AMDCUDA_EXTRACTED_RT_BUILTINS"
+
+echo "[*] Bundling kernel..."
+"$AMDCUDA_CLANG_OFFLOAD_BUNDLER" \
+    -type=o \
+    -bundle-align=4096 \
+    -targets=host-x86_64-unknown-linux,hipv4-amdgcn-amd-amdhsa--gfx90a \
+    -input=/dev/null \
+    "-input=$AMDCUDA_OUTPUT_KERNEL_LINKED" \
+    "-output=$AMDCUDA_OUTPUT_KERNEL_FATBIN"
+
+echo "[*] Swapping kernel code and translating host-side program..."
+"$AMDCUDA_HOST_TTOR" "$AMDCUDA_INPUT_HOST_IR" "$AMDCUDA_OUTPUT_KERNEL_FATBIN"
+find_translated_ir "$AMDCUDA_INPUT_HOST_IR"
+AMDCUDA_TRANSLATED_HOST_IR="$FOUND_IR"
+postprocess_ir "$AMDCUDA_TRANSLATED_HOST_IR"
+
+echo "[*] Compiling translated host IR to assembly..."
+"$AMDCUDA_CLANG" \
+    -cc1 \
+    -triple x86_64-unknown-linux-gnu \
+    -aux-triple amdgcn-amd-amdhsa \
+    -S -save-temps=cwd \
+    -disable-free \
+    -clear-ast-before-backend \
+    -disable-llvm-verifier \
+    -discard-value-names \
+    -main-file-name "$AMDCUDA_INPUT_MAIN_FILENAME" \
+    -mrelocation-model pic \
+    -pic-level 2 \
+    -pic-is-pie \
+    -mframe-pointer=none \
+    -fmath-errno \
+    -fno-rounding-math \
+    -mconstructor-aliases \
+    -funwind-tables=2 \
+    -target-cpu x86-64 \
+    -tune-cpu generic \
+    -mllvm \
+    -treat-scalable-fixed-error-as-warning \
+    -debugger-tuning=gdb \
+    -v \
+    "-fcoverage-compilation-dir=$(pwd)" \
+    -resource-dir "$AMDCUDA_CLANG_RES_DIR" \
+    -O3 \
+    "-fdebug-compilation-dir=$(pwd)" \
+    -ferror-limit 19 \
+    -fhip-new-launch-api \
+    -fgnuc-version=4.2.1 \
+    -fcolor-diagnostics \
+    -vectorize-loops \
+    -vectorize-slp \
+    -mllvm \
+    -amdgpu-early-inline-all=true \
+    -mllvm \
+    -amdgpu-function-calls=false \
+    -cuid=7426647a80c85315 \
+    -fcuda-allow-variadic-functions \
+    -faddrsig \
+    -D__GCC_HAVE_DWARF2_CFI_ASM=1 \
+    -o "$AMDCUDA_OUTPUT_HOST_ASSEMBLY" \
+    -x ir \
+    "$AMDCUDA_TRANSLATED_HOST_IR"
+
+echo "[*] Aseembling compiled program..."
+"$AMDCUDA_CLANG" \
+    -cc1as \
+    -triple x86_64-unknown-linux-gnu \
+    -filetype obj \
+    -main-file-name "$AMDCUDA_INPUT_MAIN_FILENAME" \
+    -target-cpu x86-64 \
+    "-fdebug-compilation-dir=$(pwd)" \
+    -dwarf-version=5 \
+    -mrelocation-model pic \
+    --mrelax-relocations \
+    -mllvm \
+    -amdgpu-early-inline-all=true \
+    -mllvm \
+    -amdgpu-function-calls=false \
+    -o "$AMDCUDA_OUTPUT_HOST_OBJECT" \
+    "$AMDCUDA_OUTPUT_HOST_ASSEMBLY"
+
+echo "[*] Linking compiled program..."
+# "$AMDCUDA_LD" \
+#     -pie \
+#     --hash-style=gnu \
+#     --eh-frame-hdr \
+#     -m elf_x86_64 \
+#     -dynamic-linker /lib64/ld-linux-x86-64.so.2 \
+#     -o "$AMDCUDA_OUTPUT_HOST_LINKED" \
+#     /usr/lib64/Scrt1.o \
+#     /usr/lib64/crti.o \
+#     /usr/lib/gcc/x86_64-redhat-linux/8/crtbeginS.o \
+#     -L"$HIP_PATH/lib" \
+#     -lgcc_s \
+#     -lgcc \
+#     -lpthread \
+#     -lm \
+#     -lrt \
+#     -rpath="$HIP_PATH/lib:$ROCM_PATH/lib" \
+#     -lamdhip64 \
+#     -lclang_rt.builtins \
+#     -lstdc++ \
+#     -lm \
+#     -lgcc_s \
+#     -lgcc \
+#     -lc \
+#     -lgcc_s \
+#     -lgcc \
+#     "$AMDCUDA_OUTPUT_HOST_OBJECT" \
+#     /usr/lib/gcc/x86_64-redhat-linux/8/crtendS.o \
+#     /usr/lib/gcc/x86_64-redhat-linux/8/../../../../lib64/crtn.o \
+#     "-L$AMDCUDA_RT_DIR" \
+#     -lcudaonamd
+"$AMDCUDA_CLANG" \
+    -o "$AMDCUDA_OUTPUT_HOST_LINKED" \
+    -L"$AMDCUDA_RT_DIR" \
+    -lcudaonamd \
+    -lpthread \
+    "$AMDCUDA_OUTPUT_HOST_OBJECT"
