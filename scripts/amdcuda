@@ -63,7 +63,7 @@ AMDCUDA_KERN_ASSEMBLER_FLAGS=(
 
 if [[ -z "$AMDCUDA_INPUT" ]]; then
     cat <<EOF
-Usage: $0 <source.cu|bc>
+Usage: $0 <program-name[.cu]>
 EOF
     exit 1
 fi
@@ -139,19 +139,20 @@ postprocess_ir() {
 
 # ===========================================
 
-if [[ "${AMDCUDA_INPUT:0-3}" = ".cu" ]]; then
-    if [[ ! -d "${CUDA_PREFIX}" ]]; then
-        echo "[!] Cannot accept a CUDA source file as input: CUDA_PREFIX is undefined."
+if [[ "${AMDCUDA_INPUT##*.}" = "cu" ]] || [[ "${AMDCUDA_INPUT##*.}" = "cpp" ]]; then
+    if [[ ! -d "${CUDA_PATH}" ]]; then
+        echo "[!] Cannot accept a CUDA source file as input: CUDA_PATH is undefined."
     fi
 
     echo "[*] Compiling original program to IR..."
     "$AMDCUDA_CLANGXX" \
         "$AMDCUDA_INPUT" -c \
-        "--cuda-path=$CUDA_PREFIX" \
-        "-L${CUDA_PREFIX}/lib64" \
+        "--cuda-path=$CUDA_PATH" \
+        "--cuda-gpu-arch=sm_35" \
+        "-L${CUDA_PATH}/lib64" \
         -lcudart_static -ldl -lrt -pthread -save-temps -v
     
-    AMDCUDA_INPUT_PROGNAME="${AMDCUDA_INPUT:0:-3}"
+    AMDCUDA_INPUT_PROGNAME="${AMDCUDA_INPUT%.*}"
 fi
 
 # derive related names & other info
