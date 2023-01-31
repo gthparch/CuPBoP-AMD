@@ -24,6 +24,7 @@ LLVMContext& getCupbopLLVMContext() {
 
 int main(const int argc, const char* argv[]) {
   // host file, fatbin file
+  printf("argc=%d\n", argc);
   assert(argc == 3);
 
   // Parse File

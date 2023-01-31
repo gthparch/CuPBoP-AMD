@@ -17,12 +17,12 @@ set(LIB_NAME cudaonamd)
 
 if(NOT DEFINED HIP_PATH)
     if(NOT DEFINED ENV{HIP_PATH})
-        set(HIP_PATH "/nethome/jchen706/opt/hip" CACHE PATH "Path to which HIP has been installed")
+        set(HIP_PATH "/nethome/xzhou381/prefix/opt/hip" CACHE PATH "Path to which HIP has been installed")
     else()
         set(HIP_PATH $ENV{HIP_PATH} CACHE PATH "Path to which HIP has been installed")
     endif()
 endif()
-set(CMAKE_MODULE_PATH "/nethome/jchen706/opt/hip/cmake" ${CMAKE_MODULE_PATH})
+set(CMAKE_MODULE_PATH "/nethome/xzhou381/prefix/opt/hip/cmake" ${CMAKE_MODULE_PATH})
 find_package(HIP)
 message(HIP: " ${HIP_PATH}")
 
@@ -32,7 +32,7 @@ set(HIP_COMMON_INCLUDE_DIR ${HIP_PATH}/include)
 
 set(HIP_COMMON_BIN_DIR ${HIP_PATH}/bin)
 set(__HIPCONFIG_EXECUTABLE__ ${HIP_PATH}/bin/hipconfig)
-set(ROCM_PATH "/nethome/jchen706/opt")
+set(ROCM_PATH "/nethome/xzhou381/prefix/opt")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D__HIP_PLATFORM_AMD__ -L${HIP_PATH}/lib -lamdhip64 -L${ROCM_PATH}/lib -lhsa-runtime64 -ldl -lnuma")
 
 file(GLOB proj_SOURCES "./src/*.cpp")

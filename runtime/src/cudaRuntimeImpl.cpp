@@ -29,6 +29,12 @@ cudaError_t cudaPeekAtLastError() {
   return cudaSuccess;
 }
 
+cudaError_t cudaDeviceSynchronize() {
+  printf("inside cudaDeviceSynchronize()\n");
+  HIP_CHECK(hipDeviceSynchronize());
+  return cudaSuccess;
+}
+
 cudaError_t cudaGetDevice(int *devPtr) { 
   printf("insideGetDevice\n");
   HIP_CHECK(hipGetDevice(devPtr));

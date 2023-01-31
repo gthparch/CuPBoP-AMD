@@ -12,6 +12,9 @@ set -e
 # Set this variable to 1 to always disassemble intermediate and translated IRs
 AMDCUDA_INSPECT_IR=1
 
+# Additional bitcode path
+AMDCUDA_BITCODE_PATH="$AMDCUDA_DIR/bitcode"
+
 # ===========================================
 
 # ====== defs ======
@@ -32,6 +35,7 @@ AMDCUDA_CLANG="$LLVM_PREFIX/bin/clang"
 AMDCUDA_CLANGXX="$LLVM_PREFIX/bin/clang++"
 AMDCUDA_LLVM_DIS="$LLVM_PREFIX/bin/llvm-dis"
 AMDCUDA_LLVM_AS="$LLVM_PREFIX/bin/llvm-as"
+AMDCUDA_LLVM_LINK="$LLVM_PREFIX/bin/llvm-link"
 AMDCUDA_LLC="$LLVM_PREFIX/bin/llc"
 AMDCUDA_LLD="$LLVM_PREFIX/bin/lld"
 AMDCUDA_LD="$LLVM_PREFIX/bin/ld.lld"
@@ -44,6 +48,7 @@ AMDCUDA_LINKED_BYTECODE=(
     hip.bc ocml.bc ockl.bc oclc_daz_opt_off.bc oclc_unsafe_math_off.bc
     oclc_finite_only_off.bc oclc_correctly_rounded_sqrt_on.bc oclc_wavefrontsize64_on.bc
     oclc_isa_version_90a.bc oclc_abi_version_400.bc
+    cudaamd-gridblock-size.ll
 )
 AMDCUDA_KERN_ASSEMBLER_FLAGS=(
     -save-temps=cwd -disable-free
@@ -59,6 +64,9 @@ AMDCUDA_KERN_ASSEMBLER_FLAGS=(
     -fcuda-allow-variadic-functions
     -fvisibility=hidden
     -fapply-global-visibility-to-externs
+)
+AMDCUDA_BITCODE=(
+    "${AMDCUDA_DIR}/bitcode/cudaamd-gridblock-size.ll"
 )
 
 if [[ -z "$AMDCUDA_INPUT" ]]; then
@@ -158,6 +166,7 @@ fi
 
 # derive related names & other info
 AMDCUDA_INPUT_MAIN_FILENAME="${AMDCUDA_INPUT_PROGNAME}.cu"
+AMDCUDA_OUTPUT_KERNEL_LINKED_BITCODE="${AMDCUDA_INPUT_PROGNAME}-cuda.translated.linked.bc"
 AMDCUDA_OUTPUT_KERNEL_ASSEMBLY="${AMDCUDA_INPUT_PROGNAME}-cuda.translated.s"
 AMDCUDA_OUTPUT_KERNEL_OBJECT="${AMDCUDA_INPUT_PROGNAME}-cuda.translated.o"
 AMDCUDA_OUTPUT_KERNEL_LINKED="${AMDCUDA_INPUT_PROGNAME}-cuda.translated.out"
@@ -171,6 +180,10 @@ for linked_bc in "${AMDCUDA_LINKED_BYTECODE[@]}"; do
     if [[ -f "${DEVICE_LIB_PATH}/${linked_bc}" ]]; then
         AMDCUDA_KERN_ASSEMBLER_FLAGS+=(
             "-mlink-builtin-bitcode" "${DEVICE_LIB_PATH}/${linked_bc}"
+        )
+    elif [[ -f "${AMDCUDA_BITCODE_PATH}/${linked_bc}" ]]; then
+        AMDCUDA_KERN_ASSEMBLER_FLAGS+=(
+            "-mlink-builtin-bitcode" "${AMDCUDA_BITCODE_PATH}/${linked_bc}"
         )
     else
         echo "[!] Bitcode $linked_bc not found under DEVICE_LIB_PATH...compilation will continue but may fail as a result."
@@ -195,6 +208,13 @@ echo "[*] Translating kernel IR..."
 find_translated_ir "$AMDCUDA_INPUT_KERN_IR"
 AMDCUDA_TRANSLATED_KERN_IR="$FOUND_IR"
 postprocess_ir "$AMDCUDA_TRANSLATED_KERN_IR"
+
+echo "[*] Linking CUDAAMD bitcode..."
+"$AMDCUDA_LLVM_LINK" \
+    -o "$AMDCUDA_OUTPUT_KERNEL_LINKED_BITCODE" \
+    "$AMDCUDA_TRANSLATED_KERN_IR" \
+    "${AMDCUDA_BITCODE[@]}"
+postprocess_ir "$AMDCUDA_OUTPUT_KERNEL_LINKED_BITCODE"
 
 # compile translated kernel
 echo "[*] Compiling translated kernel IR to assembly..."
@@ -226,7 +246,7 @@ echo "[*] Compiling translated kernel IR to assembly..."
     -faddrsig \
     -o "$AMDCUDA_OUTPUT_KERNEL_ASSEMBLY" \
     -x ir \
-    "$AMDCUDA_TRANSLATED_KERN_IR"
+    "$AMDCUDA_OUTPUT_KERNEL_LINKED_BITCODE"
 
 echo "[*] Aseembling compiled kernel..."
 "$AMDCUDA_CLANG" \
@@ -268,7 +288,8 @@ echo "[*] Linking kernel..."
     -plugin-opt=-amdgpu-function-calls=false \
     -save-temps \
     -o "$AMDCUDA_OUTPUT_KERNEL_LINKED" \
-    "$AMDCUDA_OUTPUT_KERNEL_OBJECT" "$AMDCUDA_EXTRACTED_RT_BUILTINS"
+    "$AMDCUDA_OUTPUT_KERNEL_OBJECT" \
+    "$AMDCUDA_EXTRACTED_RT_BUILTINS"
 
 echo "[*] Bundling kernel..."
 "$AMDCUDA_CLANG_OFFLOAD_BUNDLER" \
