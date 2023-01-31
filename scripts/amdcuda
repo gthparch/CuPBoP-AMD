@@ -152,6 +152,19 @@ if [[ "${AMDCUDA_INPUT##*.}" = "cu" ]] || [[ "${AMDCUDA_INPUT##*.}" = "cpp" ]]; 
         echo "[!] Cannot accept a CUDA source file as input: CUDA_PATH is undefined."
     fi
 
+    AMDCUDA_INPUT_PROGNAME="${AMDCUDA_INPUT%.*}"
+    find . \( \
+        -name "$AMDCUDA_INPUT_PROGNAME-cuda-*.bc" -o \
+        -name "$AMDCUDA_INPUT_PROGNAME-cuda-*.ll" -o \
+        -name "$AMDCUDA_INPUT_PROGNAME-cuda-*.cui" -o \
+        -name "$AMDCUDA_INPUT_PROGNAME-cuda-*.cubin" -o \
+        -name "$AMDCUDA_INPUT_PROGNAME-cuda-*.s" -o \
+        -name "$AMDCUDA_INPUT_PROGNAME-host-*.bc" -o \
+        -name "$AMDCUDA_INPUT_PROGNAME-host-*.s" -o \
+        -name "$AMDCUDA_INPUT_PROGNAME-host-*.cui" -o \
+        -name "$AMDCUDA_INPUT_PROGNAME-host-*.ll" \) \
+        -type f -exec rm {} \;
+
     echo "[*] Compiling original program to IR..."
     "$AMDCUDA_CLANGXX" \
         "$AMDCUDA_INPUT" -c \
@@ -159,9 +172,6 @@ if [[ "${AMDCUDA_INPUT##*.}" = "cu" ]] || [[ "${AMDCUDA_INPUT##*.}" = "cpp" ]]; 
         "--cuda-gpu-arch=sm_35" \
         "-L${CUDA_PATH}/lib64" \
         -lcudart_static -ldl -lrt -pthread -save-temps -v
-    
-    AMDCUDA_INPUT_PROGNAME="${AMDCUDA_INPUT%.*}"
-    echo ">>>>> $AMDCUDA_INPUT_PROGNAME"
 fi
 
 # derive related names & other info
