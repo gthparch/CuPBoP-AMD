@@ -1,64 +1,99 @@
-#include <iostream>
 #include <cassert>
+#include <iostream>
 #include <string>
 
-#include <llvm/IR/Module.h>
-#include <llvm/IRReader/IRReader.h>
-#include <llvm/IR/LLVMContext.h>
-#include <llvm/Support/SourceMgr.h>
-#include <llvm/Support/ToolOutputFile.h>
-#include <llvm/Bitcode/BitcodeWriter.h>
-#include <llvm/Support/FileSystem.h>
+#include "llvm/Analysis/CGSCCPassManager.h"
+#include "llvm/Analysis/LoopAnalysisManager.h"
+#include "llvm/Bitcode/BitcodeWriter.h"
+#include "llvm/IR/LLVMContext.h"
+#include "llvm/IR/LegacyPassManager.h"
+#include "llvm/IR/Module.h"
+#include "llvm/IR/PassManager.h"
+#include "llvm/IRReader/IRReader.h"
+#include "llvm/InitializePasses.h"
+#include "llvm/PassInfo.h"
+#include "llvm/Passes/OptimizationLevel.h"
+#include "llvm/Passes/PassBuilder.h"
+#include "llvm/PassRegistry.h"
+#include "llvm/Support/CommandLine.h"
+#include "llvm/Support/FileSystem.h"
+#include "llvm/Support/SourceMgr.h"
+#include "llvm/Support/ToolOutputFile.h"
+#include "llvm/Transforms/IPO/PassManagerBuilder.h"
+#include "llvm/Transforms/Scalar.h"
+#include "llvm/Transforms/Scalar/GVN.h"
+#include "llvm/Transforms/Utils/BasicBlockUtils.h"
+#include "llvm/Transforms/Utils/Cloning.h"
+#include "llvm/Transforms/Utils/ValueMapper.h"
 
+#include "AddressSpaceCastPass.hpp"
+#include "CUDA2AMDKernelFormatPass.hpp"
+#include "CUDA2AMDModuleFormatPass.hpp"
+#include "GridBlockPass.hpp"
+#include "TransformVPrintfPass.hpp"
 #include "cupbop_amd.hpp"
-#include "init_amdgpu.hpp"
-#include "generate_amdgpu_format.hpp"
 #include "utils.hpp"
-#include "convert_address_space.hpp"
-#include "convert_grid_block.hpp"
-#include "transform_vprintf.hpp"
 
 using namespace llvm;
+using namespace cupbop::amd::passes;
 
-LLVMContext& getCupbopLLVMContext() {
+LLVMContext &getCupbopLLVMContext() {
     static LLVMContext context;
     return context;
 }
 
-int main(const int argc, const char* argv[]) {
+Pass *createRegisteredPass(std::string id) {
+    static auto registry = PassRegistry::getPassRegistry();
+    const PassInfo *registeredPassInfo = registry->getPassInfo(StringRef(id));
+    assert(registeredPassInfo != nullptr);
+    return registeredPassInfo->createPass();
+}
+
+int main(const int argc, const char *argv[]) {
     assert(argc == 2);
 
     // Parse File
     SMDiagnostic diagOut;
+
     auto M = parseIRFile(argv[1], diagOut, getCupbopLLVMContext());
 
     if (!M) {
         diagOut.print(argv[0], errs());
         return 1;
     }
-
-    // Remove Metadata
-    init_amdgpu(*M);
-   
-    // generate AMD GPU format
-    generate_amdgpu_format(*M);
-
-    address_space_pass(*M);
-
-    VerifyModule(*M);
-
-    // Optimize Kernel Code 
     
-    grid_block_pass(*M);
+    PassManagerBuilder PMB;
+    legacy::PassManager PM, MetadataPM;
+    std::vector<std::string> passes{
+        "cuda2amd-module-format", "cuda2amd-kernel-format",
+        "address-space-cast",     "grid-block-conversion",
+        "transform-cuda-vprintf",
+    };
 
-    transform_vprintf_pass(*M);
+    // First run the metadata passes
+    PM.add(createRegisteredPass("cuda2amd-module-format"));
+    PM.add(createRegisteredPass("cuda2amd-kernel-format"));
+    PM.add(createRegisteredPass("grid-block-conversion"));
+    PM.add(createRegisteredPass("transform-cuda-vprintf"));
 
+    // Run the address space cast last
+    PMB.addExtension(
+        PassManagerBuilder::EP_CGSCCOptimizerLate,
+        [](const llvm::PassManagerBuilder &passManagerBuilder,
+           llvm::legacy::PassManagerBase &passManager) {
+            passManager.add(createInferAddressSpacesPass());
+        });
+    PMB.populateModulePassManager(PM);
+    PM.add(createRegisteredPass("address-space-cast"));
+
+    PM.run(*M);
     VerifyModule(*M);
 
-    //Write to Output
+    // Write to Output
     std::error_code writeError;
     auto outputFilename = std::string(argv[1]) + ".translated_test.bc";
-    ToolOutputFile toolOutput (outputFilename.data(), writeError, sys::fs::OF_None);
+    ToolOutputFile toolOutput(outputFilename.data(), writeError,
+                              sys::fs::OF_None);
     WriteBitcodeToFile(*M, toolOutput.os());
     toolOutput.keep();
 

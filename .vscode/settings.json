@@ -77,7 +77,11 @@
         "__tuple": "cpp",
         "ios": "cpp",
         "locale": "cpp",
-        "queue": "cpp"
+        "queue": "cpp",
+        "__assert": "cpp",
+        "list": "cpp",
+        "shared_mutex": "cpp",
+        "stack": "cpp"
     },
     "cmake.configureArgs": [
         "-DHIP_COMMON_DIR=${env:HOME}/prefix/opt/ROCm-OpenCL-Runtime",
