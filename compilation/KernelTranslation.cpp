@@ -16,6 +16,7 @@
 #include "utils.hpp"
 #include "convert_address_space.hpp"
 #include "convert_grid_block.hpp"
+#include "transform_vprintf.hpp"
 
 using namespace llvm;
 
@@ -49,6 +50,8 @@ int main(const int argc, const char* argv[]) {
     // Optimize Kernel Code 
     
     grid_block_pass(*M);
+
+    transform_vprintf_pass(*M);
 
     VerifyModule(*M);
 

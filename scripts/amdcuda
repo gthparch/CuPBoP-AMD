@@ -44,11 +44,13 @@ AMDCUDA_CLANG_RES_DIR="$(realpath "$LLVM_PREFIX/lib/clang/"*)"
 AMDCUDA_CLANGRT_DIR="$(realpath "$AMDCUDA_CLANG_RES_DIR/lib/"*)"
 
 # TODO: dynamically generate this list
-AMDCUDA_LINKED_BYTECODE=(
+AMDCUDA_BUILTIN_BYTECODE=(
     hip.bc ocml.bc ockl.bc oclc_daz_opt_off.bc oclc_unsafe_math_off.bc
     oclc_finite_only_off.bc oclc_correctly_rounded_sqrt_on.bc oclc_wavefrontsize64_on.bc
     oclc_isa_version_90a.bc oclc_abi_version_400.bc
-    cudaamd-gridblock-size.ll
+)
+AMDCUDA_LINKED_BYTECODE=(
+    cudaamd-gridblock-size.ll ockl.bc oclc_abi_version_400.bc oclc_wavefrontsize64_on.bc
 )
 AMDCUDA_KERN_ASSEMBLER_FLAGS=(
     -save-temps=cwd -disable-free
@@ -185,18 +187,33 @@ AMDCUDA_EXTRACTED_RT_BUILTINS="libbc-clang_rt.builtins.amdgcn.a"
 AMDCUDA_OUTPUT_HOST_ASSEMBLY="${AMDCUDA_INPUT_PROGNAME}-host.translated.s"
 AMDCUDA_OUTPUT_HOST_OBJECT="${AMDCUDA_INPUT_PROGNAME}-host.translated.o"
 AMDCUDA_OUTPUT_HOST_LINKED="${AMDCUDA_INPUT_PROGNAME}.translated"
+AMDCUDA_LINKED_BITCODE_FULLPATHS=()
+
+for builtin_bc in "${AMDCUDA_BUILTIN_BYTECODE[@]}"; do
+    if [[ -f "${DEVICE_LIB_PATH}/${builtin_bc}" ]]; then
+        AMDCUDA_KERN_ASSEMBLER_FLAGS+=(
+            "-mlink-builtin-bitcode" "${DEVICE_LIB_PATH}/${builtin_bc}"
+        )
+    elif [[ -f "${AMDCUDA_BITCODE_PATH}/${builtin_bc}" ]]; then
+        AMDCUDA_KERN_ASSEMBLER_FLAGS+=(
+            "-mlink-builtin-bitcode" "${AMDCUDA_BITCODE_PATH}/${builtin_bc}"
+        )
+    else
+        echo "[!] Bitcode $builtin_bc not found under DEVICE_LIB_PATH...compilation will continue but may fail as a result."
+    fi
+done
 
 for linked_bc in "${AMDCUDA_LINKED_BYTECODE[@]}"; do
     if [[ -f "${DEVICE_LIB_PATH}/${linked_bc}" ]]; then
-        AMDCUDA_KERN_ASSEMBLER_FLAGS+=(
-            "-mlink-builtin-bitcode" "${DEVICE_LIB_PATH}/${linked_bc}"
+        AMDCUDA_LINKED_BITCODE_FULLPATHS+=(
+            "${DEVICE_LIB_PATH}/${linked_bc}"
         )
     elif [[ -f "${AMDCUDA_BITCODE_PATH}/${linked_bc}" ]]; then
-        AMDCUDA_KERN_ASSEMBLER_FLAGS+=(
-            "-mlink-builtin-bitcode" "${AMDCUDA_BITCODE_PATH}/${linked_bc}"
+        AMDCUDA_LINKED_BITCODE_FULLPATHS+=(
+            "${AMDCUDA_BITCODE_PATH}/${linked_bc}"
         )
     else
-        echo "[!] Bitcode $linked_bc not found under DEVICE_LIB_PATH...compilation will continue but may fail as a result."
+        echo "[!] Linked bitcode $linked_bc not found under DEVICE_LIB_PATH...compilation will continue but may fail as a result."
     fi
 done
 
@@ -299,6 +316,7 @@ echo "[*] Linking kernel..."
     -save-temps \
     -o "$AMDCUDA_OUTPUT_KERNEL_LINKED" \
     "$AMDCUDA_OUTPUT_KERNEL_OBJECT" \
+    "${AMDCUDA_LINKED_BITCODE_FULLPATHS[@]}" \
     "$AMDCUDA_EXTRACTED_RT_BUILTINS"
 
 echo "[*] Bundling kernel..."

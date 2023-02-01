@@ -5,4 +5,4 @@
 
 std::vector<llvm::Function*> discover_cuda_kernels(llvm::Module&);
 void VerifyModule(llvm::Module&);
-
+std::string type_to_string(llvm::Type&);

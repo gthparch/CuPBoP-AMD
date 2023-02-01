@@ -18,6 +18,13 @@
 
 using namespace llvm;
 
+std::string type_to_string(Type& T) {
+    std::string type_str;
+    llvm::raw_string_ostream rso(type_str);
+    T.print(rso);
+    return type_str;
+}
+
 std::vector<Function*> discover_cuda_kernels(Module& M) {
     std::vector<Function*> kernels;
     auto* nvvmAnnotation = M.getNamedMetadata("nvvm.annotations");
