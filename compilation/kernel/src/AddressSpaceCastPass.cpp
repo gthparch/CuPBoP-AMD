@@ -114,7 +114,6 @@ bool AddressSpaceCastPass::runOnFunction(Function &F) {
                                       ee = FTy->param_end();
          ii != ee; ++ii) {
 
-        printf("here \n");
         Type *ArgType = *ii;
         if (ArgType->isPointerTy()) {
             Type *NewPtrTy = PointerType::getWithSamePointeeType(
@@ -206,13 +205,12 @@ bool AddressSpaceCastPass::runOnFunction(Function &F) {
                 std::cout << rso.str() << " 4 " << std::endl;
 
                 if (allocaType->isPointerTy()) {
-                    Type *newType = PointerType::getWithSamePointeeType(
-                        cast<PointerType>(allocaType), DL.getAllocaAddrSpace());
-
+                  
                     Builder.SetInsertPoint(alloc);
-
-                    AllocaInst *new_arr = Builder.CreateAlloca(
-                        newType, nullptr, alloc->getName().str());
+       
+                    llvm::Type* ta = alloc->getAllocatedType();
+                
+                    AllocaInst *new_arr = Builder.CreateAlloca(ta, DL.getAllocaAddrSpace() , alloc->getArraySize(), alloc->getName().str());
                     new_arr->setAlignment(alloc->getAlign());
 
                     // address space cast to ptr (generic address space of 0)
