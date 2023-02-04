@@ -434,6 +434,17 @@ echo "[*] Linking compiled program..."
 "$AMDCUDA_CLANG" \
     -o "$AMDCUDA_OUTPUT_HOST_LINKED" \
     -L"$AMDCUDA_RT_DIR" \
+    -L"$ROCM_PATH/lib" \
     -lcudaonamd \
     -lpthread \
+    -lamdhip64 \
+    -lstdc++ \
+    -lrt \
+    -lm \
+    -lgcc_s \
+    -lgcc \
+    -lc \
+    -lgcc_s \
+    -lgcc \
+    -lstdc++ \
     "$AMDCUDA_OUTPUT_HOST_OBJECT"
