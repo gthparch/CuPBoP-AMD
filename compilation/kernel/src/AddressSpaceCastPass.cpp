@@ -109,6 +109,7 @@ bool AddressSpaceCastPass::runOnFunction(Function &F) {
 
     FunctionType *FTy = F.getFunctionType();
     std::vector<Type *> newParams;
+    printf("Get all the type of each parameter \n");
 
     for (FunctionType::param_iterator ii = FTy->param_begin(),
                                       ee = FTy->param_end();
@@ -121,6 +122,9 @@ bool AddressSpaceCastPass::runOnFunction(Function &F) {
             // v->mutateType(NewPtrTy);
 
             newParams.emplace_back(NewPtrTy);
+        } else {
+            newParams.emplace_back(ArgType);
+
         }
         // ii->replaceAllUsesWith(v);
         Type *ArgType2 = *ii;
@@ -136,7 +140,7 @@ bool AddressSpaceCastPass::runOnFunction(Function &F) {
         FunctionType::get(FTy->getReturnType(), newParams, FTy->isVarArg());
     unsigned NumArgs = newParams.size();
 
-    printf(" Args Number %d ", NumArgs);
+    printf("Function Argument Number %d \n", NumArgs);
 
     // check new params
 
@@ -152,7 +156,7 @@ bool AddressSpaceCastPass::runOnFunction(Function &F) {
     for (llvm::Function::arg_iterator AI = F.arg_begin(), AE = F.arg_end(),
                                       NAI = NF->arg_begin();
          AI != AE; ++AI, ++NAI) {
-        std::cout << AI->getName().str() << std::endl;
+        // std::cout << AI->getName().str() << std::endl;
 
         NAI->takeName(AI);
     }
@@ -163,6 +167,8 @@ bool AddressSpaceCastPass::runOnFunction(Function &F) {
                                       NI = NF->arg_begin();
          I != E; ++I, ++NI)
         I->replaceAllUsesWith(NI);
+
+    printf("Replace all uses of the old function with the new function \n");
 
     F.replaceAllUsesWith(NF);
     // F.eraseFromParent(); // segFaults
@@ -185,18 +191,21 @@ bool AddressSpaceCastPass::runOnFunction(Function &F) {
     // %4 = addrspacecast ptr addrspace(5) %2 to ptr
     // replaces uses of 2 with 4
 
+    printf("Address Space Cast Alloca Instructions\n");
+
     std::vector<llvm::Instruction *> need_remove;
 
     llvm::IRBuilder<> Builder(M->getContext());
 
     for (Function::iterator FI = NF->begin(); FI != NF->end(); ++FI) {
         for (BasicBlock::iterator BBI = FI->begin(); BBI != FI->end(); ++BBI) {
-            // alloca instructiony
+            // alloca instruction
             Instruction *inst = &(*BBI);
-            outs() << "Instruction: " << *BBI << "\n";
             if (llvm::AllocaInst *alloc =
                     llvm::dyn_cast<llvm::AllocaInst>(inst)) {
                 // create new alloc instruction -
+                outs() << "Instruction: " << *BBI << "\n";
+
                 Type *allocaType = alloc->getType();
 
                 std::string type_str;
@@ -262,13 +271,14 @@ bool AddressSpaceCastPass::runOnFunction(Function &F) {
     // remove the change address space cast instructions
 
     // delete no uses
+    printf("Remove the casted instructions\n");
 
     for (auto f : need_remove) {
         f->dropAllReferences();
         f->eraseFromParent();
     }
 
-    outs() << *NF << " /n ";
+    // outs() << *NF << " /n ";
 
     return 1;
 }
