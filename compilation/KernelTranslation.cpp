@@ -31,6 +31,8 @@
 #include "CUDA2AMDModuleFormatPass.hpp"
 #include "GridBlockPass.hpp"
 #include "TransformVPrintfPass.hpp"
+#include "Syncthreads.hpp"
+
 #include "SharedMemory.hpp"
 #include "cupbop_amd.hpp"
 #include "utils.hpp"
@@ -67,7 +69,7 @@ int main(const int argc, const char *argv[]) {
     std::vector<std::string> passes{
         "cuda2amd-module-format", "cuda2amd-kernel-format",
         "address-space-cast",     "grid-block-conversion",
-        "transform-cuda-vprintf",
+        "transform-cuda-vprintf", 
     };
 
     // First run the metadata passes
@@ -84,6 +86,7 @@ int main(const int argc, const char *argv[]) {
 
     // Shared Memory
     shared_memory(*M);
+    syncthreads(*M);
 
 
     VerifyModule(*M);
