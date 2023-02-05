@@ -31,6 +31,7 @@
 #include "CUDA2AMDModuleFormatPass.hpp"
 #include "GridBlockPass.hpp"
 #include "TransformVPrintfPass.hpp"
+#include "SharedMemory.hpp"
 #include "cupbop_amd.hpp"
 #include "utils.hpp"
 
@@ -62,7 +63,6 @@ int main(const int argc, const char *argv[]) {
         return 1;
     }
     
-    PassManagerBuilder PMB;
     legacy::PassManager PM, MetadataPM;
     std::vector<std::string> passes{
         "cuda2amd-module-format", "cuda2amd-kernel-format",
@@ -77,16 +77,15 @@ int main(const int argc, const char *argv[]) {
     PM.add(createRegisteredPass("transform-cuda-vprintf"));
 
     // Run the address space cast last
-    PMB.addExtension(
-        PassManagerBuilder::EP_CGSCCOptimizerLate,
-        [](const llvm::PassManagerBuilder &passManagerBuilder,
-           llvm::legacy::PassManagerBase &passManager) {
-            passManager.add(createInferAddressSpacesPass());
-        });
-    PMB.populateModulePassManager(PM);
     PM.add(createRegisteredPass("address-space-cast"));
 
+    
     PM.run(*M);
+
+    // Shared Memory
+    shared_memory(*M);
+
+
     VerifyModule(*M);
 
     // Write to Output
