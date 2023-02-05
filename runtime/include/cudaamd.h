@@ -140,6 +140,8 @@ cudaError_t cudaLaunchKernel (const void* func, dim3 gridDim, dim3 blockDim, voi
 
 cudaError_t cudaDeviceSynchronize();
 
+const char* cudaGetErrorString(cudaError_t error);
+
 void** __hipRegisterFatBinary(const void* data);
 
 

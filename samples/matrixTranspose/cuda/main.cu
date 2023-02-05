@@ -136,6 +136,8 @@ int main(int argc, char **argv){
   if(err != cudaSuccess){
     fprintf(stderr, "CUDA ERROR: %s\n", 
 	    cudaGetErrorString(err));
-  }  
+  } else {
+    fprintf(stderr, "No cuda error reported.\n");
+  }
 
 }
