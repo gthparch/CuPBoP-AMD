@@ -90,6 +90,10 @@ cudaError_t cudaLaunchKernel(const void *func, dim3 gridDim, dim3 blockDim,
     return cudaSuccess;
 }
 
+const char* cudaGetErrorString(cudaError_t error) {
+    return hipGetErrorString((hipError_t) error);
+}
+
 static callParams callParamTemp;
 /*
   Internal Cuda Library Functions

@@ -58,6 +58,7 @@
 #include "llvm/PassInfo.h"
 #include "llvm/PassRegistry.h"
 #include "llvm/Support/CommandLine.h"
+#include "llvm/Support/AtomicOrdering.h"
 #include "llvm/Transforms/IPO/PassManagerBuilder.h"
 #include "llvm/Transforms/Utils/BasicBlockUtils.h"
 #include "llvm/Transforms/Utils/Cloning.h"
@@ -93,6 +94,18 @@ void replace_call(op_context &ctx, IntrinsicInst &call,
     auto replacementFunction = ctx.M.getOrInsertFunction(
         replacementCallee, IntegerType::get(getCupbopLLVMContext(), 32));
     call.setCalledFunction(replacementFunction);
+}
+
+void replace_barrier(op_context &ctx, IntrinsicInst &call) {
+    auto& llvmContext = ctx.M.getContext();
+    auto gcnBarrierIntrinsic = Intrinsic::getDeclaration(&ctx.M, Intrinsic::amdgcn_s_barrier);
+    IRBuilder<> builder (llvmContext);
+    auto workgroupSsid = llvmContext.getOrInsertSyncScopeID("workgroup");
+    builder.SetInsertPoint(&call);
+    builder.CreateFence(AtomicOrdering::Release, workgroupSsid);
+    builder.CreateCall(gcnBarrierIntrinsic);
+    builder.CreateFence(AtomicOrdering::Acquire, workgroupSsid);
+    ctx.insts_to_remove.push_back(&call);
 }
 
 intrinsic_replacer direct_replacement(Intrinsic::ID replacement) {
@@ -136,6 +149,7 @@ bool GridBlockPass::runOnFunction(Function &F) {
          custom_call("cudaamd.nvvm.read.ptx.sreg.nctaid.y")},
         {Intrinsic::nvvm_read_ptx_sreg_nctaid_z,
          custom_call("cudaamd.nvvm.read.ptx.sreg.nctaid.z")},
+        {Intrinsic::nvvm_barrier0, replace_barrier}
     };
     auto &M = *F.getParent();
 
