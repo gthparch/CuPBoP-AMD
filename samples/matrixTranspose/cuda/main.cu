@@ -98,18 +98,32 @@ __global__ void transposeV3(int N,
   }
 }
 
+void validate(float *output, float *reference, int n) {
+  int num_invalid = 0;
+  for (int i = 0; i < n; ++i) {
+    for (int j = 0; j < n; ++j) {
+      if (output[j+i*n] != reference[j+i*n]) {
+        num_invalid += 1;
+        fprintf(stderr, "output[%d, %d]: %d != reference: %d\n", j, i, output[j+i*n], reference[j+i*n]);
+      }
+    }
+  }
+  printf("%d inconsistencies\n", num_invalid);
+}
 
 int main(int argc, char **argv){
   
   int N = 2048;
   float *A  = (float*) calloc(N*N, sizeof(float));
   float *AT = (float*) calloc(N*N, sizeof(float));
+  float *AT_ref = (float*) calloc(N*N, sizeof(float));
 
   printf("N=%d\n", N);
 
   for(int i=0;i<N;++i){
     for(int j=0;j<N;++j){
       A[j+i*N] = j;
+      AT_ref[i+j*N] = j;
     }
   }
 
@@ -123,12 +137,21 @@ int main(int argc, char **argv){
   dim3 threadsPerBlock(BDIM,BDIM,1);
   dim3 blocks(Nblocks,Nblocks,1);
 
+  printf("transposeV1");
   copy <<< blocks,threadsPerBlock >>> (N,c_A,c_AT);
   transposeV1 <<< blocks, threadsPerBlock >>> (N, c_A, c_AT);
-  transposeV2 <<< blocks, threadsPerBlock >>> (N, c_A, c_AT);
-  transposeV3 <<< blocks, threadsPerBlock >>> (N, c_A, c_AT);
-
   cudaMemcpy(AT, c_AT, sz, cudaMemcpyDeviceToHost);
+  validate(AT, AT_ref, N);
+  
+  printf("transposeV2");
+  transposeV2 <<< blocks, threadsPerBlock >>> (N, c_A, c_AT);
+  cudaMemcpy(AT, c_AT, sz, cudaMemcpyDeviceToHost);
+  validate(AT, AT_ref, N);
+
+  printf("transposeV3");
+  transposeV3 <<< blocks, threadsPerBlock >>> (N, c_A, c_AT);
+  cudaMemcpy(AT, c_AT, sz, cudaMemcpyDeviceToHost);
+  validate(AT, AT_ref, N);
   
   // --------------------------------------------------------------------------------
 
