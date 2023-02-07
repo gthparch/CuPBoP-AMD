@@ -65,31 +65,26 @@ int main(const int argc, const char *argv[]) {
     }
     
     legacy::PassManager PM, MetadataPM;
-    std::vector<std::string> passes{
-        "cuda2amd-module-format", "cuda2amd-kernel-format",
-        "address-space-cast",     "grid-block-conversion",
-        "transform-cuda-vprintf",
-    };
 
     // First run the metadata passes
     PM.add(createRegisteredPass("cuda2amd-module-format"));
     PM.add(createRegisteredPass("cuda2amd-kernel-format"));
     PM.add(createRegisteredPass("grid-block-conversion"));
     PM.add(createRegisteredPass("transform-cuda-vprintf"));
+    PM.add(createRegisteredPass("transform-cuda-math-fn"));
+    // PM.add(createRegisteredPass("cudaamd-shared-memory-pass"));
 
     // Run the address space cast last
     PM.add(createRegisteredPass("address-space-cast"));
-
     
     PM.run(*M);
 
     // Shared Memory
-    shared_memory(*M);
+    // shared_memory(*M);
 
     // Change Atomics
     changeAtomics(*M);
-
-
+    
     VerifyModule(*M);
 
     // Write to Output

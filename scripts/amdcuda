@@ -12,9 +12,6 @@ CUDA_PATH="/nethome/jchen706/cuda-11.5"
 # Set this variable to 1 to always disassemble intermediate and translated IRs
 AMDCUDA_INSPECT_IR=1
 
-# Additional bitcode path
-AMDCUDA_BITCODE_PATH="$AMDCUDA_DIR/bitcode"
-
 # ===========================================
 
 # ====== defs ======
@@ -43,6 +40,9 @@ AMDCUDA_CLANG_OFFLOAD_BUNDLER="$LLVM_PREFIX/bin/clang-offload-bundler"
 AMDCUDA_CLANG_RES_DIR="$(realpath "$LLVM_PREFIX/lib/clang/"*)"
 AMDCUDA_CLANGRT_DIR="$(realpath "$AMDCUDA_CLANG_RES_DIR/lib/"*)"
 
+# Additional bitcode path
+AMDCUDA_BITCODE_PATH="$AMDCUDA_DIR/bitcode"
+
 # TODO: dynamically generate this list
 AMDCUDA_BUILTIN_BYTECODE=(
     hip.bc ocml.bc ockl.bc oclc_daz_opt_off.bc oclc_unsafe_math_off.bc
@@ -50,7 +50,12 @@ AMDCUDA_BUILTIN_BYTECODE=(
     oclc_isa_version_90a.bc oclc_abi_version_400.bc
 )
 AMDCUDA_LINKED_BYTECODE=(
+<<<<<<< HEAD
     cudaamd-gridblock-size.ll ockl.bc oclc_abi_version_400.bc oclc_wavefrontsize64_on.bc atomic.ll
+=======
+    ockl.bc ocml.bc oclc_abi_version_400.bc oclc_finite_only_off.bc
+    oclc_isa_version_90a.bc oclc_wavefrontsize64_on.bc
+>>>>>>> 7226854 (Add math fn pass to translate __nv_x math symbols)
 )
 AMDCUDA_KERN_ASSEMBLER_FLAGS=(
     -save-temps=cwd -disable-free
@@ -68,7 +73,13 @@ AMDCUDA_KERN_ASSEMBLER_FLAGS=(
     -fapply-global-visibility-to-externs
 )
 AMDCUDA_BITCODE=(
+<<<<<<< HEAD
     "${AMDCUDA_DIR}/bitcode/cudaamd-gridblock-size.ll" "${AMDCUDA_DIR}/bitcode/atomic.ll" 
+=======
+    "${AMDCUDA_BITCODE_PATH}/cudaamd-gridblock-size.ll"
+    "${AMDCUDA_BITCODE_PATH}/cudaamd-math.ll"
+    "${AMDCUDA_BITCODE_PATH}/cuda2gcn.ll"
+>>>>>>> 7226854 (Add math fn pass to translate __nv_x math symbols)
 )
 
 if [[ -z "$AMDCUDA_INPUT" ]]; then

@@ -145,8 +145,10 @@ bool TransformVPrintfPass::runOnFunction(Function &F) {
     for (auto &bb : F) {
         for (auto &instruction : bb) {
             if (CallInst *callInst = dyn_cast<CallInst>(&instruction)) {
+                auto calledFn = callInst->getCalledFunction();
+                if (!calledFn) continue;
                 auto calledFunctionName =
-                    callInst->getCalledFunction()->getName();
+                    calledFn->getName();
                 printf("Called function: %s\n", calledFunctionName.bytes_begin());
                 if (calledFunctionName == "vprintf") {
                     identifiedVprintfCalls.push_back(

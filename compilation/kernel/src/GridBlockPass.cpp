@@ -160,6 +160,10 @@ bool GridBlockPass::runOnFunction(Function &F) {
     for (auto &BB : F) {
         for (auto &I : BB) {
             if (auto *call = dyn_cast<IntrinsicInst>(&I)) {
+                if (call->getCalledFunction()->getName() == "__nvvm_reflect") {
+                    
+                }
+
                 if (auto oldIntrinsicId = call->getIntrinsicID()) {
                     auto replacer = knownIntrinsics.find(oldIntrinsicId);
                     if (replacer != knownIntrinsics.end()) {
