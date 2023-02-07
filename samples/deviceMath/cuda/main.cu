@@ -4,7 +4,7 @@
 #include "math.h"
 #include <cmath>
 
-#define NUM_TEST_CALLS 26
+#define NUM_TEST_CALLS 28
 
 #define TEST_SEQ(in, out, counter) \
     out[counter] = (int) ::lgamma(10.0f); counter += 1; \
@@ -33,8 +33,8 @@
     out[counter] = (int) ::round(2.3f); counter += 1; \
     out[counter] = (int) ::pow(2.0f, 10.0f); counter += 1; \
     out[counter] = (int) ::atan2(7.0f, 0.0f); counter += 1; \
-    /* out[counter] = (int) ::isnan(0.0f); counter += 1; */ \
-    /* out[counter] = (int) ::isinf(0.0f); counter += 1; */
+    out[counter] = (int) ::isnan(0.0f); counter += 1; \
+    out[counter] = (int) ::isinf(0.0f); counter += 1;
 
 void test_math_host(float *in, float *out) {
     int counter = 0;
