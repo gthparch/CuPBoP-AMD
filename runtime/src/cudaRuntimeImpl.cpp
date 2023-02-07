@@ -125,7 +125,7 @@ cudaError_t cudaEventDestroy (cudaEvent_t event) {
 
 cudaError_t cudaEventElapsedTime (float* ms, cudaEvent_t start, cudaEvent_t end) {
 
-HIP_CHECK(hipEventElapsedTime(ms, start, end));
+    HIP_CHECK(hipEventElapsedTime(ms, start, end));
     return cudaSuccess;
 
 
@@ -135,7 +135,7 @@ cudaError_t cudaMemset(void* devPtr, int  value, size_t count) {
     
     printf("insideCudaMemset\n");
     HIP_CHECK(hipMemset(devPtr, value, count));
-        return cudaSuccess;
+    return cudaSuccess;
 
 
 }
@@ -144,7 +144,60 @@ const char* cudaGetErrorString(cudaError_t error) {
     return hipGetErrorString((hipError_t) error);
 }
 
+cudaError_t cudaStreamCreateWithFlags(cudaStream_t* stream, unsigned int flags) {
+    HIP_CHECK(hipStreamCreateWithFlags(stream, flags));
+    return cudaSuccess;
+}
 
+cudaError_t cudaStreamCreateWithPriority(cudaStream_t* stream, unsigned int flags, int priority) {
+    HIP_CHECK(hipStreamCreateWithPriority(stream, flags, priority));
+    return cudaSuccess;
+}
+
+cudaError_t cudaDeviceGetStreamPriorityRange(int* leastPriority, int* greatestPriority) {
+    HIP_CHECK(hipDeviceGetStreamPriorityRange(leastPriority, greatestPriority));
+    return cudaSuccess;
+}
+
+cudaError_t cudaStreamCreate(cudaStream_t* stream) {
+    HIP_CHECK(hipStreamCreate(stream));
+    return cudaSuccess;
+}
+
+cudaError_t cudaStreamSynchronize(cudaStream_t stream) {
+    HIP_CHECK(hipStreamSynchronize(stream));
+    return cudaSuccess;
+}
+
+cudaError_t cudaStreamDestroy(cudaStream_t stream) {
+    HIP_CHECK(hipStreamDestroy(stream));
+    return cudaSuccess;
+}
+
+cudaError_t cudaStreamGetFlags(cudaStream_t stream, unsigned int* flags) {
+    HIP_CHECK(hipStreamGetFlags(stream, flags));
+    return cudaSuccess;
+}
+
+cudaError_t cudaStreamGetPriority(cudaStream_t stream, int *priority) {
+    HIP_CHECK(hipStreamGetPriority(stream, priority));
+    return cudaSuccess;
+}
+
+cudaError_t cudaStreamWaitEvent(cudaStream_t stream, cudaEvent_t event, unsigned int flags) {
+    HIP_CHECK(hipStreamWaitEvent(stream, event, flags));
+    return cudaSuccess;
+}
+
+cudaError_t cudaStreamQuery(cudaStream_t stream) {
+    HIP_CHECK(hipStreamQuery(stream));
+    return cudaSuccess;
+}
+
+cudaError_t cudaStreamAddCallback(cudaStream_t stream, cudaStreamCallback_t callback, void* userData, unsigned int flags) {
+    HIP_CHECK(hipStreamAddCallback(stream, callback, userData, flags));
+    return cudaSuccess;
+}
 
 
 

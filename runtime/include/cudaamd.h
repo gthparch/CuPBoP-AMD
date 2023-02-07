@@ -31,6 +31,9 @@ typedef struct ihipStream_t* cudaStream_t;
 
 typedef struct ihipEvent_t* cudaEvent_t;
 
+typedef void (*cudaStreamCallback_t)(cudaStream_t stream, hipError_t status, void* userData);
+
+
 
 struct cudaDeviceProp {
       char name[256];
@@ -156,6 +159,28 @@ cudaError_t cudaEventRecord (cudaEvent_t event, cudaStream_t stream);
 cudaError_t cudaEventCreate (cudaEvent_t* event);
 
 const char* cudaGetErrorString(cudaError_t error);
+
+cudaError_t cudaStreamAddCallback(cudaStream_t stream, cudaStreamCallback_t callback, void* userData, unsigned int flags);
+
+cudaError_t cudaStreamQuery(cudaStream_t stream);
+
+cudaError_t cudaStreamWaitEvent(cudaStream_t stream, cudaEvent_t event, unsigned int flags);
+
+cudaError_t cudaStreamGetPriority(cudaStream_t stream, int *priority);
+
+cudaError_t cudaStreamGetFlags(cudaStream_t stream, unsigned int *flags);
+
+cudaError_t cudaStreamDestroy(cudaStream_t stream);
+
+cudaError_t cudaStreamSynchronize(cudaStream_t stream);
+
+cudaError_t cudaStreamCreate(cudaStream_t* stream);
+
+cudaError_t cudaDeviceGetStreamPriorityRange(int* leastPriority, int* greatestPriority);
+
+cudaError_t cudaStreamCreateWithPriority(cudaStream_t* stream, unsigned int flags, int priority);
+
+cudaError_t cudaStreamCreateWithFlags(cudaStream_t stream, unsigned int flags);
 
 void** __hipRegisterFatBinary(const void* data);
 
