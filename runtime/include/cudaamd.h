@@ -29,6 +29,9 @@ typedef  struct CUuuid_st cudaUUID_t;
 // typedef uint8_t CUstream_st*;
 typedef struct ihipStream_t* cudaStream_t;
 
+typedef struct ihipEvent_t* cudaEvent_t;
+
+
 struct cudaDeviceProp {
       char name[256];
       cudaUUID_t uuid;
@@ -139,6 +142,18 @@ cudaError_t cudaMemcpy (void* dst, const void* src, size_t count, cudaMemcpyKind
 cudaError_t cudaLaunchKernel (const void* func, dim3 gridDim, dim3 blockDim, void** args, size_t sharedMem, cudaStream_t stream);
 
 cudaError_t cudaDeviceSynchronize();
+
+cudaError_t cudaMemset(void* devPtr, int  value, size_t count);
+
+cudaError_t cudaEventElapsedTime (float* ms, cudaEvent_t start, cudaEvent_t end);
+
+cudaError_t cudaEventDestroy (cudaEvent_t event);
+
+cudaError_t cudaEventSynchronize (cudaEvent_t event);
+
+cudaError_t cudaEventRecord (cudaEvent_t event, cudaStream_t stream);
+
+cudaError_t cudaEventCreate (cudaEvent_t* event);
 
 const char* cudaGetErrorString(cudaError_t error);
 

@@ -32,6 +32,7 @@
 #include "GridBlockPass.hpp"
 #include "TransformVPrintfPass.hpp"
 #include "SharedMemory.hpp"
+#include "ChangeAtomics.hpp"
 #include "cupbop_amd.hpp"
 #include "utils.hpp"
 
@@ -84,6 +85,9 @@ int main(const int argc, const char *argv[]) {
 
     // Shared Memory
     shared_memory(*M);
+
+    // Change Atomics
+    changeAtomics(*M);
 
 
     VerifyModule(*M);

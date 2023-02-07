@@ -6,7 +6,7 @@ set -e
 
 # Set custom llvm prefix here
 # LLVM_PREFIX=""
-# CUDA_PREFIX=""
+CUDA_PATH="/nethome/jchen706/cuda-11.5"
 # DEVICE_LIB_PATH=""
 
 # Set this variable to 1 to always disassemble intermediate and translated IRs
@@ -50,7 +50,7 @@ AMDCUDA_BUILTIN_BYTECODE=(
     oclc_isa_version_90a.bc oclc_abi_version_400.bc
 )
 AMDCUDA_LINKED_BYTECODE=(
-    cudaamd-gridblock-size.ll ockl.bc oclc_abi_version_400.bc oclc_wavefrontsize64_on.bc
+    cudaamd-gridblock-size.ll ockl.bc oclc_abi_version_400.bc oclc_wavefrontsize64_on.bc atomic.ll
 )
 AMDCUDA_KERN_ASSEMBLER_FLAGS=(
     -save-temps=cwd -disable-free
@@ -68,7 +68,7 @@ AMDCUDA_KERN_ASSEMBLER_FLAGS=(
     -fapply-global-visibility-to-externs
 )
 AMDCUDA_BITCODE=(
-    "${AMDCUDA_DIR}/bitcode/cudaamd-gridblock-size.ll"
+    "${AMDCUDA_DIR}/bitcode/cudaamd-gridblock-size.ll" "${AMDCUDA_DIR}/bitcode/atomic.ll" 
 )
 
 if [[ -z "$AMDCUDA_INPUT" ]]; then
@@ -238,6 +238,10 @@ postprocess_ir "$AMDCUDA_TRANSLATED_KERN_IR"
 
 echo "[*] Linking CUDAAMD bitcode..."
 "$AMDCUDA_LLVM_LINK" \
+    -o "$AMDCUDA_OUTPUT_KERNEL_LINKED_BITCODE" \
+    "$AMDCUDA_TRANSLATED_KERN_IR" \
+    "${AMDCUDA_BITCODE[@]}"
+echo "$AMDCUDA_LLVM_LINK" \
     -o "$AMDCUDA_OUTPUT_KERNEL_LINKED_BITCODE" \
     "$AMDCUDA_TRANSLATED_KERN_IR" \
     "${AMDCUDA_BITCODE[@]}"

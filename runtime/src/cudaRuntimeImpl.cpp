@@ -90,9 +90,63 @@ cudaError_t cudaLaunchKernel(const void *func, dim3 gridDim, dim3 blockDim,
     return cudaSuccess;
 }
 
+cudaError_t cudaEventCreate (cudaEvent_t* event) {
+    printf("hipEventCreate\n");
+
+    HIP_CHECK(hipEventCreate(event));
+    return cudaSuccess;
+
+
+}
+
+cudaError_t cudaEventRecord (cudaEvent_t event, cudaStream_t stream = 0) {
+    printf("hipEventRecord\n");
+
+    HIP_CHECK(hipEventRecord(event, stream));
+    return cudaSuccess;
+
+}
+
+cudaError_t cudaEventSynchronize (cudaEvent_t event) {
+    printf("hipSynchronize\n");
+
+    HIP_CHECK(hipEventSynchronize(event));
+    return cudaSuccess;
+
+}
+
+cudaError_t cudaEventDestroy (cudaEvent_t event) {
+    printf("hipEventDestroy\n");
+
+    HIP_CHECK(hipEventDestroy(event));
+    return cudaSuccess;
+
+}
+
+cudaError_t cudaEventElapsedTime (float* ms, cudaEvent_t start, cudaEvent_t end) {
+
+HIP_CHECK(hipEventElapsedTime(ms, start, end));
+    return cudaSuccess;
+
+
+}
+
+cudaError_t cudaMemset(void* devPtr, int  value, size_t count) {
+    
+    printf("insideCudaMemset\n");
+    HIP_CHECK(hipMemset(devPtr, value, count));
+        return cudaSuccess;
+
+
+}
+
 const char* cudaGetErrorString(cudaError_t error) {
     return hipGetErrorString((hipError_t) error);
 }
+
+
+
+
 
 static callParams callParamTemp;
 /*
