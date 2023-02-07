@@ -72,15 +72,12 @@ int main(const int argc, const char *argv[]) {
     PM.add(createRegisteredPass("grid-block-conversion"));
     PM.add(createRegisteredPass("transform-cuda-vprintf"));
     PM.add(createRegisteredPass("transform-cuda-math-fn"));
-    // PM.add(createRegisteredPass("cudaamd-shared-memory-pass"));
+    PM.add(createRegisteredPass("cudaamd-shared-memory-pass"));
 
     // Run the address space cast last
     PM.add(createRegisteredPass("address-space-cast"));
     
     PM.run(*M);
-
-    // Shared Memory
-    // shared_memory(*M);
 
     // Change Atomics
     changeAtomics(*M);

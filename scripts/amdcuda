@@ -6,8 +6,14 @@ set -e
 
 # Set custom llvm prefix here
 # LLVM_PREFIX=""
-CUDA_PATH="/nethome/jchen706/cuda-11.5"
+# CUDA_PATH="/nethome/jchen706/cuda-11.5"
 # DEVICE_LIB_PATH=""
+
+if [[ -z "$CUDA_PATH" ]]; then
+    if [[ -d "$HOME/cuda-11.5" ]]; then
+        CUDA_PATH="$HOME/cuda-11.5"
+    fi
+fi
 
 # Set this variable to 1 to always disassemble intermediate and translated IRs
 AMDCUDA_INSPECT_IR=1
@@ -50,12 +56,8 @@ AMDCUDA_BUILTIN_BYTECODE=(
     oclc_isa_version_90a.bc oclc_abi_version_400.bc
 )
 AMDCUDA_LINKED_BYTECODE=(
-<<<<<<< HEAD
-    cudaamd-gridblock-size.ll ockl.bc oclc_abi_version_400.bc oclc_wavefrontsize64_on.bc atomic.ll
-=======
     ockl.bc ocml.bc oclc_abi_version_400.bc oclc_finite_only_off.bc
     oclc_isa_version_90a.bc oclc_wavefrontsize64_on.bc
->>>>>>> 7226854 (Add math fn pass to translate __nv_x math symbols)
 )
 AMDCUDA_KERN_ASSEMBLER_FLAGS=(
     -save-temps=cwd -disable-free
@@ -73,13 +75,10 @@ AMDCUDA_KERN_ASSEMBLER_FLAGS=(
     -fapply-global-visibility-to-externs
 )
 AMDCUDA_BITCODE=(
-<<<<<<< HEAD
-    "${AMDCUDA_DIR}/bitcode/cudaamd-gridblock-size.ll" "${AMDCUDA_DIR}/bitcode/atomic.ll" 
-=======
     "${AMDCUDA_BITCODE_PATH}/cudaamd-gridblock-size.ll"
     "${AMDCUDA_BITCODE_PATH}/cudaamd-math.ll"
     "${AMDCUDA_BITCODE_PATH}/cuda2gcn.ll"
->>>>>>> 7226854 (Add math fn pass to translate __nv_x math symbols)
+    "${AMDCUDA_BITCODE_PATH}/atomic.ll"
 )
 
 if [[ -z "$AMDCUDA_INPUT" ]]; then
