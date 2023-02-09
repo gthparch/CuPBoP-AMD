@@ -441,7 +441,6 @@ void changeAtomics(Module &M) {
     remove->eraseFromParent();
   }
 
-  outs() << M << "\n";
 
   
 }
