@@ -81,7 +81,8 @@
         "__assert": "cpp",
         "list": "cpp",
         "shared_mutex": "cpp",
-        "stack": "cpp"
+        "stack": "cpp",
+        "__functional_base": "cpp"
     },
     "cmake.configureArgs": [
         "-DHIP_COMMON_DIR=${env:HOME}/prefix/opt/ROCm-OpenCL-Runtime",

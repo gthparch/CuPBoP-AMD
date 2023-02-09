@@ -2,66 +2,12 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Debug GridBlock Kernel",
+            "name": "Debug Kernel Translator",
             "type": "lldb",
             "request": "launch",
             "program": "${workspaceFolder}/build/compilation/kernelTranslator",
-            "args": ["main-cuda-nvptx64-nvidia-cuda-sm_35.bc"],
-            "cwd": "${workspaceFolder}/samples/gridBlock/cuda",
+            "args": ["${file}"],
             "preLaunchTask": "CMake build"
-        },
-        {
-            "name": "(gdb) Launch",
-            "type": "cppdbg",
-            "request": "launch",
-            "program": "/nethome/xzhou381/amdcuda/build/compilation/hostTranslator",
-            "args": [
-                "/nethome/xzhou381/amdcuda/samples/emptyKernel/cuda/empty-host-x86_64-unknown-linux-gnu.ll",
-                "/nethome/xzhou381/amdcuda/samples/emptyKernel/cuda/empty.cpp-hip-amdgcn-amd-amdhsa.hipfb",
-            ],
-            "stopAtEntry": false,
-            "cwd": "${workspaceFolder}",
-            "environment": [],
-            "externalConsole": false,
-            "MIMode": "gdb",
-            "setupCommands": [
-                {
-                    "description": "Enable pretty-printing for gdb",
-                    "text": "-enable-pretty-printing",
-                    "ignoreFailures": true
-                },
-                {
-                    "description": "Set Disassembly Flavor to Intel",
-                    "text": "-gdb-set disassembly-flavor intel",
-                    "ignoreFailures": true
-                }
-            ]
-        },
-        {
-            "name": "Translate vecAdd",
-            "type": "cppdbg",
-            "request": "launch",
-            "program": "${command:cmake.launchTargetPath}",
-            "args": [
-                "${workspaceFolder}/vector-add/vecadd.cu.device.ll"
-            ],
-            "stopAtEntry": false,
-            "cwd": "${workspaceFolder}",
-            "environment": [
-                {
-                    "name": "PATH",
-                    "value": "$PATH:${command:cmake.launchTargetDirectory}"
-                }
-            ],
-            "externalConsole": true,
-            "MIMode": "gdb",
-            "setupCommands": [
-                {
-                    "description": "Enable pretty-printing for gdb",
-                    "text": "-enable-pretty-printing",
-                    "ignoreFailures": true
-                }
-            ]
         }
     ]
 }
