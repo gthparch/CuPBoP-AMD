@@ -63,12 +63,26 @@ cudaError_t cudaMalloc(void **devPtr, size_t size) {
     return cudaSuccess;
 }
 
+cudaError_t cudaMallocArray(cudaArray_t* array, const cudaChannelFormatDesc* desc, size_t width, size_t height = 0, unsigned int  flags = 0) {
+        HIP_CHECK(hipMallocArray(array, desc, width, height, flags));
+        return cudaSuccess;
+}
+
+cudaError_t cudaMallocPitch(void **devPtr, size_t *pitch, size_t width, size_t height)	{
+  HIP_CHECK(hipMallocPitch(devPtr,  pitch, width, height))
+  return cudaSuccess;
+}
+
 cudaError_t cudaFree(void *ptr) {
     printf("inside cudaFree\n");
     HIP_CHECK(hipFree(ptr));
     return cudaSuccess;
 }
 
+cudaError_t cudaFreeArray(cudaArray_t array) {
+    HIP_CHECK(hipFreeArray(array));
+    return cudaSuccess;
+}
 cudaError_t cudaHostAlloc(void **ptr, size_t size, unsigned int flag) {
     printf("inside HostAlloc\n");
     HIP_CHECK(hipHostMalloc(ptr, size, flag));
@@ -80,6 +94,12 @@ cudaError_t cudaMemcpy(void *dst, const void *src, size_t count,
     printf("insideCudaMemcpy\n");
     HIP_CHECK(hipMemcpy(dst, src, count, (hipMemcpyKind)kind));
     return cudaSuccess;
+}
+
+cudaError_t cudaMemcpy2D(void * dst, size_t dpitch, const void * src, size_t spitch, size_t width,
+    size_t 	height, cudaMemcpyKind kind) {
+        HIP_CHECK(hipMemcpy2D(dst, dpitch, src, spitch, width, height, (hipMemcpyKind)kind));
+        return cudaSuccess;
 }
 
 cudaError_t cudaLaunchKernel(const void *func, dim3 gridDim, dim3 blockDim,
@@ -236,11 +256,25 @@ cudaError_t cudaGetTextureObjectTextureDesc(cudaTextureDesc* pTexDesc, cudaTextu
   return cudaSuccess;
 
 }
-// Texture
-// cudaMallocPitch
-// cudaMemcpy2D
-// cudaBindTexture2D
-// 	cudaCreateChannelDesc 
+
+cudaError_t cudaBindTexture(size_t* offset, const textureReference* texref, const void* devPtr, const cudaChannelFormatDesc* desc, size_t size = UINT_MAX) {
+    HIP_CHECK(hipBindTexture(offset, texref, devPtr, desc, size));
+    return cudaSuccess;
+}
+
+cudaError_t cudaBindTexture2D(size_t* offset, const textureReference* texref, const void* devPtr, const cudaChannelFormatDesc* desc, 
+    size_t width, size_t height, size_t pitch) {
+
+    HIP_CHECK(hipBindTexture2D(offset, texref, devPtr,
+    desc, width, height, pitch));
+    return cudaSuccess;
+
+}
+
+cudaError_t cudaUnbindTexture(const textureReference* texref) {
+    HIP_CHECK(hipUnbindTexture(texref));
+    return cudaSuccess;
+}
 
 static callParams callParamTemp;
 /*

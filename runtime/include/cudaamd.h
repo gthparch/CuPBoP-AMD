@@ -170,11 +170,18 @@ cudaError_t cudaGetDeviceProperties (cudaDeviceProp* prop, int  device );
 
 cudaError_t cudaMalloc (void ** devPtr, size_t size);
 
+cudaError_t cudaMallocArray(cudaArray_t* array, const cudaChannelFormatDesc* desc, size_t width, size_t height, unsigned int  flags);
+
+cudaError_t cudaMallocPitch(void **devPtr, size_t *pitch, size_t width, size_t height);
+
 cudaError_t cudaFree (void * ptr);
 
 cudaError_t cudaHostAlloc (void** ptr, size_t size, unsigned int flag);
 
 cudaError_t cudaMemcpy (void* dst, const void* src, size_t count, cudaMemcpyKind kind);
+
+cudaError_t cudaMemcpy2D(void * dst, size_t dpitch, const void * src, size_t spitch, size_t width,
+    size_t 	height, cudaMemcpyKind kind);
 
 cudaError_t cudaLaunchKernel (const void* func, dim3 gridDim, dim3 blockDim, void** args, size_t sharedMem, cudaStream_t stream);
 
@@ -215,6 +222,24 @@ cudaError_t cudaDeviceGetStreamPriorityRange(int* leastPriority, int* greatestPr
 cudaError_t cudaStreamCreateWithPriority(cudaStream_t* stream, unsigned int flags, int priority);
 
 cudaError_t cudaStreamCreateWithFlags(cudaStream_t stream, unsigned int flags);
+
+cudaChannelFormatDesc cudaCreateChannelDesc(int  x, int  y, int  z, int  w, cudaChannelFormatKind f);
+
+cudaError_t cudaDestroyTextureObject ( cudaTextureObject_t texObject );
+
+cudaError_t cudaCreateTextureObject(cudaTextureObject_t* pTexObject, const cudaResourceDesc* pResDesc, const cudaTextureDesc* pTexDesc, const cudaResourceViewDesc* pResViewDesc);
+
+cudaError_t cudaGetChannelDesc(cudaChannelFormatDesc* desc, cudaArray_const_t array);
+
+cudaError_t cudaGetTextureObjectResourceDesc(cudaResourceDesc* pResDesc, cudaTextureObject_t texObject);
+
+cudaError_t cudaGetTextureObjectResourceViewDesc(cudaResourceViewDesc* pResViewDesc, cudaTextureObject_t texObject);
+
+cudaError_t cudaGetTextureObjectTextureDesc(cudaTextureDesc* pTexDesc, cudaTextureObject_t texObject);
+
+cudaError_t cudaBindTexture2D(size_t* offset, const textureReference* texref, const void* devPtr, const cudaChannelFormatDesc* desc, 
+   size_t width, size_t height, size_t pitch);
+
 
 void** __hipRegisterFatBinary(const void* data);
 
