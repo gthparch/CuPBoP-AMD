@@ -2,6 +2,7 @@
 #include <string.h> 
 #include <stdint.h>
 #include "hip/hip_runtime_api.h"
+#include "hip/driver_types.h"
 
 extern "C" {
 // typedef __int32 int32_t;
@@ -12,6 +13,7 @@ enum cudaError_t {
   cudaErrorInvalidValue 
 };
 
+
 enum cudaMemcpyKind {
   cudaMemcpyHostToHost,
   cudaMemcpyHostToDevice,
@@ -19,6 +21,22 @@ enum cudaMemcpyKind {
   cudaMemcpyDeviceToDevice,
   cudaMemcpyDefault
 };
+
+// the hip runtime api only shows these format kinds
+enum cudaChannelFormatKind {
+  cudaChannelFormatKindSigned,
+  cudaChannelFormatKindUnsigned, 
+  cudaChannelFormatKindFloat,
+  cudaChannelFormatKindNone,  
+};
+
+enum cudaResourceType {
+  cudaResourceTypeArray,
+  cudaResourceTypeMipmappedArray,
+  cudaResourceTypeLinear,
+  cudaResourceTypePitch2D, 
+};
+
 
 typedef struct CUuuid_st {                                /**< CUDA definition of UUID */
     char bytes[16];
@@ -34,6 +52,22 @@ typedef struct ihipEvent_t* cudaEvent_t;
 typedef void (*cudaStreamCallback_t)(cudaStream_t stream, hipError_t status, void* userData);
 
 
+typedef hipTextureObject_t cudaTextureObject_t;
+typedef hipSurfaceObject_t cudaSurfaceObject_t;
+#define cudaTextureType1D hipTextureType1D
+#define cudaTextureType1DLayered hipTextureType1DLayered
+#define cudaTextureType2D hipTextureType2D
+#define cudaTextureType2DLayered hipTextureType2DLayered
+#define cudaTextureType3D hipTextureType3D
+#define cudaArray_t hipArray_t
+#define cudaArray_const_t hipArray_const_t
+
+typedef hipMipmappedArray_t cudaMipmappedArray_t;
+typedef hipMipmappedArray_const_t  cudaMipmappedArray_const_t;
+typedef hipChannelFormatDesc  cudaChannelFormatDesc ;
+typedef hipResourceDesc cudaResourceDesc;
+typedef hipTextureDesc cudaTextureDesc;
+typedef struct hipResourceViewDesc cudaResourceViewDesc;
 
 struct cudaDeviceProp {
       char name[256];

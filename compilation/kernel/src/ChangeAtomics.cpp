@@ -435,7 +435,7 @@ void changeAtomics(Module &M) {
   }
 
 
-  // remove Nvidia Intrinsics and atomic functions 
+  // remove Nvidia atomic functions 
   for(auto remove: need_remove) {
     remove->dropAllReferences();
     remove->eraseFromParent();

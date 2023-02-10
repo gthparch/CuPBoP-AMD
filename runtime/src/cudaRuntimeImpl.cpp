@@ -1,6 +1,8 @@
 #include "cudaamd.h"
 #include "stdio.h"
 #include <hip/hip_runtime.h>
+#include <hip/amd_detail/amd_channel_descriptor.h>
+#include <hip/driver_types.h>
 #include <iostream>
 
 #define HIP_CHECK(status)                                                      \
@@ -199,7 +201,46 @@ cudaError_t cudaStreamAddCallback(cudaStream_t stream, cudaStreamCallback_t call
     return cudaSuccess;
 }
 
+cudaChannelFormatDesc cudaCreateChannelDesc(int  x, int  y, int  z, int  w, cudaChannelFormatKind f) {
+ return hipCreateChannelDesc(x, y, z, w, (hipChannelFormatKind)f);
+}
 
+cudaError_t cudaCreateTextureObject(cudaTextureObject_t* pTexObject, const cudaResourceDesc* pResDesc, const cudaTextureDesc* pTexDesc, const cudaResourceViewDesc* pResViewDesc) {
+    HIP_CHECK(hipCreateTextureObject(pTexObject, pResDesc, pTexDesc, pResViewDesc));
+    return cudaSuccess;
+}
+
+cudaError_t cudaDestroyTextureObject ( cudaTextureObject_t texObject ) {
+    HIP_CHECK(hipDestroyTextureObject(texObject));
+    return cudaSuccess;
+
+}
+
+cudaError_t cudaGetChannelDesc(cudaChannelFormatDesc* desc, cudaArray_const_t array) {
+    HIP_CHECK(hipGetChannelDesc(desc, array));
+    return cudaSuccess;
+}
+
+cudaError_t cudaGetTextureObjectResourceDesc(cudaResourceDesc* pResDesc, cudaTextureObject_t texObject) {
+    HIP_CHECK(hipGetTextureObjectResourceDesc(pResDesc, texObject));
+    return cudaSuccess;
+}
+
+cudaError_t cudaGetTextureObjectResourceViewDesc(cudaResourceViewDesc* pResViewDesc, cudaTextureObject_t texObject) {
+    HIP_CHECK(hipGetTextureObjectResourceViewDesc(pResViewDesc, texObject));
+    return cudaSuccess;
+}
+
+cudaError_t cudaGetTextureObjectTextureDesc(cudaTextureDesc* pTexDesc, cudaTextureObject_t texObject) {
+  HIP_CHECK(hipGetTextureObjectTextureDesc(pTexDesc, texObject));
+  return cudaSuccess;
+
+}
+// Texture
+// cudaMallocPitch
+// cudaMemcpy2D
+// cudaBindTexture2D
+// 	cudaCreateChannelDesc 
 
 static callParams callParamTemp;
 /*
