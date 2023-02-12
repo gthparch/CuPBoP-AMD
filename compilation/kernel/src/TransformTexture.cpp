@@ -173,6 +173,13 @@ void transformTexture(llvm::Module &M) {
   //
   // Change llvm.nvvm.texsurf.handle.internal.p1 to 
   llvm::IRBuilder<> Builder(M.getContext());
+  const DataLayout &DL = M.getDataLayout();
+
+  std::vector<Type *> I32Params;
+  I32Params.push_back(I32Ptr);
+  I32Params.push_back(I32);
+  llvm::FunctionType *atomicFnTypeI32 = FunctionType::get(I32,
+          I32Params, false);
 
 
   for (Module::iterator i = M.begin(), e = M.end(); i != e; ++i) {
@@ -185,6 +192,8 @@ void transformTexture(llvm::Module &M) {
     Function::iterator I = F->begin();
     for (Function::iterator E = F->end(); I != E; ++I) {
       BasicBlock::iterator firstBB = E->getFirstInsertionPt();
+      auto *first_instr = dyn_cast<Instruction>(firstBB);
+
       for (BasicBlock::iterator BI = I->begin(); BI != I->end(); BI++) {
 
          if (auto *nvvm_atomic = dyn_cast<CallInst>(BI)) {
@@ -192,11 +201,24 @@ void transformTexture(llvm::Module &M) {
 
           if (func_name == "llvm.nvvm.texsurf.handle.internal.p1") {
             // get the uses of the current instruction return
-            AllocaInst *new_arr = Builder.CreateAlloca(ta, DL.getAllocaAddrSpace() , alloc->getArraySize(), alloc->getName().str());
-            new_arr->setAlignment(alloc->getAlign());
+            Builder.SetInsertPoint(first_instr);     
+            AllocaInst *newTextureStruct = Builder.CreateAlloca(textureStruct, DL.getAllocaAddrSpace() , 0, "");
+            auto *newtex = Builder.CreateAddrSpaceCast(newTextureStruct, intPtrType); // int32ptr or int64ptr
+
+           // next instruction is store evolving this operand 
+           // store i64 %20, ptr %8, align 4
+
+           // call void @llvm.memcpy.p0.p0.i64(ptr align 8 %16, ptr align 8 addrspacecast (ptr addrspace(1) @tex to ptr), i64 88, i1 false)
 
 
 
+
+          } else if (func_name = "_ZL5tex2DIiEN17__nv_tex_rmet_retIT_E4typeE7textureIS1_Li2EL19cudaTextureReadMode0EEff") {
+            /*
+              %27 = load i64, ptr %8, align 4
+              %28 = call noundef i32 @_ZL5tex2DIiEN17__nv_tex_rmet_retIT_E4typeE7textureIS1_Li2EL19cudaTextureReadMode0EEff(i64 %27, float noundef %23, float noundef %26) #4
+              store i32 %28, ptr %5, align 4
+            */
           }
 
 
