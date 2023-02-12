@@ -67,6 +67,41 @@ std::vector<Function *> discover_cuda_kernels(Module &M) {
     return kernels;
 }
 
+
+std::vector<GlobalVariable *> discover_texture_memory(Module &M) {
+    std::vector<GlobalVariable *> texture;
+    auto *nvvmAnnotation = M.getNamedMetadata("nvvm.annotations");
+    auto numTextures = nvvmAnnotation->getNumOperands();
+
+    if (nvvmAnnotation == nullptr) {
+        fprintf(stderr, "No nvvm.annotations metadata found in module! No "
+                        "texture memory will be translated.\n");
+        return texture;
+    }
+
+    for (unsigned int i = 0; i < numTextures; ++i) {
+        auto *metadataNode = nvvmAnnotation->getOperand(i);
+        if (!metadataNode || metadataNode->getNumOperands() != 3) {
+            continue;
+        }
+
+        auto *metadataClassification =
+            dyn_cast<MDString>(metadataNode->getOperand(1));
+
+        if (metadataClassification &&
+            metadataClassification->getString() == "texture") {
+            auto *metadatFnValue =
+                dyn_cast<ValueAsMetadata>(metadataNode->getOperand(0));
+            auto *fn = dyn_cast<GlobalVariable>(metadatFnValue->getValue());
+            if (fn) {
+                texture.push_back(fn);
+            }
+        }
+    }
+
+    return texture;
+}
+
 void VerifyModule(llvm::Module &M) {
     std::string msg;
     llvm::raw_string_ostream os(msg);

@@ -33,6 +33,7 @@
 #include "TransformVPrintfPass.hpp"
 #include "SharedMemory.hpp"
 #include "ChangeAtomics.hpp"
+#include "TransformTexture.hpp"
 #include "cupbop_amd.hpp"
 #include "utils.hpp"
 
@@ -81,6 +82,9 @@ int main(const int argc, const char *argv[]) {
 
     // Change Atomics
     changeAtomics(*M);
+
+    // Transform Texture Memory
+    transformTexture(*M);
     
     VerifyModule(*M);
 

@@ -1,7 +1,11 @@
 #include "cuda_runtime.h"
 #include <stdlib.h>
 #include "stdio.h"
+#include "helper_math.h"
 
+// will need export CPATH=~/cuda-11.5/samples/common/inc:$CPATH
+
+// https://forums.developer.nvidia.com/t/tex1dfetch-apparently-returning-incorrect-value/38795
 // https://github.com/ricsonc/linear_vs_texture_memory_cuda/blob/master/main.cu
 
 #define gpuCheck(ans) { gpuAssert((ans), __FILE__, __LINE__); }
@@ -29,11 +33,12 @@ __global__ void touch1Dtexture(void* outPtr_, long M){
     typ* outPtr = (typ*) outPtr_;
 
     for(; i < M-2; i += N) {
+        float4 a = tex1Dfetch(texref, i);
+        float4 b = tex1Dfetch(texref, i+1); 
+        float4 c = tex1Dfetch(texref, i+2);  
+        float4 d = tex1Dfetch(texref, i+3);
         outPtr[i] = (
-            tex1Dfetch(texref, i) +
-            tex1Dfetch(texref, i+1) +
-            tex1Dfetch(texref, i+2) + 
-            tex1Dfetch(texref, i+3)
+           a + b + c + d
         );
     }
 }
@@ -64,108 +69,101 @@ void time1Dtexture()
 
 /* 2D linear memory */
 
-__global__ void touch2Dtexture(void* outPtr_, long M){
-    long N = gridDim.x * blockDim.x;
-    long ix = blockIdx.x * blockDim.x + threadIdx.x;
-    long iy = blockIdx.y * blockDim.y + threadIdx.y;
+// __global__ void touch2Dtexture(void* outPtr_, long M){
+//     long N = gridDim.x * blockDim.x;
+//     long ix = blockIdx.x * blockDim.x + threadIdx.x;
+//     long iy = blockIdx.y * blockDim.y + threadIdx.y;
 
-    typ* outPtr = (typ*) outPtr_;
+//     typ* outPtr = (typ*) outPtr_;
 
-    for(; ix < M-1; ix += N) {
-        for(; iy < M-1; iy += N) {
-            outPtr[ix*M+iy] = (
-                tex2D(texref2, ix, iy) +
-                tex2D(texref2, ix+1, iy) +
-                tex2D(texref2, ix, iy+1) +
-                tex2D(texref2, ix+1, iy+1)
-            );
-        }
-    }
-}
+//     for(; ix < M-1; ix += N) {
+//         for(; iy < M-1; iy += N) {
+//             outPtr[ix*M+iy] = (
+//                 tex2D(texref2, ix, iy) +
+//                 tex2D(texref2, ix+1, iy) +
+//                 tex2D(texref2, ix, iy+1) +
+//                 tex2D(texref2, ix+1, iy+1)
+//             );
+//         }
+//     }
+// }
 
-/* 3D texture memory */
+// /* 3D texture memory */
 
-__global__ void touch3Dtexture(void* outPtr_, long M){
-    long N = gridDim.x * blockDim.x;
-    long ix = blockIdx.x * blockDim.x + threadIdx.x;
-    long iy = blockIdx.y * blockDim.y + threadIdx.y;
-    long iz = blockIdx.z * blockDim.z + threadIdx.z;
+// __global__ void touch3Dtexture(void* outPtr_, long M){
+//     long N = gridDim.x * blockDim.x;
+//     long ix = blockIdx.x * blockDim.x + threadIdx.x;
+//     long iy = blockIdx.y * blockDim.y + threadIdx.y;
+//     long iz = blockIdx.z * blockDim.z + threadIdx.z;
 
-    typ* outPtr = (typ*) outPtr_;
+//     typ* outPtr = (typ*) outPtr_;
 
-    for(; ix < M-1; ix += N) {
-        for(; iy < M-1; iy += N) {
-            for(; iz < M-1; iz += N) {
-                outPtr[ix*M*M+iy*M+iz] = (
-                    tex3D(texref3, ix, iy, iz) +                    
-                    tex3D(texref3, ix, iy, iz+1) +
-                    tex3D(texref3, ix, iy+1, iz) +
-                    tex3D(texref3, ix+1, iy, iz)
-                );
-            }
-        }
-    }
-}
+//     for(; ix < M-1; ix += N) {
+//         for(; iy < M-1; iy += N) {
+//             for(; iz < M-1; iz += N) {
+//                 outPtr[ix*M*M+iy*M+iz] = (
+//                     tex3D(texref3, ix, iy, iz) +                    
+//                     tex3D(texref3, ix, iy, iz+1) +
+//                     tex3D(texref3, ix, iy+1, iz) +
+//                     tex3D(texref3, ix+1, iy, iz)
+//                 );
+//             }
+//         }
+//     }
+// }
 
-void time2Dtexture()
-{
-    long M = 10000;
-    dim3 blocks(256, 256);
-    dim3 threads(8,8);
+// void time2Dtexture()
+// {
+//     long M = 10000;
+//     dim3 blocks(256, 256);
+//     dim3 threads(8,8);
 
-    void* outPtr;
-    gpuCheck( cudaMalloc(&outPtr, M*M*sizeof(typ)) );
+//     void* outPtr;
+//     gpuCheck( cudaMalloc(&outPtr, M*M*sizeof(typ)) );
 
-    cudaArray *refPtr;
-    gpuCheck( cudaMallocArray(&refPtr, &texref2.channelDesc, M, M) );
-    gpuCheck( cudaBindTextureToArray(texref2, refPtr) );
+//     cudaArray *refPtr;
+//     gpuCheck( cudaMallocArray(&refPtr, &texref2.channelDesc, M, M) );
+//     gpuCheck( cudaBindTextureToArray(texref2, refPtr) );
     
-    auto start = std::chrono::system_clock::now();
-    for(int i = 0; i < RUNS; i++){
-        touch2Dtexture<<<blocks, threads>>>(outPtr, M);
-    }
+   
+//     touch2Dtexture<<<blocks, threads>>>(outPtr, M);
     
-    gpuCheck( cudaPeekAtLastError() );
-    gpuCheck( cudaDeviceSynchronize() );
-
-    auto end = std::chrono::system_clock::now();
-    std::chrono::duration<double> delta = end-start;
-
-    gpuCheck( cudaUnbindTexture(texref) );    
-    gpuCheck( cudaFreeArray(refPtr) );
-    gpuCheck( cudaFree(outPtr) );
     
-    printf("texture 2D: %.1f ms\n", delta.count());
-}
+//     gpuCheck( cudaPeekAtLastError() );
+//     gpuCheck( cudaDeviceSynchronize() );
 
 
-void time3Dtexture()
-{
-    unsigned long M = 465;
-    dim3 blocks(32,32,32);
-    dim3 threads(4,4,4);
 
-    void* outPtr;
-    gpuCheck( cudaMalloc(&outPtr, M*M*M*sizeof(typ)) );
+//     gpuCheck( cudaUnbindTexture(texref) );    
+//     gpuCheck( cudaFreeArray(refPtr) );
+//     gpuCheck( cudaFree(outPtr) );
     
-    cudaArray* refPtr;
-    gpuCheck( cudaMalloc3DArray(&refPtr, &texref2.channelDesc, {M, M, M}) );
-    gpuCheck( cudaBindTextureToArray(texref3, refPtr) );
-    
-    auto start = std::chrono::system_clock::now();
-    for(int i = 0; i < RUNS; i++){
-        touch3Dtexture<<<blocks, threads>>>(outPtr, M);
-    }
-    
-    gpuCheck( cudaPeekAtLastError() );
-    gpuCheck( cudaDeviceSynchronize() );
+// }
 
-    auto end = std::chrono::system_clock::now();
-    std::chrono::duration<double> delta = end-start;
 
-    gpuCheck( cudaUnbindTexture(texref) );    
-    gpuCheck( cudaFreeArray(refPtr) );
-    gpuCheck( cudaFree(outPtr) );
+// void time3Dtexture()
+// {
+//     unsigned long M = 465;
+//     dim3 blocks(32,32,32);
+//     dim3 threads(4,4,4);
+
+//     void* outPtr;
+//     gpuCheck( cudaMalloc(&outPtr, M*M*M*sizeof(typ)) );
     
-    printf("texture 3D: %.1f ms\n", delta.count());
-}
+//     cudaArray* refPtr;
+//     gpuCheck( cudaMalloc3DArray(&refPtr, &texref2.channelDesc, {M, M, M}) );
+//     gpuCheck( cudaBindTextureToArray(texref3, refPtr) );
+    
+   
+//     touch3Dtexture<<<blocks, threads>>>(outPtr, M);
+    
+    
+//     gpuCheck( cudaPeekAtLastError() );
+//     gpuCheck( cudaDeviceSynchronize() );
+
+
+//     gpuCheck( cudaUnbindTexture(texref) );    
+//     gpuCheck( cudaFreeArray(refPtr) );
+//     gpuCheck( cudaFree(outPtr) );
+    
+// }
