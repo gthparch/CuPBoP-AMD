@@ -8,6 +8,8 @@
 #include <set>
 #include <utility>
 #include <vector>
+#include <unordered_map>
+
 
 #include "llvm/IR/CallingConv.h"
 #include "llvm/IR/Constants.h"
@@ -18,6 +20,7 @@
 #include "llvm/IR/IntrinsicsAMDGPU.h"
 #include "llvm/IR/IntrinsicsNVPTX.h"
 #include "llvm/IR/Module.h"
+#include <llvm/IR/DerivedTypes.h>
 
 #include "llvm/IR/Function.h"
 #include "llvm/Pass.h"
@@ -98,6 +101,7 @@ void transformTexture(llvm::Module &M) {
 
   // Check all the global variables for texture reference:
   std::cout << "Running Texture Memory Process on Module " << std::endl;
+  std::vector<Instruction*> need_remove;
 
   std::vector<llvm::GlobalVariable*> allTextureMemories = discover_texture_memory(M);
   printf(" %d ", allTextureMemories.size());
@@ -125,21 +129,26 @@ void transformTexture(llvm::Module &M) {
 
   auto textureStruct = StructType::create(context, "struct.texture");
   textureStruct->setBody({textureReference}, false);
-
+  std::unordered_map<std::string, GlobalVariable*> umap;
 
   for(GlobalVariable* global: allTextureMemories) {
     std::string new_name = "cupbop_" + global->getName().str(); 
     std::cout << global->getName().str() << std::endl;
     // Value* v = dyn_cast<Value>(global);
-
-  // Global variable initializer type does not match global variable type!
-  // ptr addrspace(1) @cupbob_tex
+    std::string old_name = global->getName().str();
+    // Global variable initializer type does not match global variable type!
+    // ptr addrspace(1) @cupbob_tex
     auto undef = llvm::UndefValue::get(textureStruct);
 
     auto gv = new llvm::GlobalVariable(M, textureStruct , false, global->getLinkage(),
                             undef, new_name, NULL,
                             global->getThreadLocalMode(), global->getAddressSpace(), global->isExternallyInitialized());
-    
+    umap[global->getName().str()] = gv;
+    global->replaceAllUsesWith(gv);
+    global->dropAllReferences();
+    global->eraseFromParent();
+    gv->setName(old_name);
+
   }
 
   // Go through the functions 
@@ -173,14 +182,37 @@ void transformTexture(llvm::Module &M) {
   //
   // Change llvm.nvvm.texsurf.handle.internal.p1 to 
   llvm::IRBuilder<> Builder(M.getContext());
+  llvm::IRBuilder<> Builder2(M.getContext());
+
   const DataLayout &DL = M.getDataLayout();
 
-  std::vector<Type *> I32Params;
-  I32Params.push_back(I32Ptr);
-  I32Params.push_back(I32);
-  llvm::FunctionType *atomicFnTypeI32 = FunctionType::get(I32,
-          I32Params, false);
 
+  Type* llvmVoidTy = Type::getVoidTy(context);
+  Type* llvmI8PtrTy = Type::getInt8PtrTy(context);
+  Type* llvmI64Ty = IntegerType::get(context, 64);
+  Type* llvmI1Ty = IntegerType::get(context, 1);
+
+  std::vector<Type *> memcpyParams;
+  memcpyParams.push_back(llvmI8PtrTy);
+  memcpyParams.push_back(llvmI8PtrTy);
+  memcpyParams.push_back(llvmI64Ty);
+  memcpyParams.push_back(llvmI1Ty);
+  llvm::FunctionType *LLVMmemcpyType = FunctionType::get(llvmVoidTy,
+          memcpyParams, false);
+
+  Type *Float = llvm::Type::getFloatTy(M.getContext());
+
+  std::vector<Type *> textureFloatParams;
+  textureFloatParams.push_back(textureReference);
+  textureFloatParams.push_back(Float);
+  textureFloatParams.push_back(Float);
+  llvm::FunctionType *LLVMFloatTextureType = FunctionType::get(intType,
+          textureFloatParams, false);
+
+
+
+  bool memcpyDeclared = false;
+           
 
   for (Module::iterator i = M.begin(), e = M.end(); i != e; ++i) {
     Function *F = &(*i);
@@ -190,35 +222,98 @@ void transformTexture(llvm::Module &M) {
     
     std::cout << "Function: " << F->getName().str() << std::endl;
     Function::iterator I = F->begin();
-    for (Function::iterator E = F->end(); I != E; ++I) {
-      BasicBlock::iterator firstBB = E->getFirstInsertionPt();
-      auto *first_instr = dyn_cast<Instruction>(firstBB);
+    BasicBlock::iterator firstBB = I->getFirstInsertionPt();
+    auto *first_instr = dyn_cast<Instruction>(firstBB);
+    outs() << " First " << *first_instr << " \n";
 
+    for (Function::iterator E = F->end(); I != E; ++I) {
+      Value* textureToBeLoaded;
       for (BasicBlock::iterator BI = I->begin(); BI != I->end(); BI++) {
 
-         if (auto *nvvm_atomic = dyn_cast<CallInst>(BI)) {
-          auto func_name = nvvm_atomic->getCalledFunction()->getName();
+         if (auto *nvvm_function = dyn_cast<CallInst>(BI)) {
+          auto func_name = nvvm_function->getCalledFunction()->getName();
 
           if (func_name == "llvm.nvvm.texsurf.handle.internal.p1") {
             // get the uses of the current instruction return
+
             Builder.SetInsertPoint(first_instr);     
             AllocaInst *newTextureStruct = Builder.CreateAlloca(textureStruct, DL.getAllocaAddrSpace() , 0, "");
             auto *newtex = Builder.CreateAddrSpaceCast(newTextureStruct, intPtrType); // int32ptr or int64ptr
+            
+            // call void @llvm.memcpy.p0.p0.i64(ptr align 8 %16, ptr align 8 addrspacecast (ptr addrspace(1) @tex to ptr), i64 88, i1 false)
+         
+            FunctionCallee LLVMmemcpyFC = M.getOrInsertFunction("llvm.memcpy.p0.p0.i64", LLVMmemcpyType);
+            Function * LLVMmemcpyFn = dyn_cast<Function>(LLVMmemcpyFC.getCallee());
+            
+
+            // get the operand of the call function
+            llvm::Value* texOperand = nvvm_function->getArgOperand(0);
+            outs() << *texOperand << '\n';
+            std::unordered_map<std::string,GlobalVariable*>::const_iterator got = umap.find(texOperand->getName().str());
+            if ( got == umap.end() ) {
+              std::cout << "not found";
+              exit(1);
+            } else {
+                std::cout << " foound " << std::endl;
+                SmallVector<Value *, 4> memcpyArgs;
+                memcpyArgs.push_back(newtex);
+                // ptr align 8 addrspacecast (ptr addrspace(1) @tex to ptr)
+                memcpyArgs.push_back(Builder.CreateAddrSpaceCast(got->second,llvmI8PtrTy));
+                // i64 88
+                llvm::Constant *i64_val = llvm::ConstantInt::get(llvmI64Ty, 88/*value*/, false);
+                memcpyArgs.push_back(i64_val);
+                // i1 false 
+                llvm::Constant *ifalse_val = llvm::ConstantInt::get(llvmI1Ty, 0/*value*/, false);
+                memcpyArgs.push_back(ifalse_val);
+                Builder.SetInsertPoint(nvvm_function);
+                Builder.CreateCall(LLVMmemcpyFn, memcpyArgs);
+                Value *i32zero = ConstantInt::get(context, APInt(32, 0));
+                Value *indices[2] = {i32zero, i32zero};
+                textureToBeLoaded = Builder.CreateGEP(textureReference, newtex, ArrayRef<Value *>(indices, 2) ,"", true);
+                // %35 = getelementptr inbounds %struct.texture, ptr %16, i32 0, i32 0
+                // %36 = load %struct.textureReference, ptr %35, align 8
+
+                // remove  %29 = call i64 @llvm.nvvm.texsurf.handle.internal.p1(ptr addrspace(1) @tex)
+                // store i64 %29, ptr %16, align 
+
+                need_remove.push_back(nvvm_function);
+                need_remove.push_back(nvvm_function->getNextNode());
+            }
+            
+
+
 
            // next instruction is store evolving this operand 
            // store i64 %20, ptr %8, align 4
 
-           // call void @llvm.memcpy.p0.p0.i64(ptr align 8 %16, ptr align 8 addrspacecast (ptr addrspace(1) @tex to ptr), i64 88, i1 false)
+         
+          //  currentInst->replaceAllUsesWith(UndefValue::get(currentInst->getType())
 
 
+          // https://stackoverflow.com/questions/44034192/how-to-get-the-next-immediate-instruction-for-a-given-instruction
 
 
-          } else if (func_name = "_ZL5tex2DIiEN17__nv_tex_rmet_retIT_E4typeE7textureIS1_Li2EL19cudaTextureReadMode0EEff") {
+          } else if (func_name == "_ZL5tex2DIiEN17__nv_tex_rmet_retIT_E4typeE7textureIS1_Li2EL19cudaTextureReadMode0EEff") {
             /*
               %27 = load i64, ptr %8, align 4
               %28 = call noundef i32 @_ZL5tex2DIiEN17__nv_tex_rmet_retIT_E4typeE7textureIS1_Li2EL19cudaTextureReadMode0EEff(i64 %27, float noundef %23, float noundef %26) #4
               store i32 %28, ptr %5, align 4
             */
+            LoadInst* loadTexture = dyn_cast<LoadInst>(nvvm_function->getPrevNode());
+            Builder.SetInsertPoint(loadTexture);
+            LoadInst* newLoadTexture = Builder.CreateLoad(textureReference, textureToBeLoaded);
+            loadTexture->replaceAllUsesWith(newLoadTexture);
+            // loadTexture->setT(0,textureToBeLoaded);
+            // loadTexture->setT
+            outs() << *newLoadTexture <<  ' \n';
+            need_remove.push_back(nvvm_function->getPrevNode());
+       
+            FunctionCallee LLVMnewFunFC = M.getOrInsertFunction("_ZL5tex2DIiL18hipTextureReadMode0EEN13__hip_tex_retIT_XT0_EbE4typeE7textureIS2_Li2EXT0_EEff", LLVMFloatTextureType);
+            Function* LLVMnewFunFn = dyn_cast<Function>(LLVMnewFunFC.getCallee());
+            
+            nvvm_function->setCalledFunction(LLVMnewFunFn);
+
+
           }
 
 
@@ -230,8 +325,20 @@ void transformTexture(llvm::Module &M) {
 
 
 
-outs() << M << '\n';
 
 
+
+  }
+  
+}
+
+
+   // remove Nvidia atomic functions 
+  for(auto remove: need_remove) {
+    remove->dropAllReferences();
+    remove->eraseFromParent();
+  }
+
+  outs() << M << '\n';
 
 }

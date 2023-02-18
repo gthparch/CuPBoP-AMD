@@ -39,7 +39,7 @@ Nvidia GPU
 
 salloc -t 1:00:00 -p rg-gpu -w quorra2
 
-export PATH=/usr/local/cuda-11.5/bin:/nethome/jchen706/llvm/bin:$PATH
+export PATH=/usr/local/cuda-12.0/bin:/nethome/jchen706/llvm/bin:$PATH
 export LD_LIBRARY_PATH=/usr/local/cuda-11.5/lib64:$LD_LIBRARY_PATH
 
 nvcc vecAdd.cu -c -save-temps
@@ -60,3 +60,4 @@ Nvidia:
 
 
 
+/nethome/jchen706/opt/llvm/bin/lld -flavor gnu --no-undefined -shared -plugin-opt=-amdgpu-internalize-symbols -plugin-opt=mcpu=gfx90a -plugin-opt=O3 -plugin-opt=-amdgpu-early-inline-all=true -plugin-opt=-amdgpu-function-calls=false -save-temps -o main-cuda.translated.out main-cuda.translated.o /nethome/jchen706/ROCm-Device-Libs/install/amdgcn/bitcode//ockl.bc /nethome/jchen706/ROCm-Device-Libs/install/amdgcn/bitcode//ocml.bc /nethome/jchen706/ROCm-Device-Libs/install/amdgcn/bitcode//oclc_abi_version_400.bc /nethome/jchen706/ROCm-Device-Libs/install/amdgcn/bitcode//oclc_finite_only_off.bc /nethome/jchen706/ROCm-Device-Libs/install/amdgcn/bitcode//oclc_unsafe_math_on.bc /nethome/jchen706/ROCm-Device-Libs/install/amdgcn/bitcode//oclc_daz_opt_on.bc /nethome/jchen706/ROCm-Device-Libs/install/amdgcn/bitcode//oclc_correctly_rounded_sqrt_on.bc /nethome/jchen706/ROCm-Device-Libs/install/amdgcn/bitcode//oclc_isa_version_90a.bc /nethome/jchen706/ROCm-Device-Libs/install/amdgcn/bitcode//oclc_wavefrontsize64_on.bc /nethome/jchen706/ROCm-Device-Libs/install/amdgcn/bitcode//opencl.bc libbc-clang_rt.builtins.amdgcn.a

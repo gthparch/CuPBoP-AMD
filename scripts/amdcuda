@@ -80,6 +80,7 @@ AMDCUDA_BITCODE=(
     "${AMDCUDA_BITCODE_PATH}/cudaamd-math.ll"
     "${AMDCUDA_BITCODE_PATH}/cuda2gcn.ll"
     "${AMDCUDA_BITCODE_PATH}/atomic.ll"
+    "${AMDCUDA_BITCODE_PATH}/textureInt2DReadMode.ll"
 )
 
 if [[ -z "$AMDCUDA_INPUT" ]]; then

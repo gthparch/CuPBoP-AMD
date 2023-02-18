@@ -264,11 +264,19 @@ cudaError_t cudaBindTexture(size_t* offset, const textureReference* texref, cons
 
 cudaError_t cudaBindTexture2D(size_t* offset, const textureReference* texref, const void* devPtr, const cudaChannelFormatDesc* desc, 
     size_t width, size_t height, size_t pitch) {
-
+    // printf("cudaBindTexture2d  %p\n", texref);
+    // printf("cudaBindTexture2d  %p\n", devPtr);
+    // printf("cudaBindTexture2d  %p\n", desc);
+    // hipBindTexture2D(offset, texref, devPtr, desc, width, height, pitch);
     HIP_CHECK(hipBindTexture2D(offset, texref, devPtr,
     desc, width, height, pitch));
-    return cudaSuccess;
+     
+    // printf("cudaBindTexture2d  %p\n", texref);
+    // printf("cudaBindTexture2d  %p\n", devPtr);
+    // printf("cudaBindTexture2d  %p\n", desc);
 
+    // exit(1);
+    return cudaSuccess;
 }
 
 cudaError_t cudaUnbindTexture(const textureReference* texref) {
@@ -385,6 +393,16 @@ extern void __cudaRegisterTexture(void **fatCubinHandle,
                                   const char *deviceName, int dim, int norm,
                                   int ext) {
     printf("__cudaRegisterTexture Called\n");
+
+    // tex, "texName" 
+    // 2 0 0    
+    __hipRegisterTexture(fatCubinHandle,      // The device modules containing code object
+                                     (void *)hostVar,        // The shadow variable in host code
+                                     (char *)deviceName,    // Variable name in host code
+                                     (char *)deviceName,  // Variable name in device code
+                                     dim, norm, ext);
+
+
 }
 
 extern void __cudaRegisterSurface(void **fatCubinHandle,

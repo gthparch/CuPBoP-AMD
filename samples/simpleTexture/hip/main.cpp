@@ -41,9 +41,9 @@ __global__ void kernel (int m, int n)
     for (int row = 0; row < m; row++) {
         for (int col = 0; col < n; col++) {
             val = tex2D (tex, col+0.5f, row+0.5f);
-            // printf ("%3d  ", val);
+            printf ("%3d  ", val);
         }
-        // printf ("\n");
+        printf ("\n");
     }
 }
 
