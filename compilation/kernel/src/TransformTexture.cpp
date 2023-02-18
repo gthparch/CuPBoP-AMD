@@ -103,8 +103,12 @@ void transformTexture(llvm::Module &M) {
   std::cout << "Running Texture Memory Process on Module " << std::endl;
   std::vector<Instruction*> need_remove;
 
+
+
   std::vector<llvm::GlobalVariable*> allTextureMemories = discover_texture_memory(M);
   printf(" %d ", allTextureMemories.size());
+  
+  
   if (allTextureMemories.size() > 0) {
 
 
@@ -116,20 +120,35 @@ void transformTexture(llvm::Module &M) {
     %struct.hipChannelFormatDesc = type { i32, i32, i32, i32, i32 }
   */
 
-  auto intType = IntegerType::get(context, 32); // 32 bits integer
+  auto int32Type = IntegerType::get(context, 32); // 32 bits integer
   auto hipChannelFormatDesc = StructType::create(context, "struct.hipChannelFormatDesc"); // Create opaque type
   // auto myStructPtrType = PointerType::get(myStructType, 0); // Initialise the pointer type now
-  hipChannelFormatDesc->setBody({intType, intType , intType, intType, intType}, /* packed */ false); // Set the body of the aggregate
+  hipChannelFormatDesc->setBody({int32Type, int32Type , int32Type, int32Type, int32Type}, /* packed */ false); // Set the body of the aggregate
 
-  ArrayType* arrayType = ArrayType::get(intType, 3);
+  ArrayType* arrayType = ArrayType::get(int32Type, 3);
   auto floatType = Type::getFloatTy(context);
   auto intPtrType = Type::getInt32PtrTy(context);
   auto textureReference = StructType::create(context, "struct.textureReference");
-  textureReference->setBody({intType, intType , intType, arrayType, hipChannelFormatDesc, intType, intType, intType, floatType, floatType, floatType, intPtrType, intType, intType}, /* packed */ false); 
+  textureReference->setBody({int32Type, int32Type , int32Type, arrayType, hipChannelFormatDesc, int32Type, int32Type, int32Type, floatType, floatType, floatType, intPtrType, int32Type, int32Type}, /* packed */ false); 
 
   auto textureStruct = StructType::create(context, "struct.texture");
   textureStruct->setBody({textureReference}, false);
   std::unordered_map<std::string, GlobalVariable*> umap;
+
+  // vector type <4 x i32>   Is Scalable false?
+  Type *vectorIntType = VectorType::get(int32Type, 4, false);
+  auto unionIntVector = StructType::create(context, "vector.int.union"); 
+  unionIntVector->setBody({vectorIntType});
+
+  Type *vectorFloatType = VectorType::get(floatType, 4, false);
+  auto unionFloatVector = StructType::create(context, "vector.float.union"); 
+  unionFloatVector->setBody({vectorFloatType});
+
+  auto hipVectorBase = StructType::create(context, "struct.HIP_vector_base");
+  hipVectorBase->setBody({unionIntVector});
+
+  auto hipVectorType = StructType::create(context, "struct.HIP_vector_type");
+  hipVectorType->setBody({hipVectorBase});
 
   for(GlobalVariable* global: allTextureMemories) {
     std::string new_name = "cupbop_" + global->getName().str(); 
@@ -143,6 +162,9 @@ void transformTexture(llvm::Module &M) {
     auto gv = new llvm::GlobalVariable(M, textureStruct , false, global->getLinkage(),
                             undef, new_name, NULL,
                             global->getThreadLocalMode(), global->getAddressSpace(), global->isExternallyInitialized());
+    // auto gv1 = new llvm::GlobalVariable(M, unionVector , false, global->getLinkage(),
+    //                         undef, "testVector", NULL,
+    //                         global->getThreadLocalMode(), global->getAddressSpace(), global->isExternallyInitialized());
     umap[global->getName().str()] = gv;
     global->replaceAllUsesWith(gv);
     global->dropAllReferences();
@@ -186,7 +208,6 @@ void transformTexture(llvm::Module &M) {
 
   const DataLayout &DL = M.getDataLayout();
 
-
   Type* llvmVoidTy = Type::getVoidTy(context);
   Type* llvmI8PtrTy = Type::getInt8PtrTy(context);
   Type* llvmI64Ty = IntegerType::get(context, 64);
@@ -202,17 +223,20 @@ void transformTexture(llvm::Module &M) {
 
   Type *Float = llvm::Type::getFloatTy(M.getContext());
 
-  std::vector<Type *> textureFloatParams;
-  textureFloatParams.push_back(textureReference);
-  textureFloatParams.push_back(Float);
-  textureFloatParams.push_back(Float);
-  llvm::FunctionType *LLVMFloatTextureType = FunctionType::get(intType,
-          textureFloatParams, false);
+  std::vector<Type *> texture2dIntReadParams;
+  texture2dIntReadParams.push_back(textureReference);
+  texture2dIntReadParams.push_back(Float);
+  texture2dIntReadParams.push_back(Float);
+  llvm::FunctionType *LLVM2dIntReadTextureType = FunctionType::get(int32Type,
+          texture2dIntReadParams, false);
 
 
+  std::vector<Type *> texture1dFloatReadParams;
+  texture1dFloatReadParams.push_back(textureReference);
+  texture1dFloatReadParams.push_back(int32Type);
+  llvm::FunctionType *LLVM1dFloatReadTextureType = FunctionType::get(Float,
+          texture1dFloatReadParams, false);
 
-  bool memcpyDeclared = false;
-           
 
   for (Module::iterator i = M.begin(), e = M.end(); i != e; ++i) {
     Function *F = &(*i);
@@ -280,58 +304,52 @@ void transformTexture(llvm::Module &M) {
                 need_remove.push_back(nvvm_function->getNextNode());
             }
             
-
-
-
-           // next instruction is store evolving this operand 
-           // store i64 %20, ptr %8, align 4
-
-         
-          //  currentInst->replaceAllUsesWith(UndefValue::get(currentInst->getType())
-
-
-          // https://stackoverflow.com/questions/44034192/how-to-get-the-next-immediate-instruction-for-a-given-instruction
-
-
           } else if (func_name == "_ZL5tex2DIiEN17__nv_tex_rmet_retIT_E4typeE7textureIS1_Li2EL19cudaTextureReadMode0EEff") {
             /*
+              2D Integer ReadMode
+
               %27 = load i64, ptr %8, align 4
               %28 = call noundef i32 @_ZL5tex2DIiEN17__nv_tex_rmet_retIT_E4typeE7textureIS1_Li2EL19cudaTextureReadMode0EEff(i64 %27, float noundef %23, float noundef %26) #4
               store i32 %28, ptr %5, align 4
             */
+
+            
             LoadInst* loadTexture = dyn_cast<LoadInst>(nvvm_function->getPrevNode());
             Builder.SetInsertPoint(loadTexture);
             LoadInst* newLoadTexture = Builder.CreateLoad(textureReference, textureToBeLoaded);
             loadTexture->replaceAllUsesWith(newLoadTexture);
-            // loadTexture->setT(0,textureToBeLoaded);
-            // loadTexture->setT
+           
             outs() << *newLoadTexture <<  ' \n';
             need_remove.push_back(nvvm_function->getPrevNode());
        
-            FunctionCallee LLVMnewFunFC = M.getOrInsertFunction("_ZL5tex2DIiL18hipTextureReadMode0EEN13__hip_tex_retIT_XT0_EbE4typeE7textureIS2_Li2EXT0_EEff", LLVMFloatTextureType);
+            FunctionCallee LLVMnewFunFC = M.getOrInsertFunction("_ZL5tex2DIiL18hipTextureReadMode0EEN13__hip_tex_retIT_XT0_EbE4typeE7textureIS2_Li2EXT0_EEff", LLVM2dIntReadTextureType);
             Function* LLVMnewFunFn = dyn_cast<Function>(LLVMnewFunFC.getCallee());
             
             nvvm_function->setCalledFunction(LLVMnewFunFn);
 
 
+          } else if (func_name == "_ZL10tex1DfetchIfEN17__nv_tex_rmet_retIT_E4typeE7textureIS1_Li1EL19cudaTextureReadMode0EEi") {
+
+              // tex1DFetch (float, 1, readMode)
+              LoadInst* loadTexture = dyn_cast<LoadInst>(nvvm_function->getPrevNode());
+              Builder.SetInsertPoint(loadTexture);
+              LoadInst* newLoadTexture = Builder.CreateLoad(textureReference, textureToBeLoaded);
+              loadTexture->replaceAllUsesWith(newLoadTexture);
+
+              outs() << *newLoadTexture <<  ' \n';
+              need_remove.push_back(nvvm_function->getPrevNode());
+
+              FunctionCallee LLVMnewFunFC = M.getOrInsertFunction("_ZL10tex1DfetchIfL18hipTextureReadMode0EEN13__hip_tex_retIT_XT0_EbE4typeE7textureIS2_Li1EXT0_EEi", LLVM1dFloatReadTextureType);
+              Function* LLVMnewFunFn = dyn_cast<Function>(LLVMnewFunFC.getCallee());
+              
+              nvvm_function->setCalledFunction(LLVMnewFunFn);
+
           }
-
-
-
       }
     }
   }
-
-
-
-
-
-
-
-  }
-  
+  }  
 }
-
 
    // remove Nvidia atomic functions 
   for(auto remove: need_remove) {

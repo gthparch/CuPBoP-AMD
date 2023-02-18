@@ -160,6 +160,10 @@ cudaError_t cudaGetDeviceProperties (cudaDeviceProp* prop, int  device);
 
 cudaError_t cudaDeviceReset ();
 
+cudaError_t cudaSetDeviceFlags(unsigned int flags);
+
+cudaError_t cudaHostGetDevicePointer(void** pDevice, void* pHost, unsigned int flags);
+
 cudaError_t cudaGetLastError ();
 
 cudaError_t cudaPeekAtLastError ();
@@ -175,6 +179,8 @@ cudaError_t cudaMallocArray(cudaArray_t* array, const cudaChannelFormatDesc* des
 cudaError_t cudaMallocPitch(void **devPtr, size_t *pitch, size_t width, size_t height);
 
 cudaError_t cudaFree (void * ptr);
+
+cudaError_t cudaFreeHost(void *ptr);
 
 cudaError_t cudaHostAlloc (void** ptr, size_t size, unsigned int flag);
 
@@ -236,6 +242,8 @@ cudaError_t cudaGetTextureObjectResourceDesc(cudaResourceDesc* pResDesc, cudaTex
 cudaError_t cudaGetTextureObjectResourceViewDesc(cudaResourceViewDesc* pResViewDesc, cudaTextureObject_t texObject);
 
 cudaError_t cudaGetTextureObjectTextureDesc(cudaTextureDesc* pTexDesc, cudaTextureObject_t texObject);
+
+cudaError_t cudaBindTexture(size_t* offset, const textureReference* texref, const void* devPtr, const cudaChannelFormatDesc* desc, size_t size);
 
 cudaError_t cudaBindTexture2D(size_t* offset, const textureReference* texref, const void* devPtr, const cudaChannelFormatDesc* desc, 
    size_t width, size_t height, size_t pitch);

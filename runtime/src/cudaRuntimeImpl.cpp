@@ -56,6 +56,17 @@ cudaError_t cudaGetDeviceProperties(cudaDeviceProp *prop, int device) {
     return cudaSuccess;
 }
 
+cudaError_t cudaSetDeviceFlags(unsigned int flags) {
+    HIP_CHECK(hipSetDeviceFlags(flags));
+    return cudaSuccess;
+}
+
+
+cudaError_t cudaHostGetDevicePointer (void** pDevice, void* pHost, unsigned int flags) {
+    HIP_CHECK(hipHostGetDevicePointer(pDevice, pHost, flags));
+    return cudaSuccess;
+}
+
 cudaError_t cudaMalloc(void **devPtr, size_t size) {
     printf("insideCudaMalloc %p size=%zu\n", devPtr, size);
     HIP_CHECK(hipMalloc(devPtr, size));
@@ -76,6 +87,12 @@ cudaError_t cudaMallocPitch(void **devPtr, size_t *pitch, size_t width, size_t h
 cudaError_t cudaFree(void *ptr) {
     printf("inside cudaFree\n");
     HIP_CHECK(hipFree(ptr));
+    return cudaSuccess;
+}
+
+cudaError_t cudaFreeHost(void *ptr) {
+
+    HIP_CHECK(hipFreeHost(ptr));
     return cudaSuccess;
 }
 
