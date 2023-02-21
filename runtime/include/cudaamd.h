@@ -156,6 +156,8 @@ typedef struct callParams {
 
 cudaError_t cudaGetDevice(int *devPtr);
 
+cudaError_t cudaGetDeviceCount(int *count);
+
 cudaError_t cudaGetDeviceProperties (cudaDeviceProp* prop, int  device);
 
 cudaError_t cudaDeviceReset ();
@@ -163,10 +165,6 @@ cudaError_t cudaDeviceReset ();
 cudaError_t cudaGetLastError ();
 
 cudaError_t cudaPeekAtLastError ();
-
-cudaError_t cudaGetDevice (int *devPtr);
-
-cudaError_t cudaGetDeviceProperties (cudaDeviceProp* prop, int  device );
 
 cudaError_t cudaMalloc (void ** devPtr, size_t size);
 
@@ -186,6 +184,9 @@ cudaError_t cudaMemcpy2D(void * dst, size_t dpitch, const void * src, size_t spi
 cudaError_t cudaLaunchKernel (const void* func, dim3 gridDim, dim3 blockDim, void** args, size_t sharedMem, cudaStream_t stream);
 
 cudaError_t cudaDeviceSynchronize();
+
+/// Deprecated by Nvidia's documents and replaced by cudaDeviceSynchronize()
+cudaError_t cudaThreadSynchronize();
 
 cudaError_t cudaMemset(void* devPtr, int  value, size_t count);
 

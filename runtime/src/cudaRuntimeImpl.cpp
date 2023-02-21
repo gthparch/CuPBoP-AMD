@@ -38,9 +38,21 @@ cudaError_t cudaDeviceSynchronize() {
     return cudaSuccess;
 }
 
+cudaError_t cudaThreadSynchronize() {
+    printf("inside cudaThreadSynchronize()\n");
+    HIP_CHECK(hipDeviceSynchronize());
+    return cudaSuccess;
+}
+
 cudaError_t cudaGetDevice(int *devPtr) {
     printf("insideGetDevice\n");
     HIP_CHECK(hipGetDevice(devPtr));
+    return cudaSuccess;
+}
+
+cudaError_t cudaGetDeviceCount(int *count) {
+    printf("insideGetDeviceCount\n");
+    HIP_CHECK(hipGetDeviceCount(count));
     return cudaSuccess;
 }
 
@@ -49,8 +61,24 @@ cudaError_t cudaGetDeviceProperties(cudaDeviceProp *prop, int device) {
     hipDeviceProp_t dprops;
     HIP_CHECK(hipGetDeviceProperties(&dprops, device));
     memcpy(prop->name, dprops.name, sizeof(prop->name));
+    memcpy(prop->maxThreadsDim, dprops.maxThreadsDim, sizeof(dprops.maxThreadsDim));
+    memcpy(prop->maxGridSize, dprops.maxGridSize, sizeof(dprops.maxGridSize));
+
     prop->warpSize = dprops.warpSize;
     prop->clockRate = dprops.clockRate;
+    prop->sharedMemPerBlock = dprops.sharedMemPerBlock;
+    prop->totalGlobalMem = dprops.totalGlobalMem;
+    prop->regsPerBlock = dprops.regsPerBlock;
+    prop->memPitch = dprops.memPitch;
+    prop->maxThreadsPerBlock = dprops.maxThreadsPerBlock;
+    prop->totalConstMem = dprops.totalConstMem;
+    prop->major = 11;
+    prop->minor = 5;
+    prop->clockRate = dprops.clockRate;
+    prop->textureAlignment = dprops.textureAlignment;
+    prop->deviceOverlap = false;
+    prop->multiProcessorCount = dprops.multiProcessorCount;
+
     printf("Device WarpSize: %d \n", prop->warpSize);
     printf("Device clockRate: %d \n", prop->clockRate);
     return cudaSuccess;
