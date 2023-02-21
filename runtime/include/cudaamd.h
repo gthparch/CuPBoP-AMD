@@ -37,6 +37,13 @@ enum cudaResourceType {
   cudaResourceTypePitch2D, 
 };
 
+enum cudaFuncCache {
+  cudaFuncCachePreferNone = 0,
+  cudaFuncCachePreferShared = 1,
+  cudaFuncCachePreferL1 = 2,
+  cudaFuncCachePreferEqual = 3
+};
+
 
 typedef struct CUuuid_st {                                /**< CUDA definition of UUID */
     char bytes[16];
@@ -153,10 +160,13 @@ typedef struct callParams {
   void *stream;
 } callParams;
 
+cudaError_t cudaSetDevice(int device);
 
 cudaError_t cudaGetDevice(int *devPtr);
 
 cudaError_t cudaGetDeviceCount(int *count);
+
+cudaError_t cudaFuncSetCacheConfig(const void* func, cudaFuncCache cacheConfig);
 
 cudaError_t cudaGetDeviceProperties (cudaDeviceProp* prop, int  device);
 

@@ -36,7 +36,6 @@ bool is_cuda_kernel(Function &F) {
 std::vector<Function *> discover_cuda_kernels(Module &M) {
     std::vector<Function *> kernels;
     auto *nvvmAnnotation = M.getNamedMetadata("nvvm.annotations");
-    auto numKernels = nvvmAnnotation->getNumOperands();
 
     if (nvvmAnnotation == nullptr) {
         fprintf(stderr, "No nvvm.annotations metadata found in module! No "
@@ -44,6 +43,7 @@ std::vector<Function *> discover_cuda_kernels(Module &M) {
         return kernels;
     }
 
+    auto numKernels = nvvmAnnotation->getNumOperands();
     for (unsigned int i = 0; i < numKernels; ++i) {
         auto *metadataNode = nvvmAnnotation->getOperand(i);
         if (!metadataNode || metadataNode->getNumOperands() != 3) {

@@ -44,6 +44,11 @@ cudaError_t cudaThreadSynchronize() {
     return cudaSuccess;
 }
 
+cudaError_t cudaSetDevice(int device) {
+    HIP_CHECK(hipSetDevice(device));
+    return cudaSuccess;
+}
+
 cudaError_t cudaGetDevice(int *devPtr) {
     printf("insideGetDevice\n");
     HIP_CHECK(hipGetDevice(devPtr));
@@ -53,6 +58,12 @@ cudaError_t cudaGetDevice(int *devPtr) {
 cudaError_t cudaGetDeviceCount(int *count) {
     printf("insideGetDeviceCount\n");
     HIP_CHECK(hipGetDeviceCount(count));
+    return cudaSuccess;
+}
+
+cudaError_t cudaFuncSetCacheConfig(const void* func, cudaFuncCache cacheConfig) {
+    hipFuncCache_t hipCacheConfig = (hipFuncCache_t) cacheConfig;
+    HIP_CHECK(hipFuncSetCacheConfig(func, hipCacheConfig));
     return cudaSuccess;
 }
 
