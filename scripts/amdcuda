@@ -23,6 +23,8 @@ AMDCUDA_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )/.." &> /dev/null && pw
 AMDCUDA_RT_DIR="$AMDCUDA_DIR/build/runtime"
 AMDCUDA_HOST_TTOR="$AMDCUDA_DIR/build/compilation/hostTranslator"
 AMDCUDA_KERN_TTOR="$AMDCUDA_DIR/build/compilation/kernelTranslator"
+AMDCUDA_SCRIPT_LOGFILE="$(pwd)/amdcuda.log"
+AMDCUDA_CWD="$(pwd)"
 
 if [[ -z "$LLVM_PREFIX" ]]; then
     LLVM_PREFIX="$(dirname "$(dirname "$(which clang)")")"
@@ -92,14 +94,18 @@ AMDCUDA_OPT_SAVE_TEMPS=0
 # Disassemble intermediate and translated IRs
 AMDCUDA_OPT_INSPECT_IR=0
 
+# Verbose outputs
+AMDCUDA_OPT_VERBOSE=0
+
 print_usage() {
     cat <<EOF
-Usage: $0 [-c] [-o <file>] [-t] [-h] inputs...
+Usage: $0 [-c] [-o <file>] [-t] [-v] [-h] inputs...
 
     -c          Only run preprocess, compile, and assemble steps (do not link).
     -o <file>   Write output to <file>. The default is the input program name with the ".translated" suffix.
     -t          Do not cleanup temporary files produced by the compilers and translators after completion.
     -i          Inspect intermediate and translated IRs.
+    -v          Print compiler and translator outputs to stdout/stderr (instead of a temporary log file that gets removed).
     -h          Print this help message.
 EOF
 }
@@ -110,6 +116,7 @@ while getopts "o:cthi" in_opt; do
     o)      AMDCUDA_OPT_OUTPUT="$OPTARG";;
     t)      AMDCUDA_OPT_SAVE_TEMPS=1;;
     i)      AMDCUDA_OPT_INSPECT_IR=1;;
+    v)      AMDCUDA_OPT_VERBOSE=1;;
     ? | h)  print_usage
             exit 2;;
     esac
@@ -168,17 +175,78 @@ fi
 
 # ====== helper fns ======
 
-find_raw_ir() {
+on_nonzero() {
+    local exit_code=$?
+    cat >>"$AMDCUDA_SCRIPT_LOGFILE" <<EOF
+
+Program exited with code: $exit_code
+===================================================
+
+EOF
+    echo "[!] An error occurred during the previous step. Below are the most recent lines in the logs:"
+    tail -n 50 "$AMDCUDA_SCRIPT_LOGFILE"
+    echo "[!] The complete outputs can be found in $AMDCUDA_SCRIPT_LOGFILE. All temporary files related to the errored program are also preserved."
+    exit 1
+}
+
+set -o errtrace
+trap "on_nonzero" ERR
+
+exec_with_logs() {
+    if [[ "$AMDCUDA_OPT_VERBOSE" = "1" ]]; then
+        "$@"
+    else
+        cat >>"$AMDCUDA_SCRIPT_LOGFILE" <<EOF
+===================================================
+Running command: $@
+Working directory: $(pwd)
+
+EOF
+        "$@" >>"$AMDCUDA_SCRIPT_LOGFILE" 2>&1 0>&1
+        local exit_code=$?
+        cat >>"$AMDCUDA_SCRIPT_LOGFILE" <<EOF
+
+Program exited with code: $exit_code
+===================================================
+
+EOF
+    fi
+}
+
+cd_with_logs() {
+    if [[ ! -z "$1" ]]; then
+        cd "$1"
+        cat >>"$AMDCUDA_SCRIPT_LOGFILE" <<EOF
+===================================================
+Changing directory to: $1
+Working directory: $(pwd)
+===================================================
+
+EOF
+    fi
+}
+
+revert_cd_with_logs() {
+    cd_with_logs "$AMDCUDA_CWD"
+}
+
+try_find_raw_ir() {
     FOUND_IR=`find . -maxdepth 1 \( \
         -name $1'*.bc' -o -name $1'*.ll' \
     \) ! -name '*.translated*' | head -n 1`
+
+    if [[ ! -z "$FOUND_IR" ]]; then
+        FOUND_IR="$(realpath "$FOUND_IR")"
+    fi
+}
+
+find_raw_ir() {
+    try_find_raw_ir "$1"
 
     if [[ -z "$FOUND_IR" ]]; then
         echo "[!] Unable to find input file: $1"
         exit 1
     fi
-
-    FOUND_IR="$(realpath "$FOUND_IR")"
 }
 
 find_translated_ir() {
@@ -238,19 +306,22 @@ while test $# -gt 0; do
     # Shift to the next file
     shift
 
-    AMDCUDA_INPUT_PROGNAME="${AMDCUDA_INPUT}"
+    AMDCUDA_INPUT_PROGNAME="$(basename "$AMDCUDA_INPUT")"
+    AMDCUDA_INPUT_DIR="$(realpath "$(dirname "$AMDCUDA_INPUT")")"
+    cd_with_logs "$AMDCUDA_INPUT_DIR"
 
-    if [[ "${AMDCUDA_INPUT##*.}" = "cu" ]] || [[ "${AMDCUDA_INPUT##*.}" = "cpp" ]] || [[ "${AMDCUDA_INPUT##*.}" = "c" ]]; then
+    if [[ "${AMDCUDA_INPUT_PROGNAME##*.}" = "cu" ]] || [[ "${AMDCUDA_INPUT_PROGNAME##*.}" = "cpp" ]] || [[ "${AMDCUDA_INPUT_PROGNAME##*.}" = "c" ]]; then
         if [[ ! -d "${CUDA_PATH}" ]]; then
             echo "[!] Cannot accept a CUDA source file as input: CUDA_PATH is undefined."
         fi
 
-        AMDCUDA_INPUT_PROGNAME="${AMDCUDA_INPUT%.*}"
+        AMDCUDA_INPUT_SOURCEFILE="$AMDCUDA_INPUT_PROGNAME"
+        AMDCUDA_INPUT_PROGNAME="${AMDCUDA_INPUT_PROGNAME%.*}"
         cleanup_all_temps "$AMDCUDA_INPUT_PROGNAME"
 
-        echo "[*] Compiling original program to IR..."
-        "$AMDCUDA_CLANGXX" \
-            "$AMDCUDA_INPUT" -c \
+        echo "[*] Compiling $AMDCUDA_INPUT_PROGNAME to IR..."
+        exec_with_logs "$AMDCUDA_CLANGXX" \
+            "$AMDCUDA_INPUT_SOURCEFILE" -c \
             "--cuda-path=$CUDA_PATH" \
             "--cuda-gpu-arch=sm_35" \
             "-L${CUDA_PATH}/lib64" \
@@ -317,18 +388,14 @@ while test $# -gt 0; do
 
     # translate kernel
     echo "[*] Translating kernel IR..."
-    "$AMDCUDA_KERN_TTOR" "$AMDCUDA_INPUT_KERN_IR"
+    exec_with_logs "$AMDCUDA_KERN_TTOR" "$AMDCUDA_INPUT_KERN_IR"
 
     find_translated_ir "$AMDCUDA_INPUT_KERN_IR"
     AMDCUDA_TRANSLATED_KERN_IR="$FOUND_IR"
     postprocess_ir "$AMDCUDA_TRANSLATED_KERN_IR"
 
     echo "[*] Linking CUDAAMD bitcode..."
-    "$AMDCUDA_LLVM_LINK" \
-        -o "$AMDCUDA_OUTPUT_KERNEL_LINKED_BITCODE" \
-        "$AMDCUDA_TRANSLATED_KERN_IR" \
-        "${AMDCUDA_BITCODE[@]}"
-    echo "$AMDCUDA_LLVM_LINK" \
+    exec_with_logs "$AMDCUDA_LLVM_LINK" \
         -o "$AMDCUDA_OUTPUT_KERNEL_LINKED_BITCODE" \
         "$AMDCUDA_TRANSLATED_KERN_IR" \
         "${AMDCUDA_BITCODE[@]}"
@@ -336,7 +403,7 @@ while test $# -gt 0; do
 
     # compile translated kernel
     echo "[*] Compiling translated kernel IR to assembly..."
-    "$AMDCUDA_CLANG" \
+    exec_with_logs "$AMDCUDA_CLANG" \
         -cc1 -triple amdgcn-amd-amdhsa \
         -aux-triple x86_64-unknown-linux-gnu -S \
         -main-file-name "$AMDCUDA_INPUT_MAIN_FILENAME" \
@@ -367,7 +434,7 @@ while test $# -gt 0; do
         "$AMDCUDA_OUTPUT_KERNEL_LINKED_BITCODE"
 
     echo "[*] Aseembling compiled kernel..."
-    "$AMDCUDA_CLANG" \
+    exec_with_logs "$AMDCUDA_CLANG" \
         -cc1as \
         -triple amdgcn-amd-amdhsa \
         -filetype obj \
@@ -385,7 +452,7 @@ while test $# -gt 0; do
         "$AMDCUDA_OUTPUT_KERNEL_ASSEMBLY"
 
     echo "[*] Extracting libbc-clang runtime built-ins..."
-    "$AMDCUDA_CLANG_OFFLOAD_BUNDLER" \
+    exec_with_logs "$AMDCUDA_CLANG_OFFLOAD_BUNDLER" \
         -unbundle \
         -type=a \
         "-input=$AMDCUDA_CLANGRT_DIR/libclang_rt.builtins.a" \
@@ -395,7 +462,7 @@ while test $# -gt 0; do
         -hip-openmp-compatible
 
     echo "[*] Linking kernel..."
-    "$AMDCUDA_LLD" \
+    exec_with_logs "$AMDCUDA_LLD" \
         -flavor gnu \
         --no-undefined \
         -shared \
@@ -411,7 +478,7 @@ while test $# -gt 0; do
         "$AMDCUDA_EXTRACTED_RT_BUILTINS"
 
     echo "[*] Bundling kernel..."
-    "$AMDCUDA_CLANG_OFFLOAD_BUNDLER" \
+    exec_with_logs "$AMDCUDA_CLANG_OFFLOAD_BUNDLER" \
         -type=o \
         -bundle-align=4096 \
         -targets=host-x86_64-unknown-linux,hipv4-amdgcn-amd-amdhsa--gfx90a \
@@ -420,13 +487,13 @@ while test $# -gt 0; do
         "-output=$AMDCUDA_OUTPUT_KERNEL_FATBIN"
 
     echo "[*] Swapping kernel code and translating host-side program..."
-    "$AMDCUDA_HOST_TTOR" "$AMDCUDA_INPUT_HOST_IR" "$AMDCUDA_OUTPUT_KERNEL_FATBIN"
+    exec_with_logs "$AMDCUDA_HOST_TTOR" "$AMDCUDA_INPUT_HOST_IR" "$AMDCUDA_OUTPUT_KERNEL_FATBIN"
     find_translated_ir "$AMDCUDA_INPUT_HOST_IR"
     AMDCUDA_TRANSLATED_HOST_IR="$FOUND_IR"
     postprocess_ir "$AMDCUDA_TRANSLATED_HOST_IR"
 
     echo "[*] Compiling translated host IR to assembly..."
-    "$AMDCUDA_CLANG" \
+    exec_with_logs "$AMDCUDA_CLANG" \
         -cc1 \
         -triple x86_64-unknown-linux-gnu \
         -aux-triple amdgcn-amd-amdhsa \
@@ -473,7 +540,7 @@ while test $# -gt 0; do
         "$AMDCUDA_TRANSLATED_HOST_IR"
 
     echo "[*] Aseembling compiled program..."
-    "$AMDCUDA_CLANG" \
+    exec_with_logs "$AMDCUDA_CLANG" \
         -cc1as \
         -triple x86_64-unknown-linux-gnu \
         -filetype obj \
@@ -492,12 +559,15 @@ while test $# -gt 0; do
     
     # Move the file so it doesn't get removed
     mv "$AMDCUDA_OUTPUT_HOST_OBJECT" "$AMDCUDA_INPUT_PROGNAME.o"
-    AMDCUDA_COMPILED_OBJECTS+=("$AMDCUDA_INPUT_PROGNAME.o")
+    AMDCUDA_COMPILED_OBJECTS+=("$(pwd)/$AMDCUDA_INPUT_PROGNAME.o")
 
     if [[ "$AMDCUDA_OPT_SAVE_TEMPS" = "0" ]]; then
-        echo "[*] Cleaning up..."
+        echo "[*] Cleaning up $AMDCUDA_INPUT_PROGNAME..."
         cleanup_all_temps "$AMDCUDA_INPUT_PROGNAME"
     fi
+
+    # Revert dir change
+    revert_cd_with_logs
 done
 
 if [[ "$AMDCUDA_OPT_LINK" = "1" ]]; then
@@ -533,7 +603,7 @@ if [[ "$AMDCUDA_OPT_LINK" = "1" ]]; then
     #     /usr/lib/gcc/x86_64-redhat-linux/8/../../../../lib64/crtn.o \
     #     "-L$AMDCUDA_RT_DIR" \
     #     -lcudaonamd
-    "$AMDCUDA_CLANG" \
+    exec_with_logs "$AMDCUDA_CLANG" \
         -o "$AMDCUDA_OPT_OUTPUT" \
         -L"$AMDCUDA_RT_DIR" \
         -L"$ROCM_PATH/lib" \
@@ -555,4 +625,9 @@ if [[ "$AMDCUDA_OPT_LINK" = "1" ]]; then
         # Remove objects if no save temps
         rm -f "${AMDCUDA_COMPILED_OBJECTS[@]}"
     fi
+fi
+
+# Remove logfiles
+if [[ "$AMDCUDA_OPT_SAVE_TEMPS" = "0" ]]; then
+    rm -f "$AMDCUDA_SCRIPT_LOGFILE"
 fi

@@ -1,32 +1,15 @@
 #!/bin/bash
 
+set -e
 AMDCUDA_DIR=`realpath ../../..`
 RODINIA_PATH=`realpath ..`
 
-pushd kernel
-"$AMDCUDA_DIR/scripts/amdcuda" -c \
-    kernel_gpu_cuda_wrapper.cu \
-    kernel_gpu_cuda_wrapper_2.cu
-popd
-
-pushd util/cuda
-    "$AMDCUDA_DIR/scripts/amdcuda" -c cuda.cu
-popd
-
-pushd util/num
-    "$AMDCUDA_DIR/scripts/amdcuda" -c num.c
-popd
-
-pushd util/timer
-    "$AMDCUDA_DIR/scripts/amdcuda" -c timer.c
-popd
-
 "$AMDCUDA_DIR/scripts/amdcuda" -o "b+tree.cupbop" \
-    kernel/kernel_gpu_cuda_wrapper.o \
-    kernel/kernel_gpu_cuda_wrapper_2.o \
-    util/cuda/cuda.o \
-    util/num/num.o \
-    util/timer/timer.o \
+    kernel/kernel_gpu_cuda_wrapper.cu \
+    kernel/kernel_gpu_cuda_wrapper_2.cu \
+    util/cuda/cuda.cu \
+    util/num/num.cu \
+    util/timer/timer.cu \
     main.cu
 
 AMD_LOG_LEVEL=2 LD_LIBRARY_PATH="$AMDCUDA_DIR/build/runtime:$LD_LIBRARY_PATH" ./b+tree.cupbop \
