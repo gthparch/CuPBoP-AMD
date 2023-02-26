@@ -186,6 +186,8 @@ cudaError_t cudaHostAlloc (void** ptr, size_t size, unsigned int flag);
 
 cudaError_t cudaMemcpy (void* dst, const void* src, size_t count, cudaMemcpyKind kind);
 
+cudaError_t cudaMemcpyToSymbol(const void* symbol, const void* src, size_t count, size_t offset = 0, cudaMemcpyKind kind = cudaMemcpyHostToDevice);
+
 cudaError_t cudaMemcpy2D(void * dst, size_t dpitch, const void * src, size_t spitch, size_t width,
     size_t 	height, cudaMemcpyKind kind);
 

@@ -109,6 +109,15 @@ bool SharedMemoryPass::runOnModule(Module &M) {
                             llvm::GlobalValue::VisibilityTypes::
                                 HiddenVisibility);
                     }
+                } else if (AS == 4) {
+                    if (constant_memory->hasExternalLinkage()) {
+                         std::cout << "Constant Memory Variable: "
+                              << constant_memory->getName().str() << std::endl;
+                        constant_memory->setAlignment(MaybeAlign(16));
+                        
+                    }
+
+
                 }
             }
         }

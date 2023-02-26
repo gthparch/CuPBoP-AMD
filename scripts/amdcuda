@@ -187,7 +187,7 @@ if [[ "${AMDCUDA_INPUT##*.}" = "cu" ]] || [[ "${AMDCUDA_INPUT##*.}" = "cpp" ]]; 
         "--cuda-path=$CUDA_PATH" \
         "--cuda-gpu-arch=sm_35" \
         "-L${CUDA_PATH}/lib64" \
-        -lcudart_static -ldl -lrt -pthread -save-temps -v
+        -lcudart_static -ldl -lrt -pthread -fPIC -save-temps -v
 fi
 
 # derive related names & other info
@@ -264,7 +264,7 @@ postprocess_ir "$AMDCUDA_OUTPUT_KERNEL_LINKED_BITCODE"
 # compile translated kernel
 echo "[*] Compiling translated kernel IR to assembly..."
 "$AMDCUDA_CLANG" \
-    -cc1 -triple amdgcn-amd-amdhsa \
+    -cc1 -triple amdgcn-amd-amdhsa\
     -aux-triple x86_64-unknown-linux-gnu -S \
     -main-file-name "$AMDCUDA_INPUT_MAIN_FILENAME" \
     "$AMDCUDA_KERN_ASSEMBLER_FLAGS[@]" \
