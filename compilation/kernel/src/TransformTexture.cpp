@@ -114,7 +114,7 @@ void transformTexture(llvm::Module &M) {
 
 
   /* 
-    Create 
+    Create these structures from HIP
 
     %struct.texture = type { %struct.textureReference }
     %struct.textureReference = type { i32, i32, i32, [3 x i32], %struct.hipChannelFormatDesc, i32, i32, i32, float, float, float, ptr, i32, i32 }
@@ -141,10 +141,9 @@ void transformTexture(llvm::Module &M) {
   auto unionIntVector = StructType::create(context, "vector.int.union"); 
   unionIntVector->setBody({vectorIntType});
 
-
   // vector type <4x float>
   Type *vectorFloat4Type = VectorType::get(floatType, 4, false);
-  auto unionFloat4Vector = StructType::create(context, "vector.float.union"); 
+  auto unionFloat4Vector = StructType::create(context, "union.anon"); 
   unionFloat4Vector->setBody({vectorFloat4Type});
 
   auto hipVectorFloat4Base = StructType::create(context, "struct.HIP_vector_base");
@@ -187,12 +186,14 @@ void transformTexture(llvm::Module &M) {
 
   }
 
-  // Go through the functions 
-  // for each tex used in llvm.nvvm.texsurf.handle.internal.p1
-  // need to alloc struct.texture in the first block of the function
-  // then address space cast the alloc to from address space(5) to genetric ptr
-
+ 
   /*
+    Go through the functions 
+    for each tex used in llvm.nvvm.texsurf.handle.internal.p1
+    need to alloc struct.texture in the first block of the function
+    then address space cast the alloc to from address space(5) to genetric ptr
+
+
     %20 = call i64 @llvm.nvvm.texsurf.handle.internal.p1(ptr addrspace(1) @tex)
     store i64 %20, ptr %8, align 4
     %27 = load i64, ptr %8, align 4
@@ -209,14 +210,7 @@ void transformTexture(llvm::Module &M) {
 
   */
 
-  /*
-
-
-
-  */
-
-  //
-  // Change llvm.nvvm.texsurf.handle.internal.p1 to 
+  // Change llvm.nvvm.texsurf.handle.internal.p1 to llvm.memcpy.p0.p0.i64
   llvm::IRBuilder<> Builder(M.getContext());
   llvm::IRBuilder<> Builder2(M.getContext());
 
@@ -261,18 +255,17 @@ void transformTexture(llvm::Module &M) {
 
   
   // _ZN15HIP_vector_typeIfLj4EEaSERKS0_
-  // llvm::AttrBuilder RetAttrs;
-
   std::vector<Type *> float4VectorTypeParams;
-  // Type* llvmI8PtrTy = Type::getInt8PtrTy(context);
-  // llvmI8PtrTy
-  //  float4VectorTypeParams.push_back(llvmI8PtrTy);
-  //  float4VectorTypeParams.push_back(llvmI8PtrTy);
+  float4VectorTypeParams.push_back(llvmI8PtrTy);
+  float4VectorTypeParams.push_back(llvmI8PtrTy);
+  llvm::FunctionType *LLVMFloat4VectorType = FunctionType::get(llvmI8PtrTy,
+        float4VectorTypeParams, false);
 
 
 
 
-  // map operand of old to new operand
+  // map operand of old operand of the last segment of llvm.memcpy to new operand for 
+  // functions such as _ZN15HIP_vector_typeIfLj4EEaSERKS0_
   std::unordered_map<Value*, Value*> operand_map;
 
   for (Module::iterator i = M.begin(), e = M.end(); i != e; ++i) {
@@ -509,7 +502,37 @@ void transformTexture(llvm::Module &M) {
                 // replace memcpy with _ZN15HIP_vector_typeIfLj4EEaSERKS0_
 
                 // llvmI8PtrTy
+                FunctionCallee LLVMnewFunFC = M.getOrInsertFunction("_ZN15HIP_vector_typeIfLj4EEaSERKS0_", LLVMFloat4VectorType);
+                Function* LLVMnewFunFn = dyn_cast<Function>(LLVMnewFunFC.getCallee());
+                // TODO: get dereferenceable from data layout type size DL.getTypeStoreSize(newGEP->getType())
+                LLVMnewFunFn->addDereferenceableParamAttr(0,16);
+                LLVMnewFunFn->addDereferenceableParamAttr(1,16);
+                LLVMnewFunFn->addRetAttr(Attribute::getWithDereferenceableBytes(context, 16));
+                SmallVector<Value *, 2> texArgs;
 
+                llvm::Value* texOperand = memcpyFn->getArgOperand(1);
+                outs() << *texOperand << '\n';
+               
+                std::unordered_map<Value*,Value*>::iterator gotValue = operand_map.find(texOperand);
+                if ( gotValue == operand_map.end() ) {
+                  std::cerr << "not found";
+                  exit(1);
+                } else {
+                  texArgs.push_back(newGEP);
+                  texArgs.push_back(gotValue->second);
+                  auto vectorTypeCall = Builder.CreateCall(LLVMnewFunFn, texArgs);
+                  vectorTypeCall->addDereferenceableParamAttr(0,16);
+                  vectorTypeCall->addDereferenceableParamAttr(1,16);
+                  vectorTypeCall->addRetAttr(Attribute::getWithDereferenceableBytes(context, 16));
+
+                  memcpyFn->replaceAllUsesWith(vectorTypeCall);
+                  need_remove.push_back(memcpyFn);
+
+
+
+
+
+                }
                 
               }
            }
@@ -530,6 +553,6 @@ void transformTexture(llvm::Module &M) {
     remove->eraseFromParent();
   }
 
-  outs() << M << '\n';
+  // outs() << M << '\n';
 
 }

@@ -70,7 +70,7 @@ cudaError_t cudaHostGetDevicePointer (void** pDevice, void* pHost, unsigned int 
 cudaError_t cudaMalloc(void **devPtr, size_t size) {
     printf("insideCudaMalloc %p size=%zu\n", devPtr, size);
     HIP_CHECK(hipMalloc(devPtr, size));
-    printf("endCudaMalloc");
+    printf("endCudaMalloc\n");
     return cudaSuccess;
 }
 
@@ -275,7 +275,18 @@ cudaError_t cudaGetTextureObjectTextureDesc(cudaTextureDesc* pTexDesc, cudaTextu
 }
 
 cudaError_t cudaBindTexture(size_t* offset, const textureReference* texref, const void* devPtr, const cudaChannelFormatDesc* desc, size_t size = UINT_MAX) {
+    printf(" cudaBindTexture Runtime \n");
+//    printf("cudaBindTexture2d  %p\n", texref);
+//     printf("cudaBindTexture2d  %p\n", devPtr);
+//     printf("cudaBindTexture2d  %p\n", desc);
+    size_t offset1;
+    if (offset == NULL) {
+        *offset = offset1;
+    }
     HIP_CHECK(hipBindTexture(offset, texref, devPtr, desc, size));
+    //  printf("cudaBindTexture2d  %p\n", texref);
+    // printf("cudaBindTexture2d  %p\n", devPtr);
+    // printf("cudaBindTexture2d  %p\n", desc);
     return cudaSuccess;
 }
 
@@ -285,6 +296,7 @@ cudaError_t cudaBindTexture2D(size_t* offset, const textureReference* texref, co
     // printf("cudaBindTexture2d  %p\n", devPtr);
     // printf("cudaBindTexture2d  %p\n", desc);
     // hipBindTexture2D(offset, texref, devPtr, desc, width, height, pitch);
+    
     HIP_CHECK(hipBindTexture2D(offset, texref, devPtr,
     desc, width, height, pitch));
      

@@ -248,6 +248,7 @@ cudaError_t cudaBindTexture(size_t* offset, const textureReference* texref, cons
 cudaError_t cudaBindTexture2D(size_t* offset, const textureReference* texref, const void* devPtr, const cudaChannelFormatDesc* desc, 
    size_t width, size_t height, size_t pitch);
 
+cudaError_t cudaUnbindTexture(const textureReference* texref);
 
 void** __hipRegisterFatBinary(const void* data);
 
