@@ -34,3 +34,5 @@
 */build
 build
 .cache
+
+benchmarks/rodinia/rodinia-data

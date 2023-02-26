@@ -74,6 +74,7 @@ int main(const int argc, const char *argv[]) {
     PM.add(createRegisteredPass("transform-cuda-vprintf"));
     PM.add(createRegisteredPass("transform-cuda-math-fn"));
     PM.add(createRegisteredPass("cudaamd-shared-memory-pass"));
+    PM.add(createRegisteredPass("cuda-texture-transform"));
 
     // Run the address space cast last
     PM.add(createRegisteredPass("address-space-cast"));

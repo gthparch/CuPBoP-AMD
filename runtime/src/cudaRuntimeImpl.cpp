@@ -38,9 +38,32 @@ cudaError_t cudaDeviceSynchronize() {
     return cudaSuccess;
 }
 
+cudaError_t cudaThreadSynchronize() {
+    printf("inside cudaThreadSynchronize()\n");
+    HIP_CHECK(hipDeviceSynchronize());
+    return cudaSuccess;
+}
+
+cudaError_t cudaSetDevice(int device) {
+    HIP_CHECK(hipSetDevice(device));
+    return cudaSuccess;
+}
+
 cudaError_t cudaGetDevice(int *devPtr) {
     printf("insideGetDevice\n");
     HIP_CHECK(hipGetDevice(devPtr));
+    return cudaSuccess;
+}
+
+cudaError_t cudaGetDeviceCount(int *count) {
+    printf("insideGetDeviceCount\n");
+    HIP_CHECK(hipGetDeviceCount(count));
+    return cudaSuccess;
+}
+
+cudaError_t cudaFuncSetCacheConfig(const void* func, cudaFuncCache cacheConfig) {
+    hipFuncCache_t hipCacheConfig = (hipFuncCache_t) cacheConfig;
+    HIP_CHECK(hipFuncSetCacheConfig(func, hipCacheConfig));
     return cudaSuccess;
 }
 
@@ -49,8 +72,24 @@ cudaError_t cudaGetDeviceProperties(cudaDeviceProp *prop, int device) {
     hipDeviceProp_t dprops;
     HIP_CHECK(hipGetDeviceProperties(&dprops, device));
     memcpy(prop->name, dprops.name, sizeof(prop->name));
+    memcpy(prop->maxThreadsDim, dprops.maxThreadsDim, sizeof(dprops.maxThreadsDim));
+    memcpy(prop->maxGridSize, dprops.maxGridSize, sizeof(dprops.maxGridSize));
+
     prop->warpSize = dprops.warpSize;
     prop->clockRate = dprops.clockRate;
+    prop->sharedMemPerBlock = dprops.sharedMemPerBlock;
+    prop->totalGlobalMem = dprops.totalGlobalMem;
+    prop->regsPerBlock = dprops.regsPerBlock;
+    prop->memPitch = dprops.memPitch;
+    prop->maxThreadsPerBlock = dprops.maxThreadsPerBlock;
+    prop->totalConstMem = dprops.totalConstMem;
+    prop->major = 11;
+    prop->minor = 5;
+    prop->clockRate = dprops.clockRate;
+    prop->textureAlignment = dprops.textureAlignment;
+    prop->deviceOverlap = false;
+    prop->multiProcessorCount = dprops.multiProcessorCount;
+
     printf("Device WarpSize: %d \n", prop->warpSize);
     printf("Device clockRate: %d \n", prop->clockRate);
     return cudaSuccess;
@@ -286,17 +325,13 @@ cudaError_t cudaGetTextureObjectTextureDesc(cudaTextureDesc* pTexDesc, cudaTextu
 
 cudaError_t cudaBindTexture(size_t* offset, const textureReference* texref, const void* devPtr, const cudaChannelFormatDesc* desc, size_t size = UINT_MAX) {
     printf(" cudaBindTexture Runtime \n");
-//    printf("cudaBindTexture2d  %p\n", texref);
-//     printf("cudaBindTexture2d  %p\n", devPtr);
-//     printf("cudaBindTexture2d  %p\n", desc);
+
     size_t offset1;
     if (offset == NULL) {
         *offset = offset1;
     }
     HIP_CHECK(hipBindTexture(offset, texref, devPtr, desc, size));
-    //  printf("cudaBindTexture2d  %p\n", texref);
-    // printf("cudaBindTexture2d  %p\n", devPtr);
-    // printf("cudaBindTexture2d  %p\n", desc);
+    
     return cudaSuccess;
 }
 
