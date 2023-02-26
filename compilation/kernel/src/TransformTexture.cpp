@@ -20,6 +20,7 @@
 #include "llvm/IR/IntrinsicsAMDGPU.h"
 #include "llvm/IR/IntrinsicsNVPTX.h"
 #include "llvm/IR/Module.h"
+#include "llvm/IR/Attributes.h"
 #include <llvm/IR/DerivedTypes.h>
 
 #include "llvm/IR/Function.h"
@@ -135,20 +136,33 @@ void transformTexture(llvm::Module &M) {
   textureStruct->setBody({textureReference}, false);
   std::unordered_map<std::string, GlobalVariable*> umap;
 
-  // vector type <4 x i32>   Is Scalable false?
+  // vector type <4 x i32> ?
   Type *vectorIntType = VectorType::get(int32Type, 4, false);
   auto unionIntVector = StructType::create(context, "vector.int.union"); 
   unionIntVector->setBody({vectorIntType});
 
-  Type *vectorFloatType = VectorType::get(floatType, 4, false);
-  auto unionFloatVector = StructType::create(context, "vector.float.union"); 
-  unionFloatVector->setBody({vectorFloatType});
 
-  auto hipVectorBase = StructType::create(context, "struct.HIP_vector_base");
-  hipVectorBase->setBody({unionIntVector});
+  // vector type <4x float>
+  Type *vectorFloat4Type = VectorType::get(floatType, 4, false);
+  auto unionFloat4Vector = StructType::create(context, "vector.float.union"); 
+  unionFloat4Vector->setBody({vectorFloat4Type});
 
-  auto hipVectorType = StructType::create(context, "struct.HIP_vector_type");
-  hipVectorType->setBody({hipVectorBase});
+  auto hipVectorFloat4Base = StructType::create(context, "struct.HIP_vector_base");
+  hipVectorFloat4Base->setBody({unionFloat4Vector});
+
+  auto hipVectorFloat4Type = StructType::create(context, "struct.HIP_vector_type");
+  hipVectorFloat4Type->setBody({hipVectorFloat4Base});
+
+
+  // Type *vectorFloat4Type = VectorType::get(floatType, 4, false);
+  // auto unionFloat4Vector = StructType::create(context, "vector.float.union"); 
+  // unionFloat4Vector->setBody({vectorFloat4Type});
+
+  // auto hipVectorFloat4Base = StructType::create(context, "struct.HIP_vector_base");
+  // hipVectorFloat4Base->setBody({unionFloat4Vector});
+
+  // auto hipVectorFloat4Type = StructType::create(context, "struct.HIP_vector_type");
+  // hipVectorFloat4Type->setBody({hipVectorFloat4Base});
 
   for(GlobalVariable* global: allTextureMemories) {
     std::string new_name = "cupbop_" + global->getName().str(); 
@@ -237,6 +251,29 @@ void transformTexture(llvm::Module &M) {
   llvm::FunctionType *LLVM1dFloatReadTextureType = FunctionType::get(Float,
           texture1dFloatReadParams, false);
 
+
+  std::vector<Type *> texture1dFloat4ReadParams;
+  texture1dFloat4ReadParams.push_back(textureReference);
+  texture1dFloat4ReadParams.push_back(int32Type);
+  llvm::FunctionType *LLVM1dFloat4ReadTextureType = FunctionType::get(hipVectorFloat4Type,
+          texture1dFloat4ReadParams, false);
+
+
+  
+  // _ZN15HIP_vector_typeIfLj4EEaSERKS0_
+  // llvm::AttrBuilder RetAttrs;
+
+  std::vector<Type *> float4VectorTypeParams;
+  // Type* llvmI8PtrTy = Type::getInt8PtrTy(context);
+  // llvmI8PtrTy
+  //  float4VectorTypeParams.push_back(llvmI8PtrTy);
+  //  float4VectorTypeParams.push_back(llvmI8PtrTy);
+
+
+
+
+  // map operand of old to new operand
+  std::unordered_map<Value*, Value*> operand_map;
 
   for (Module::iterator i = M.begin(), e = M.end(); i != e; ++i) {
     Function *F = &(*i);
@@ -344,7 +381,143 @@ void transformTexture(llvm::Module &M) {
               
               nvvm_function->setCalledFunction(LLVMnewFunFn);
 
-          }
+          } else if (func_name == "_ZL10tex1DfetchI6float4EN17__nv_tex_rmet_retIT_E4typeE7textureIS2_Li1EL19cudaTextureReadMode0EEi") {
+
+              // tex1DFetch (float4, 1, readMode)
+              
+              // count the vector type 
+              errs() << *nvvm_function << '\n';
+              Type* t = nvvm_function->getCalledFunction()->getReturnType();
+              errs() << *t << '\n';
+             
+              auto StructTy = dyn_cast<StructType>(t);
+ 
+              int numElementsVector = StructTy->getNumElements();
+              std::cout << numElementsVector << std::endl;
+              Type* vectorType = StructTy->getStructElementType(0);
+              // errs() << * (StructTy->getStructElementType(0)) ;
+              //  exit(1);
+
+
+              LoadInst* loadTexture = dyn_cast<LoadInst>(nvvm_function->getPrevNode());
+              Builder.SetInsertPoint(loadTexture);
+              LoadInst* newLoadTexture = Builder.CreateLoad(textureReference, textureToBeLoaded);
+              loadTexture->replaceAllUsesWith(newLoadTexture);
+
+              outs() << *newLoadTexture <<  ' \n';
+              need_remove.push_back(nvvm_function->getPrevNode());
+
+              FunctionCallee LLVMnewFunFC = M.getOrInsertFunction("_ZL10tex1DfetchI15HIP_vector_typeIfLj4EEL18hipTextureReadMode0EEN13__hip_tex_retIT_XT0_EbE4typeE7textureIS4_Li1EXT0_EEi", LLVM1dFloat4ReadTextureType);
+              Function* LLVMnewFunFn = dyn_cast<Function>(LLVMnewFunFC.getCallee());
+              Builder.SetInsertPoint(nvvm_function);
+              SmallVector<Value *, 2> texArgs;
+              outs() << nvvm_function->getArgOperand(0) << '\n';
+              texArgs.push_back(nvvm_function->getArgOperand(0));
+              texArgs.push_back(nvvm_function->getArgOperand(1));
+              auto newTexCall = Builder.CreateCall(LLVMnewFunFn, texArgs);
+              nvvm_function->replaceAllUsesWith(newTexCall);
+
+              // get the next instructions which are 
+              // %45 = getelementptr inbounds %struct.float4, ptr %16, i32 0, i32 0
+              // %46 = extractvalue %struct.HIP_vector_type %43, 0
+              Builder.SetInsertPoint(first_instr);     
+              AllocaInst *newVector = Builder.CreateAlloca(hipVectorFloat4Type, DL.getAllocaAddrSpace() , 0, "");
+              auto *newVec = Builder.CreateAddrSpaceCast(newVector , intPtrType); // int32ptr or int64ptr
+            
+               
+              GetElementPtrInst* gep = dyn_cast<GetElementPtrInst>(nvvm_function->getNextNode());
+              operand_map[gep->getOperand(0)] = newVec;
+              Builder.SetInsertPoint(gep);
+              Value *i32zero = ConstantInt::get(context, APInt(32, 0));
+              Value *indices[2] = {i32zero, i32zero};
+              auto vectorToBeExtract = Builder.CreateStructGEP(hipVectorFloat4Type, newVec, 0 /*ArrayRef<Value *>(indices, 2)*/ ,"");
+
+              gep->replaceAllUsesWith(vectorToBeExtract);
+
+              ExtractValueInst* eei = dyn_cast<ExtractValueInst>(gep->getNextNode());
+              if (!eei) {
+                printf("Null");
+              }
+              outs() << *eei << '\n';
+              // outs() << *(eei->getNextNode()) << '\n';
+              // StoreInst* store = dyn_cast<StoreInst>(eei->getNextNode());
+            
+              // Builder.SetInsertPoint(eei);
+
+              auto newEEV = Builder.CreateExtractValue(newTexCall, ArrayRef<unsigned int>({0}), "");
+              auto newStore = Builder.CreateStore(newEEV, vectorToBeExtract);
+
+              // store->replaceAllUsesWith(newStore);
+             
+        
+              // outs() << M << '\n';
+              // exit(1);
+              // nvvm_function->setCalledFunction(LLVMnewFunFn);
+
+              need_remove.push_back(nvvm_function);
+              /*
+                Remove the getelementptr, extractvalue, store for each element of the struct
+
+              */
+              int ii = 0;
+              auto prev = dyn_cast<Instruction>(gep);
+              for(ii = 0; ii < numElementsVector*3; ++ii) {
+                  need_remove.push_back(prev);
+                  prev = prev->getNextNode();
+                  if (!prev) break;
+
+              }
+
+              /*
+                %45 = getelementptr inbounds %struct.HIP_vector_type, ptr %21, i32 0, i32 0
+                %46 = extractvalue %struct.HIP_vector_type %44, 0
+                store %struct.HIP_vector_base %46, ptr %45, align 16
+              */
+
+
+
+          } 
+      } else if (auto *getelementpr = dyn_cast<GetElementPtrInst>(BI)) {
+
+            /*
+            
+              Translate the getelementpr of %struct.float4
+
+              %57 = load ptr, ptr %16, align 8
+              %58 = load i64, ptr %14, align 8
+              %59 = getelementptr inbounds %struct.float4, ptr %57, i64 %58
+              call void @llvm.memcpy.p0.p0.i64(ptr align 16 %59, ptr align 16 %18, i64 16, i1 false)
+
+            */
+         
+           outs() << *getelementpr << '\n';
+          //  outs() << getelementpr->getSourceElementType()->getStructName()<< '\n';
+          //  outs() << getelementpr->getOperand(0)->getType()->getStructName().str()<< '\n';
+           if(getelementpr->getSourceElementType()->getStructName().str() == "struct.float4") {
+            printf("88888888888888888888888\n");
+            // if the next instruction is llvm.memcpy
+            outs() << *getelementpr->getNextNode() << '\n'; 
+            if (auto *memcpyFn = dyn_cast<CallInst>(getelementpr->getNextNode())) {
+              auto callFnName = memcpyFn->getCalledFunction()->getName();
+
+              if (callFnName == "llvm.memcpy.p0.p0.i64") {
+                Builder.SetInsertPoint(getelementpr);
+                auto newGEP = Builder.CreateGEP(hipVectorFloat4Type, getelementpr->getOperand(0), ArrayRef<Value *>({getelementpr->getOperand(1)}) ,"", true);
+                getelementpr->replaceAllUsesWith(newGEP);
+                need_remove.push_back(getelementpr);
+                
+                // replace memcpy with _ZN15HIP_vector_typeIfLj4EEaSERKS0_
+
+                // llvmI8PtrTy
+
+                
+              }
+           }
+           }
+
+         
+
+
       }
     }
   }
