@@ -46,6 +46,7 @@ nvcc vecAdd.cu -c -save-temps
 
 clang++ vecAdd.cu -c -save-temps -emit-llvm 
 
+export PATH=/nethome/jchen706/cuda-11.5/bin:/nethome/jchen706/llvm/bin:$PATH
 
 
 OpenCL

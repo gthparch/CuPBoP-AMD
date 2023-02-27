@@ -10,7 +10,6 @@
 #include <vector>
 #include <unordered_map>
 
-
 #include "llvm/IR/CallingConv.h"
 #include "llvm/IR/Constants.h"
 #include "llvm/IR/IRBuilder.h"
@@ -78,7 +77,7 @@
 #include "llvm/Transforms/Utils/ValueMapper.h"
 
 #include "llvm/IR/Module.h"
-#include "ChangeAtomics.hpp"
+#include "TransformTexture.hpp"
 #include "utils.hpp"
 
 using namespace llvm;
@@ -107,7 +106,7 @@ void transformTexture(llvm::Module &M) {
 
 
   std::vector<llvm::GlobalVariable*> allTextureMemories = discover_texture_memory(M);
-  printf(" %d ", allTextureMemories.size());
+  printf("Number of Texture Memories %d \n", allTextureMemories.size());
   
   
   if (allTextureMemories.size() > 0) {
@@ -486,7 +485,7 @@ void transformTexture(llvm::Module &M) {
            outs() << *getelementpr << '\n';
           //  outs() << getelementpr->getSourceElementType()->getStructName()<< '\n';
           //  outs() << getelementpr->getOperand(0)->getType()->getStructName().str()<< '\n';
-           if(getelementpr->getSourceElementType()->getStructName().str() == "struct.float4") {
+           if(auto StructTy = dyn_cast<StructType>(getelementpr->getSourceElementType()) && getelementpr->getSourceElementType()->getStructName().str() == "struct.float4") {
             printf("88888888888888888888888\n");
             // if the next instruction is llvm.memcpy
             outs() << *getelementpr->getNextNode() << '\n'; 
@@ -527,10 +526,6 @@ void transformTexture(llvm::Module &M) {
 
                   memcpyFn->replaceAllUsesWith(vectorTypeCall);
                   need_remove.push_back(memcpyFn);
-
-
-
-
 
                 }
                 
