@@ -628,6 +628,11 @@ if [[ "$AMDCUDA_OPT_LINK" = "1" ]]; then
         # Remove objects if no save temps
         rm -f "${AMDCUDA_COMPILED_OBJECTS[@]}"
     fi
+elif [[ "${#AMDCUDA_COMPILED_OBJECTS[*]}" = "1" ]]; then
+    # Move the object to the output
+    mv "${AMDCUDA_COMPILED_OBJECTS[0]}" "$AMDCUDA_OPT_OUTPUT"
+else
+    echo "[!] Multiple objects were compiled, but no linking was requested. Output file specified by -o will be ignored."
 fi
 
 # Remove logfiles

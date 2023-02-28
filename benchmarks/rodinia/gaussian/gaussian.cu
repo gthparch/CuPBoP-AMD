@@ -255,8 +255,8 @@ void PrintDeviceProperties() {
             printf("\nClock rate \t\t\t\t - %d KHz", deviceProp.clockRate);
             printf("\nTexture Alignment \t\t\t - %zu bytes",
                    deviceProp.textureAlignment);
-            printf("\nDevice Overlap \t\t\t\t - %s",
-                   deviceProp.deviceOverlap ? "Allowed" : "Not Allowed");
+            // printf("\nDevice Overlap \t\t\t\t - %s",
+            //        deviceProp.deviceOverlap ? "Allowed" : "Not Allowed");
             printf("\nNumber of Multi processors \t\t - %d\n\n",
                    deviceProp.multiProcessorCount);
         } else

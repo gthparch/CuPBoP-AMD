@@ -1,8 +1,8 @@
 #include "cudaamd.h"
 #include "stdio.h"
-#include <hip/hip_runtime.h>
 #include <hip/amd_detail/amd_channel_descriptor.h>
 #include <hip/driver_types.h>
+#include <hip/hip_runtime.h>
 #include <iostream>
 
 #define HIP_CHECK(status)                                                      \
@@ -15,31 +15,31 @@
 // https://docs.nvidia.com/cuda/cuda-runtime-api/structcudaDeviceProp.html
 
 cudaError_t cudaDeviceReset() {
-    printf("insideDeviceReset\n");
+    // printf("insideDeviceReset\n");
     HIP_CHECK(hipDeviceReset());
     return cudaSuccess;
 }
 
 cudaError_t cudaGetLastError() {
-    printf("insideGetLastError\n");
+    // printf("insideGetLastError\n");
     HIP_CHECK(hipGetLastError());
     return cudaSuccess;
 }
 
 cudaError_t cudaPeekAtLastError() {
-    printf("insidePeekAtLastError\n");
+    // printf("insidePeekAtLastError\n");
     HIP_CHECK(hipPeekAtLastError());
     return cudaSuccess;
 }
 
 cudaError_t cudaDeviceSynchronize() {
-    printf("inside cudaDeviceSynchronize()\n");
+    // printf("inside cudaDeviceSynchronize()\n");
     HIP_CHECK(hipDeviceSynchronize());
     return cudaSuccess;
 }
 
 cudaError_t cudaThreadSynchronize() {
-    printf("inside cudaThreadSynchronize()\n");
+    // printf("inside cudaThreadSynchronize()\n");
     HIP_CHECK(hipDeviceSynchronize());
     return cudaSuccess;
 }
@@ -50,29 +50,31 @@ cudaError_t cudaSetDevice(int device) {
 }
 
 cudaError_t cudaGetDevice(int *devPtr) {
-    printf("insideGetDevice\n");
+    // printf("insideGetDevice\n");
     HIP_CHECK(hipGetDevice(devPtr));
     return cudaSuccess;
 }
 
 cudaError_t cudaGetDeviceCount(int *count) {
-    printf("insideGetDeviceCount\n");
+    // printf("insideGetDeviceCount\n");
     HIP_CHECK(hipGetDeviceCount(count));
     return cudaSuccess;
 }
 
-cudaError_t cudaFuncSetCacheConfig(const void* func, cudaFuncCache cacheConfig) {
-    hipFuncCache_t hipCacheConfig = (hipFuncCache_t) cacheConfig;
+cudaError_t cudaFuncSetCacheConfig(const void *func,
+                                   cudaFuncCache cacheConfig) {
+    hipFuncCache_t hipCacheConfig = (hipFuncCache_t)cacheConfig;
     HIP_CHECK(hipFuncSetCacheConfig(func, hipCacheConfig));
     return cudaSuccess;
 }
 
 cudaError_t cudaGetDeviceProperties(cudaDeviceProp *prop, int device) {
-    printf("Get Device Properties\n");
+    // printf("Get Device Properties\n");
     hipDeviceProp_t dprops;
     HIP_CHECK(hipGetDeviceProperties(&dprops, device));
     memcpy(prop->name, dprops.name, sizeof(prop->name));
-    memcpy(prop->maxThreadsDim, dprops.maxThreadsDim, sizeof(dprops.maxThreadsDim));
+    memcpy(prop->maxThreadsDim, dprops.maxThreadsDim,
+           sizeof(dprops.maxThreadsDim));
     memcpy(prop->maxGridSize, dprops.maxGridSize, sizeof(dprops.maxGridSize));
 
     prop->warpSize = dprops.warpSize;
@@ -90,8 +92,8 @@ cudaError_t cudaGetDeviceProperties(cudaDeviceProp *prop, int device) {
     prop->deviceOverlap = false;
     prop->multiProcessorCount = dprops.multiProcessorCount;
 
-    printf("Device WarpSize: %d \n", prop->warpSize);
-    printf("Device clockRate: %d \n", prop->clockRate);
+    // printf("Device WarpSize: %d \n", prop->warpSize);
+    // printf("Device clockRate: %d \n", prop->clockRate);
     return cudaSuccess;
 }
 
@@ -100,31 +102,34 @@ cudaError_t cudaSetDeviceFlags(unsigned int flags) {
     return cudaSuccess;
 }
 
-
-cudaError_t cudaHostGetDevicePointer (void** pDevice, void* pHost, unsigned int flags) {
+cudaError_t cudaHostGetDevicePointer(void **pDevice, void *pHost,
+                                     unsigned int flags) {
     HIP_CHECK(hipHostGetDevicePointer(pDevice, pHost, flags));
     return cudaSuccess;
 }
 
 cudaError_t cudaMalloc(void **devPtr, size_t size) {
-    printf("insideCudaMalloc %p size=%zu\n", devPtr, size);
+    // printf("insideCudaMalloc %p size=%zu\n", devPtr, size);
     HIP_CHECK(hipMalloc(devPtr, size));
-    printf("endCudaMalloc\n");
+    // printf("endCudaMalloc\n");
     return cudaSuccess;
 }
 
-cudaError_t cudaMallocArray(cudaArray_t* array, const cudaChannelFormatDesc* desc, size_t width, size_t height = 0, unsigned int  flags = 0) {
-        HIP_CHECK(hipMallocArray(array, desc, width, height, flags));
-        return cudaSuccess;
+cudaError_t cudaMallocArray(cudaArray_t *array,
+                            const cudaChannelFormatDesc *desc, size_t width,
+                            size_t height = 0, unsigned int flags = 0) {
+    HIP_CHECK(hipMallocArray(array, desc, width, height, flags));
+    return cudaSuccess;
 }
 
-cudaError_t cudaMallocPitch(void **devPtr, size_t *pitch, size_t width, size_t height)	{
-  HIP_CHECK(hipMallocPitch(devPtr,  pitch, width, height))
-  return cudaSuccess;
+cudaError_t cudaMallocPitch(void **devPtr, size_t *pitch, size_t width,
+                            size_t height) {
+    HIP_CHECK(hipMallocPitch(devPtr, pitch, width, height))
+    return cudaSuccess;
 }
 
 cudaError_t cudaFree(void *ptr) {
-    printf("inside cudaFree\n");
+    // printf("inside cudaFree\n");
     HIP_CHECK(hipFree(ptr));
     return cudaSuccess;
 }
@@ -140,114 +145,108 @@ cudaError_t cudaFreeArray(cudaArray_t array) {
     return cudaSuccess;
 }
 cudaError_t cudaHostAlloc(void **ptr, size_t size, unsigned int flag) {
-    printf("inside HostAlloc\n");
+    // printf("inside HostAlloc\n");
     HIP_CHECK(hipHostMalloc(ptr, size, flag));
     return cudaSuccess;
 }
 
 cudaError_t cudaMemcpy(void *dst, const void *src, size_t count,
                        cudaMemcpyKind kind) {
-    printf("insideCudaMemcpy\n");
+    // printf("insideCudaMemcpy\n");
     HIP_CHECK(hipMemcpy(dst, src, count, (hipMemcpyKind)kind));
     return cudaSuccess;
 }
 
-cudaError_t cudaMemcpyToSymbol(const void* symbol, const void* src, size_t count, size_t offset , cudaMemcpyKind kind) {
+cudaError_t cudaMemcpyToSymbol(const void *symbol, const void *src,
+                               size_t count, size_t offset,
+                               cudaMemcpyKind kind) {
 
-    hipMemcpyToSymbol(
-    symbol,  src, count, offset ,
-    (hipMemcpyKind)kind);
-
+    hipMemcpyToSymbol(symbol, src, count, offset, (hipMemcpyKind)kind);
 }
 
-
-
-cudaError_t cudaMemcpy2D(void * dst, size_t dpitch, const void * src, size_t spitch, size_t width,
-    size_t 	height, cudaMemcpyKind kind) {
-        HIP_CHECK(hipMemcpy2D(dst, dpitch, src, spitch, width, height, (hipMemcpyKind)kind));
-        return cudaSuccess;
+cudaError_t cudaMemcpy2D(void *dst, size_t dpitch, const void *src,
+                         size_t spitch, size_t width, size_t height,
+                         cudaMemcpyKind kind) {
+    HIP_CHECK(hipMemcpy2D(dst, dpitch, src, spitch, width, height,
+                          (hipMemcpyKind)kind));
+    return cudaSuccess;
 }
 
 cudaError_t cudaLaunchKernel(const void *func, dim3 gridDim, dim3 blockDim,
                              void **args, size_t sharedMem,
                              cudaStream_t stream) {
-    printf("insideCudaLaunchKernel\n");
+    // printf("insideCudaLaunchKernel\n");
     HIP_CHECK(hipLaunchKernel(func, gridDim, blockDim, args, sharedMem,
                               (hipStream_t)stream));
-    printf("cudaLaunchKernel\n");
+    // printf("cudaLaunchKernel\n");
     return cudaSuccess;
 }
 
-cudaError_t cudaEventCreate (cudaEvent_t* event) {
-    printf("hipEventCreate\n");
+cudaError_t cudaEventCreate(cudaEvent_t *event) {
+    // printf("hipEventCreate\n");
 
     HIP_CHECK(hipEventCreate(event));
     return cudaSuccess;
-
-
 }
 
-cudaError_t cudaEventRecord (cudaEvent_t event, cudaStream_t stream = 0) {
-    printf("hipEventRecord\n");
+cudaError_t cudaEventRecord(cudaEvent_t event, cudaStream_t stream = 0) {
+    // printf("hipEventRecord\n");
 
     HIP_CHECK(hipEventRecord(event, stream));
     return cudaSuccess;
-
 }
 
-cudaError_t cudaEventSynchronize (cudaEvent_t event) {
-    printf("hipSynchronize\n");
+cudaError_t cudaEventSynchronize(cudaEvent_t event) {
+    // printf("hipSynchronize\n");
 
     HIP_CHECK(hipEventSynchronize(event));
     return cudaSuccess;
-
 }
 
-cudaError_t cudaEventDestroy (cudaEvent_t event) {
-    printf("hipEventDestroy\n");
+cudaError_t cudaEventDestroy(cudaEvent_t event) {
+    // printf("hipEventDestroy\n");
 
     HIP_CHECK(hipEventDestroy(event));
     return cudaSuccess;
-
 }
 
-cudaError_t cudaEventElapsedTime (float* ms, cudaEvent_t start, cudaEvent_t end) {
+cudaError_t cudaEventElapsedTime(float *ms, cudaEvent_t start,
+                                 cudaEvent_t end) {
 
     HIP_CHECK(hipEventElapsedTime(ms, start, end));
     return cudaSuccess;
-
-
 }
 
-cudaError_t cudaMemset(void* devPtr, int  value, size_t count) {
-    
-    printf("insideCudaMemset\n");
+cudaError_t cudaMemset(void *devPtr, int value, size_t count) {
+
+    // printf("insideCudaMemset\n");
     HIP_CHECK(hipMemset(devPtr, value, count));
     return cudaSuccess;
-
-
 }
 
-const char* cudaGetErrorString(cudaError_t error) {
-    return hipGetErrorString((hipError_t) error);
+const char *cudaGetErrorString(cudaError_t error) {
+    return hipGetErrorString((hipError_t)error);
 }
 
-cudaError_t cudaStreamCreateWithFlags(cudaStream_t* stream, unsigned int flags) {
+cudaError_t cudaStreamCreateWithFlags(cudaStream_t *stream,
+                                      unsigned int flags) {
     HIP_CHECK(hipStreamCreateWithFlags(stream, flags));
     return cudaSuccess;
 }
 
-cudaError_t cudaStreamCreateWithPriority(cudaStream_t* stream, unsigned int flags, int priority) {
+cudaError_t cudaStreamCreateWithPriority(cudaStream_t *stream,
+                                         unsigned int flags, int priority) {
     HIP_CHECK(hipStreamCreateWithPriority(stream, flags, priority));
     return cudaSuccess;
 }
 
-cudaError_t cudaDeviceGetStreamPriorityRange(int* leastPriority, int* greatestPriority) {
+cudaError_t cudaDeviceGetStreamPriorityRange(int *leastPriority,
+                                             int *greatestPriority) {
     HIP_CHECK(hipDeviceGetStreamPriorityRange(leastPriority, greatestPriority));
     return cudaSuccess;
 }
 
-cudaError_t cudaStreamCreate(cudaStream_t* stream) {
+cudaError_t cudaStreamCreate(cudaStream_t *stream) {
     HIP_CHECK(hipStreamCreate(stream));
     return cudaSuccess;
 }
@@ -262,7 +261,7 @@ cudaError_t cudaStreamDestroy(cudaStream_t stream) {
     return cudaSuccess;
 }
 
-cudaError_t cudaStreamGetFlags(cudaStream_t stream, unsigned int* flags) {
+cudaError_t cudaStreamGetFlags(cudaStream_t stream, unsigned int *flags) {
     HIP_CHECK(hipStreamGetFlags(stream, flags));
     return cudaSuccess;
 }
@@ -272,7 +271,8 @@ cudaError_t cudaStreamGetPriority(cudaStream_t stream, int *priority) {
     return cudaSuccess;
 }
 
-cudaError_t cudaStreamWaitEvent(cudaStream_t stream, cudaEvent_t event, unsigned int flags) {
+cudaError_t cudaStreamWaitEvent(cudaStream_t stream, cudaEvent_t event,
+                                unsigned int flags) {
     HIP_CHECK(hipStreamWaitEvent(stream, event, flags));
     return cudaSuccess;
 }
@@ -282,69 +282,84 @@ cudaError_t cudaStreamQuery(cudaStream_t stream) {
     return cudaSuccess;
 }
 
-cudaError_t cudaStreamAddCallback(cudaStream_t stream, cudaStreamCallback_t callback, void* userData, unsigned int flags) {
+cudaError_t cudaStreamAddCallback(cudaStream_t stream,
+                                  cudaStreamCallback_t callback, void *userData,
+                                  unsigned int flags) {
     HIP_CHECK(hipStreamAddCallback(stream, callback, userData, flags));
     return cudaSuccess;
 }
 
-cudaChannelFormatDesc cudaCreateChannelDesc(int  x, int  y, int  z, int  w, cudaChannelFormatKind f) {
- return hipCreateChannelDesc(x, y, z, w, (hipChannelFormatKind)f);
+cudaChannelFormatDesc cudaCreateChannelDesc(int x, int y, int z, int w,
+                                            cudaChannelFormatKind f) {
+    return hipCreateChannelDesc(x, y, z, w, (hipChannelFormatKind)f);
 }
 
-cudaError_t cudaCreateTextureObject(cudaTextureObject_t* pTexObject, const cudaResourceDesc* pResDesc, const cudaTextureDesc* pTexDesc, const cudaResourceViewDesc* pResViewDesc) {
-    HIP_CHECK(hipCreateTextureObject(pTexObject, pResDesc, pTexDesc, pResViewDesc));
+cudaError_t cudaCreateTextureObject(cudaTextureObject_t *pTexObject,
+                                    const cudaResourceDesc *pResDesc,
+                                    const cudaTextureDesc *pTexDesc,
+                                    const cudaResourceViewDesc *pResViewDesc) {
+    HIP_CHECK(
+        hipCreateTextureObject(pTexObject, pResDesc, pTexDesc, pResViewDesc));
     return cudaSuccess;
 }
 
-cudaError_t cudaDestroyTextureObject ( cudaTextureObject_t texObject ) {
+cudaError_t cudaDestroyTextureObject(cudaTextureObject_t texObject) {
     HIP_CHECK(hipDestroyTextureObject(texObject));
     return cudaSuccess;
-
 }
 
-cudaError_t cudaGetChannelDesc(cudaChannelFormatDesc* desc, cudaArray_const_t array) {
+cudaError_t cudaGetChannelDesc(cudaChannelFormatDesc *desc,
+                               cudaArray_const_t array) {
     HIP_CHECK(hipGetChannelDesc(desc, array));
     return cudaSuccess;
 }
 
-cudaError_t cudaGetTextureObjectResourceDesc(cudaResourceDesc* pResDesc, cudaTextureObject_t texObject) {
+cudaError_t cudaGetTextureObjectResourceDesc(cudaResourceDesc *pResDesc,
+                                             cudaTextureObject_t texObject) {
     HIP_CHECK(hipGetTextureObjectResourceDesc(pResDesc, texObject));
     return cudaSuccess;
 }
 
-cudaError_t cudaGetTextureObjectResourceViewDesc(cudaResourceViewDesc* pResViewDesc, cudaTextureObject_t texObject) {
+cudaError_t
+cudaGetTextureObjectResourceViewDesc(cudaResourceViewDesc *pResViewDesc,
+                                     cudaTextureObject_t texObject) {
     HIP_CHECK(hipGetTextureObjectResourceViewDesc(pResViewDesc, texObject));
     return cudaSuccess;
 }
 
-cudaError_t cudaGetTextureObjectTextureDesc(cudaTextureDesc* pTexDesc, cudaTextureObject_t texObject) {
-  HIP_CHECK(hipGetTextureObjectTextureDesc(pTexDesc, texObject));
-  return cudaSuccess;
-
+cudaError_t cudaGetTextureObjectTextureDesc(cudaTextureDesc *pTexDesc,
+                                            cudaTextureObject_t texObject) {
+    HIP_CHECK(hipGetTextureObjectTextureDesc(pTexDesc, texObject));
+    return cudaSuccess;
 }
 
-cudaError_t cudaBindTexture(size_t* offset, const textureReference* texref, const void* devPtr, const cudaChannelFormatDesc* desc, size_t size = UINT_MAX) {
-    printf(" cudaBindTexture Runtime \n");
+cudaError_t cudaBindTexture(size_t *offset, const textureReference *texref,
+                            const void *devPtr,
+                            const cudaChannelFormatDesc *desc,
+                            size_t size = UINT_MAX) {
+    // printf(" cudaBindTexture Runtime \n");
 
     size_t offset1;
     if (offset == NULL) {
         *offset = offset1;
     }
     HIP_CHECK(hipBindTexture(offset, texref, devPtr, desc, size));
-    
+
     return cudaSuccess;
 }
 
-cudaError_t cudaBindTexture2D(size_t* offset, const textureReference* texref, const void* devPtr, const cudaChannelFormatDesc* desc, 
-    size_t width, size_t height, size_t pitch) {
+cudaError_t cudaBindTexture2D(size_t *offset, const textureReference *texref,
+                              const void *devPtr,
+                              const cudaChannelFormatDesc *desc, size_t width,
+                              size_t height, size_t pitch) {
     // printf("cudaBindTexture2d  %p\n", texref);
     // printf("cudaBindTexture2d  %p\n", devPtr);
     // printf("cudaBindTexture2d  %p\n", desc);
     // hipBindTexture2D(offset, texref, devPtr, desc, width, height, pitch);
-    
-    HIP_CHECK(hipBindTexture2D(offset, texref, devPtr,
-    desc, width, height, pitch));
-     
+
+    HIP_CHECK(
+        hipBindTexture2D(offset, texref, devPtr, desc, width, height, pitch));
+
     // printf("cudaBindTexture2d  %p\n", texref);
     // printf("cudaBindTexture2d  %p\n", devPtr);
     // printf("cudaBindTexture2d  %p\n", desc);
@@ -353,7 +368,7 @@ cudaError_t cudaBindTexture2D(size_t* offset, const textureReference* texref, co
     return cudaSuccess;
 }
 
-cudaError_t cudaUnbindTexture(const textureReference* texref) {
+cudaError_t cudaUnbindTexture(const textureReference *texref) {
     HIP_CHECK(hipUnbindTexture(texref));
     return cudaSuccess;
 }
@@ -378,10 +393,11 @@ extern cudaError_t __cudaPopCallConfiguration(dim3 *gridDim, dim3 *blockDim,
     // *blockDim = callParamTemp.blockDim;
     // *sharedMem = callParamTemp.shareMem;
     // *stream = callParamTemp.stream;
-    printf("__cudaPopCallConfiguration After : Grid: x:%d y:%d z:%d Block: %d, "
-           "%d, %d ShMem: %lu\n",
-           gridDim->x, gridDim->y, gridDim->z, blockDim->x, blockDim->y,
-           blockDim->z, *sharedMem);
+    // printf("__cudaPopCallConfiguration After : Grid: x:%d y:%d z:%d Block:
+    // %d, "
+    //        "%d, %d ShMem: %lu\n",
+    //        gridDim->x, gridDim->y, gridDim->z, blockDim->x, blockDim->y,
+    //        blockDim->z, *sharedMem);
 
     return cudaSuccess;
 }
@@ -402,10 +418,11 @@ extern unsigned __cudaPushCallConfiguration(dim3 gridDim, dim3 blockDim,
     // callParamTemp.shareMem = sharedMem;
     // //  std::cout << "assign shareMem" << std::endl;
     // (callParamTemp.stream) = stream;
-    printf("__cudaPushCallConfiguration Grid: x:%d y:%d z:%d Block: %d, %d, %d "
-           "ShMem: %lu\n ",
-           gridDim.x, gridDim.y, gridDim.z, blockDim.x, blockDim.y, blockDim.z,
-           sharedMem);
+    // printf("__cudaPushCallConfiguration Grid: x:%d y:%d z:%d Block: %d, %d,
+    // %d "
+    //        "ShMem: %lu\n ",
+    //        gridDim.x, gridDim.y, gridDim.z, blockDim.x, blockDim.y,
+    //        blockDim.z, sharedMem);
 
     // // return 0 continues the Pop
     return cudaSuccess;
@@ -468,15 +485,14 @@ extern void __cudaRegisterTexture(void **fatCubinHandle,
                                   int ext) {
     printf("__cudaRegisterTexture Called\n");
 
-    // tex, "texName" 
-    // 2 0 0    
-    __hipRegisterTexture(fatCubinHandle,      // The device modules containing code object
-                                     (void *)hostVar,        // The shadow variable in host code
-                                     (char *)deviceName,    // Variable name in host code
-                                     (char *)deviceName,  // Variable name in device code
-                                     dim, norm, ext);
-
-
+    // tex, "texName"
+    // 2 0 0
+    __hipRegisterTexture(
+        fatCubinHandle,     // The device modules containing code object
+        (void *)hostVar,    // The shadow variable in host code
+        (char *)deviceName, // Variable name in host code
+        (char *)deviceName, // Variable name in device code
+        dim, norm, ext);
 }
 
 extern void __cudaRegisterSurface(void **fatCubinHandle,

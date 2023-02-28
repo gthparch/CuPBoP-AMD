@@ -1,0 +1,20 @@
+diff --git a/llvm/tools/opt/opt.cpp b/llvm/tools/opt/opt.cpp
+index 40632b43e..fbeee2f71 100644
+--- a/llvm/tools/opt/opt.cpp
++++ b/llvm/tools/opt/opt.cpp
+@@ -492,15 +492,6 @@ int main(int argc, char **argv) {
+   const bool UseNPM = (EnableNewPassManager && !shouldForceLegacyPM()) ||
+                       PassPipeline.getNumOccurrences() > 0;
+ 
+-  if (UseNPM && !PassList.empty()) {
+-    errs() << "The `opt -passname` syntax for the new pass manager is "
+-              "not supported, please use `opt -passes=<pipeline>` (or the `-p` "
+-              "alias for a more concise version).\n";
+-    errs() << "See https://llvm.org/docs/NewPassManager.html#invoking-opt "
+-              "for more details on the pass pipeline syntax.\n\n";
+-    return 1;
+-  }
+-
+   if (!UseNPM && PluginList.size()) {
+     errs() << argv[0] << ": " << PassPlugins.ArgStr
+            << " specified with legacy PM.\n";
