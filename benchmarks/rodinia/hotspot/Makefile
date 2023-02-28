@@ -5,6 +5,7 @@ CUPBOPCC=$(AMDCUDA_DIR)/scripts/amdcuda
 CC=clang
 CXX=clang++
 LD=ld.lld
+CXXFLAGS=-g -O0
 
 # Objects required for compilation
 OBJS=hotspot.o
@@ -16,8 +17,9 @@ CUPBOP_OBJS=$(OBJS:.o=.cupbop.o)
 %.hipify.cpp: %.cu
 	$(HIPIFY) $< -o $@
 
+.SECONDARY:
 %.hipify.o: %.hipify.cpp
-	$(HIPCC) -c $< -o $@
+	$(HIPCC) $(CXXFLAGS) -c $< -o $@
 
 %.cupbop.o: %.cu
 	$(CUPBOPCC) -o $@ -c $<
@@ -39,4 +41,4 @@ $(BENCHMARK_NAME).cupbop: $(CUPBOP_OBJS)
 	$(CUPBOPCC) -o $@ $^
 
 $(BENCHMARK_NAME).hipify: $(HIPIFY_OBJS)
-	$(HIPCC) -L/opt/rocm/llvm/lib/clang/14.0.0/lib/linux -o $@ $^
+	$(HIPCC) $(CXXFLAGS) -L/opt/rocm/llvm/lib/clang/14.0.0/lib/linux -o $@ $^
