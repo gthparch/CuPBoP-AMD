@@ -16,7 +16,7 @@ extern "C" {
 //	UTILITIES
 //======================================================================================================================================================150
 
-#include "../util/cuda/cuda.h"							// (in library path specified to compiler)	needed by for device functions
+#include "../util/cuda/cuda-defs.h"							// (in library path specified to compiler)	needed by for device functions
 #include "../util/timer/timer.h"						// (in library path specified to compiler)	needed by timer
 
 //======================================================================================================================================================150

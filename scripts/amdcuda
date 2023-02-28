@@ -332,9 +332,11 @@ while test $# -gt 0; do
     elif [[ "${AMDCUDA_INPUT##*.}" = "o" ]]; then
         AMDCUDA_ADDITIONAL_OBJECTS+=("$AMDCUDA_INPUT")
         echo "[*] Will link against compiled object ${AMDCUDA_INPUT}"
+        revert_cd_with_logs
         continue
     else
         echo "[!] Unacceptable input ${AMDCUDA_INPUT}"
+        exit 1
     fi
 
     # derive related names & other info
