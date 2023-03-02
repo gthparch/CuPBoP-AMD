@@ -612,6 +612,7 @@ if [[ "$AMDCUDA_OPT_LINK" = "1" ]]; then
         -o "$AMDCUDA_OPT_OUTPUT" \
         -L"$AMDCUDA_RT_DIR" \
         -L"$ROCM_PATH/lib" \
+        -Wl,-rpath="$AMDCUDA_RT_DIR:$HIP_PATH/lib:$ROCM_PATH/lib",--enable-new-dtags \
         -lcudaonamd \
         -lpthread \
         -lamdhip64 \
