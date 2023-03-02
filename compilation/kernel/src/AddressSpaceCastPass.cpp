@@ -278,6 +278,13 @@ bool AddressSpaceCastPass::runOnFunction(Function &F) {
         f->eraseFromParent();
     }
 
+    // Remove previous function's metadata so new function can have it all
+    SmallVector<std::pair<unsigned, MDNode *>, 4> MDs;
+    F.getAllMetadata(MDs);
+    for (auto &MD : MDs) {
+        F.setMetadata(MD.first, nullptr);
+    }
+
     // outs() << *NF << " /n ";
 
     return 1;
@@ -288,38 +295,4 @@ char AddressSpaceCastPass::ID = 0;
 namespace {
 static RegisterPass<AddressSpaceCastPass>
     address_space_cast("address-space-cast", "Address Space Cast AMD");
-}
-
-void address_space_pass(Module &M) {
-    ModulePassManager MPM;
-    ModuleAnalysisManager MAM;
-
-    FunctionPassManager FPM;
-    llvm::legacy::PassManager passManager;
-    llvm::PassManagerBuilder passManagerBuilder;
-    auto Registry = PassRegistry::getPassRegistry();
-
-    // We can add passes at certain extension points.
-    passManagerBuilder.addExtension(
-        PassManagerBuilder::EP_CGSCCOptimizerLate,
-        [](const llvm::PassManagerBuilder &passManagerBuilder,
-           llvm::legacy::PassManagerBase &passManager) {
-            passManager.add(createInferAddressSpacesPass());
-        });
-
-    passManagerBuilder.populateModulePassManager(passManager);
-    passManager.run(M);
-
-    std::vector<std::string> passes;
-    passes.push_back("address-space-cast");
-    for (auto pass : passes) {
-        const PassInfo *PIs = Registry->getPassInfo(StringRef(pass));
-        if (PIs) {
-            Pass *thispass = PIs->createPass();
-            passManager.add(thispass);
-        } else {
-            assert(0 && "Pass not found\n");
-        }
-    }
-    passManager.run(M);
 }
