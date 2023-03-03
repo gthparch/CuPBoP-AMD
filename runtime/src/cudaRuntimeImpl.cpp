@@ -1,9 +1,10 @@
-#include "cudaamd.h"
-#include "stdio.h"
+#include <stdio.h>
+#include <iostream>
+#include <hip/hip_runtime.h>
 #include <hip/amd_detail/amd_channel_descriptor.h>
 #include <hip/driver_types.h>
-#include <hip/hip_runtime.h>
-#include <iostream>
+
+#include "cudaamd.h"
 
 #define HIP_CHECK(status)                                                      \
     if (status != hipSuccess) {                                                \
@@ -18,6 +19,10 @@ cudaError_t cudaDeviceReset() {
     // printf("insideDeviceReset\n");
     HIP_CHECK(hipDeviceReset());
     return cudaSuccess;
+}
+
+cudaError_t cudaThreadExit() {
+    return cudaDeviceReset();
 }
 
 cudaError_t cudaGetLastError() {
@@ -159,6 +164,10 @@ cudaError_t cudaMemcpy(void *dst, const void *src, size_t count,
     // printf("insideCudaMemcpy\n");
     HIP_CHECK(hipMemcpy(dst, src, count, (hipMemcpyKind)kind));
     return cudaSuccess;
+}
+
+cudaError_t cudaMemcpyAsync (void* dst, const void* src, size_t count, cudaMemcpyKind kind, cudaStream_t stream) {
+    return (cudaError_t) hipMemcpyAsync(dst, src, count, (hipMemcpyKind)kind, (hipStream_t)stream);
 }
 
 cudaError_t cudaMemcpyToSymbol(const void *symbol, const void *src,

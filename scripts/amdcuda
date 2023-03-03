@@ -83,6 +83,7 @@ AMDCUDA_BITCODE=(
 
 # Compiler flags
 AMDCUDA_CFLAGS=()
+AMDCUDA_LDFLAGS=()
 
 # Compiled objects to be linked together
 AMDCUDA_COMPILED_OBJECTS=()
@@ -114,6 +115,9 @@ Usage: $0 [OPTIONS] inputs...
     -g          Generate source-level debug information
     -h          Print this help message.
     -i          Inspect intermediate and translated IRs.
+    -I <path>   Add <path> to the header search path.
+    -l <lib>    Link against <lib> at link time.
+    -L <path>   Add <path> to the linker search path.
     -o <file>   Write output to <file>. The default is the input program name with the ".translated" suffix.
     -O <level>  Optimization level. The default is -O0.
     -t          Do not cleanup temporary files produced by the compilers and translators after completion.
@@ -121,15 +125,18 @@ Usage: $0 [OPTIONS] inputs...
 EOF
 }
 
-while getopts "o:O:cthig" in_opt; do
+while getopts "o:O:cthiI:gl:L:" in_opt; do
     case $in_opt in
     c)      AMDCUDA_OPT_LINK=0;;
     o)      AMDCUDA_OPT_OUTPUT="$OPTARG";;
     O)      AMDCUDA_OPT_OPTIMIZATION_LEVEL="$OPTARG";;
     t)      AMDCUDA_OPT_SAVE_TEMPS=1;;
     i)      AMDCUDA_OPT_INSPECT_IR=1;;
+    I)      AMDCUDA_CFLAGS+=("-I$OPTARG");;
     v)      AMDCUDA_OPT_VERBOSE=1;;
     g)      AMDCUDA_CFLAGS+=("-g");;
+    l)      AMDCUDA_LDFLAGS+=("-l$OPTARG");;
+    L)      AMDCUDA_LDFLAGS+=("-L$OPTARG");;
     ? | h)  print_usage
             exit 2;;
     esac
@@ -638,7 +645,9 @@ if [[ "$AMDCUDA_OPT_LINK" = "1" ]]; then
         -lgcc_s \
         -lgcc \
         -lstdc++ \
-        "${AMDCUDA_COMPILED_OBJECTS[@]}" "${AMDCUDA_ADDITIONAL_OBJECTS[@]}"
+        "${AMDCUDA_COMPILED_OBJECTS[@]}" \
+        "${AMDCUDA_ADDITIONAL_OBJECTS[@]}" \
+        "${AMDCUDA_LDFLAGS[@]}"
     
     if [[ "$AMDCUDA_OPT_SAVE_TEMPS" = "0" ]]; then
         # Remove objects if no save temps
