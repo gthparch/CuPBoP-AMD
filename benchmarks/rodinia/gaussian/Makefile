@@ -5,6 +5,7 @@ CUPBOPCC=$(AMDCUDA_DIR)/scripts/amdcuda
 CC=clang
 CXX=clang++
 LD=ld.lld
+CXXFLAGS=-O0 -g
 
 # Objects required for compilation
 OBJS=gaussian.o
@@ -17,10 +18,10 @@ CUPBOP_OBJS=$(OBJS:.o=.cupbop.o)
 	$(HIPIFY) $< -o $@
 
 %.hipify.o: %.hipify.cpp
-	$(HIPCC) -c $< -o $@
+	$(HIPCC) $(CXXFLAGS) -c $< -o $@
 
 %.cupbop.o: %.cu
-	$(CUPBOPCC) -o $@ -c $<
+	$(CUPBOPCC) $(CXXFLAGS) -o $@ -c $<
 
 .PHONY: clean all
 all: $(BENCHMARK_NAME).cupbop $(BENCHMARK_NAME).hipify

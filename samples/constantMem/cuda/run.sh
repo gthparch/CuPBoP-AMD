@@ -5,5 +5,6 @@
 # /nethome/jchen706/coding/code2/amdcuda/build/compilation/kernelTranslator main-cuda-nvptx64-nvidia-cuda-sm_35.bc
 # llvm-dis main-cuda-nvptx64-nvidia-cuda-sm_35.bc.translated_test.bc
 
-../../../scripts/amdcuda main.cu
-LD_LIBRARY_PATH=../../../build/runtime ./main.translated
+export AMD_LOG_LEVEL=4
+../../../scripts/amdcuda -g main.cu
+./main.translated

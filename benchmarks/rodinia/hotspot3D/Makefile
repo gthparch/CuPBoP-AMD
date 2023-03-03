@@ -22,7 +22,7 @@ CUPBOP_OBJS=$(OBJS:.o=.cupbop.o)
 	$(HIPCC) $(CXXFLAGS) -g -O0 -c $< -o $@
 
 %.cupbop.o: %.cu
-	$(CUPBOPCC) -o $@ -c $<
+	$(CUPBOPCC) $(CXXFLAGS) -o $@ -c $<
 
 .PHONY: clean all
 all: $(BENCHMARK_NAME).cupbop $(BENCHMARK_NAME).hipify

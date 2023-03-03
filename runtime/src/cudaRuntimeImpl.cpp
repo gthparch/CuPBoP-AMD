@@ -160,8 +160,7 @@ cudaError_t cudaMemcpy(void *dst, const void *src, size_t count,
 cudaError_t cudaMemcpyToSymbol(const void *symbol, const void *src,
                                size_t count, size_t offset,
                                cudaMemcpyKind kind) {
-
-    hipMemcpyToSymbol(symbol, src, count, offset, (hipMemcpyKind)kind);
+    return (cudaError_t) hipMemcpyToSymbol(symbol, src, count, offset, (hipMemcpyKind)kind);
 }
 
 cudaError_t cudaMemcpy2D(void *dst, size_t dpitch, const void *src,

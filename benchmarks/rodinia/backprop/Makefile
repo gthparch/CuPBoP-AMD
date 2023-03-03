@@ -8,8 +8,8 @@ LD=ld.lld
 CXXFLAGS=-g -O0
 
 # Objects required for compilation
-OBJS=main.o kernel/kernel_gpu_cuda_wrapper.o kernel/kernel_gpu_cuda_wrapper_2.o util/cuda/cuda.o util/num/num.o util/timer/timer.o
-BENCHMARK_NAME=b+tree
+OBJS=backprop_cuda.o backprop.o facetrain.o imagenet.o
+BENCHMARK_NAME=backprop
 
 HIPIFY_OBJS=$(OBJS:.o=.hipify.o)
 CUPBOP_OBJS=$(OBJS:.o=.cupbop.o)
