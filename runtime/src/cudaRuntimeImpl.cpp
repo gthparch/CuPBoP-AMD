@@ -115,6 +115,10 @@ cudaError_t cudaMalloc(void **devPtr, size_t size) {
     return cudaSuccess;
 }
 
+cudaError_t cudaMallocHost(void **ptr, size_t size) {
+    return (cudaError_t) hipMallocHost(ptr, size);
+}
+
 cudaError_t cudaMallocArray(cudaArray_t *array,
                             const cudaChannelFormatDesc *desc, size_t width,
                             size_t height = 0, unsigned int flags = 0) {

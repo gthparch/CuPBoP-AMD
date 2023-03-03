@@ -4,7 +4,7 @@ set -e
 AMDCUDA_DIR=`realpath ../../..`
 RODINIA_PATH=`realpath ..`
 
-make
+make -j$(nproc)
 
 echo "[*] Running CuPBoP version..."
 AMD_LOG_LEVEL=2 LD_LIBRARY_PATH="$AMDCUDA_DIR/build/runtime:$LD_LIBRARY_PATH" ./b+tree.cupbop \

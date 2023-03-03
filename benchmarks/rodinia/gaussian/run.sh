@@ -6,7 +6,7 @@ RODINIA_PATH=`realpath ..`
 # "$AMDCUDA_DIR/scripts/amdcuda" gaussian.cu
 make
 
-export AMD_LOG_LEVEL=4
+# export AMD_LOG_LEVEL=4
 
 echo "[*] Running CuPBoP version..."
 LD_LIBRARY_PATH="$AMDCUDA_DIR/build/runtime:$LD_LIBRARY_PATH" ./gaussian.cupbop \

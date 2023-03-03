@@ -3,7 +3,7 @@
 AMDCUDA_DIR=`realpath ../../..`
 RODINIA_PATH=`realpath ..`
 
-export AMD_LOG_LEVEL=4
+# export AMD_LOG_LEVEL=4
 
 make -j$(nproc)
 

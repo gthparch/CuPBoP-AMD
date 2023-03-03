@@ -182,6 +182,8 @@ cudaError_t cudaPeekAtLastError ();
 
 cudaError_t cudaMalloc (void ** devPtr, size_t size);
 
+cudaError_t cudaMallocHost (void ** hostPtr, size_t size);
+
 cudaError_t cudaMallocArray(cudaArray_t* array, const cudaChannelFormatDesc* desc, size_t width, size_t height, unsigned int  flags);
 
 cudaError_t cudaMallocPitch(void **devPtr, size_t *pitch, size_t width, size_t height);
