@@ -81,6 +81,10 @@ AMDCUDA_BITCODE=(
     "${AMDCUDA_BITCODE_PATH}/textureFloat4_1DReadMode.ll"
 )
 
+# Compiler flags
+AMDCUDA_CFLAGS=()
+AMDCUDA_LDFLAGS=()
+
 # Compiled objects to be linked together
 AMDCUDA_COMPILED_OBJECTS=()
 AMDCUDA_ADDITIONAL_OBJECTS=()
@@ -100,26 +104,39 @@ AMDCUDA_OPT_INSPECT_IR=0
 # Verbose outputs
 AMDCUDA_OPT_VERBOSE=0
 
+# Optimization level passed to the compiler
+AMDCUDA_OPT_OPTIMIZATION_LEVEL=0
+
 print_usage() {
     cat <<EOF
-Usage: $0 [-c] [-o <file>] [-t] [-v] [-h] inputs...
+Usage: $0 [OPTIONS] inputs...
 
     -c          Only run preprocess, compile, and assemble steps (do not link).
-    -o <file>   Write output to <file>. The default is the input program name with the ".translated" suffix.
-    -t          Do not cleanup temporary files produced by the compilers and translators after completion.
-    -i          Inspect intermediate and translated IRs.
-    -v          Print compiler and translator outputs to stdout/stderr (instead of a temporary log file that gets removed).
+    -g          Generate source-level debug information
     -h          Print this help message.
+    -i          Inspect intermediate and translated IRs.
+    -I <path>   Add <path> to the header search path.
+    -l <lib>    Link against <lib> at link time.
+    -L <path>   Add <path> to the linker search path.
+    -o <file>   Write output to <file>. The default is the input program name with the ".translated" suffix.
+    -O <level>  Optimization level. The default is -O0.
+    -t          Do not cleanup temporary files produced by the compilers and translators after completion.
+    -v          Print compiler and translator outputs to stdout/stderr (instead of a temporary log file that gets removed).
 EOF
 }
 
-while getopts "o:cthi" in_opt; do
+while getopts "o:O:cthiI:gl:L:" in_opt; do
     case $in_opt in
     c)      AMDCUDA_OPT_LINK=0;;
     o)      AMDCUDA_OPT_OUTPUT="$OPTARG";;
+    O)      AMDCUDA_OPT_OPTIMIZATION_LEVEL="$OPTARG";;
     t)      AMDCUDA_OPT_SAVE_TEMPS=1;;
     i)      AMDCUDA_OPT_INSPECT_IR=1;;
+    I)      AMDCUDA_CFLAGS+=("-I$OPTARG");;
     v)      AMDCUDA_OPT_VERBOSE=1;;
+    g)      AMDCUDA_CFLAGS+=("-g");;
+    l)      AMDCUDA_LDFLAGS+=("-l$OPTARG");;
+    L)      AMDCUDA_LDFLAGS+=("-L$OPTARG");;
     ? | h)  print_usage
             exit 2;;
     esac
@@ -325,6 +342,8 @@ while test $# -gt 0; do
         echo "[*] Compiling $AMDCUDA_INPUT_PROGNAME to IR..."
         exec_with_logs "$AMDCUDA_CLANGXX" \
             "$AMDCUDA_INPUT_SOURCEFILE" -c \
+            "${AMDCUDA_CFLAGS[@]}" \
+            "-O${AMDCUDA_OPT_OPTIMIZATION_LEVEL}" \
             "--cuda-path=$CUDA_PATH" \
             "--cuda-gpu-arch=sm_35" \
             "-L${CUDA_PATH}/lib64" \
@@ -332,9 +351,11 @@ while test $# -gt 0; do
     elif [[ "${AMDCUDA_INPUT##*.}" = "o" ]]; then
         AMDCUDA_ADDITIONAL_OBJECTS+=("$AMDCUDA_INPUT")
         echo "[*] Will link against compiled object ${AMDCUDA_INPUT}"
+        revert_cd_with_logs
         continue
     else
         echo "[!] Unacceptable input ${AMDCUDA_INPUT}"
+        exit 1
     fi
 
     # derive related names & other info
@@ -411,13 +432,13 @@ while test $# -gt 0; do
         -aux-triple x86_64-unknown-linux-gnu -S \
         -main-file-name "$AMDCUDA_INPUT_MAIN_FILENAME" \
         "$AMDCUDA_KERN_ASSEMBLER_FLAGS[@]" \
+        "-O${AMDCUDA_OPT_OPTIMIZATION_LEVEL}" \
         -target-cpu gfx90a \
         -mllvm \
         -treat-scalable-fixed-error-as-warning \
         -debugger-tuning=gdb \
         -v \
         -resource-dir "$AMDCUDA_CLANG_RES_DIR" \
-        -O3 \
         -fno-autolink "-fdebug-compilation-dir=$(pwd)" \
         -ferror-limit 19 \
         -fhip-new-launch-api \
@@ -471,7 +492,7 @@ while test $# -gt 0; do
         -shared \
         -plugin-opt=-amdgpu-internalize-symbols \
         -plugin-opt=mcpu=gfx90a \
-        -plugin-opt=O3 \
+        -plugin-opt="O${AMDCUDA_OPT_OPTIMIZATION_LEVEL}" \
         -plugin-opt=-amdgpu-early-inline-all=true \
         -plugin-opt=-amdgpu-function-calls=false \
         -save-temps \
@@ -522,7 +543,7 @@ while test $# -gt 0; do
         -v \
         "-fcoverage-compilation-dir=$(pwd)" \
         -resource-dir "$AMDCUDA_CLANG_RES_DIR" \
-        -O3 \
+        "-O${AMDCUDA_OPT_OPTIMIZATION_LEVEL}" \
         "-fdebug-compilation-dir=$(pwd)" \
         -ferror-limit 19 \
         -fhip-new-launch-api \
@@ -610,6 +631,8 @@ if [[ "$AMDCUDA_OPT_LINK" = "1" ]]; then
         -o "$AMDCUDA_OPT_OUTPUT" \
         -L"$AMDCUDA_RT_DIR" \
         -L"$ROCM_PATH/lib" \
+        -L"$HIP_PATH/lib" \
+        -Wl,-rpath="$AMDCUDA_RT_DIR:$HIP_PATH/lib:$ROCM_PATH/lib",--enable-new-dtags \
         -lcudaonamd \
         -lpthread \
         -lamdhip64 \
@@ -622,12 +645,19 @@ if [[ "$AMDCUDA_OPT_LINK" = "1" ]]; then
         -lgcc_s \
         -lgcc \
         -lstdc++ \
-        "${AMDCUDA_COMPILED_OBJECTS[@]}" "${AMDCUDA_ADDITIONAL_OBJECTS[@]}"
+        "${AMDCUDA_COMPILED_OBJECTS[@]}" \
+        "${AMDCUDA_ADDITIONAL_OBJECTS[@]}" \
+        "${AMDCUDA_LDFLAGS[@]}"
     
     if [[ "$AMDCUDA_OPT_SAVE_TEMPS" = "0" ]]; then
         # Remove objects if no save temps
         rm -f "${AMDCUDA_COMPILED_OBJECTS[@]}"
     fi
+elif [[ "${#AMDCUDA_COMPILED_OBJECTS[*]}" = "1" ]]; then
+    # Move the object to the output
+    mv "${AMDCUDA_COMPILED_OBJECTS[0]}" "$AMDCUDA_OPT_OUTPUT"
+else
+    echo "[!] Multiple objects were compiled, but no linking was requested. Output file specified by -o will be ignored."
 fi
 
 # Remove logfiles

@@ -81,7 +81,6 @@ using namespace llvm;
 
 
 void changeAtomics(Module &M) {
-
   std::cout << "Change Atomics" << std::endl;
 
   llvm::Type *I32 = llvm::Type::getInt32Ty(M.getContext());

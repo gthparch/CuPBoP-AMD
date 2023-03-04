@@ -71,6 +71,10 @@ std::vector<Function *> discover_cuda_kernels(Module &M) {
 std::vector<GlobalVariable *> discover_texture_memory(Module &M) {
     std::vector<GlobalVariable *> texture;
     auto *nvvmAnnotation = M.getNamedMetadata("nvvm.annotations");
+    if (!nvvmAnnotation) {
+        return texture;
+    }
+    
     auto numTextures = nvvmAnnotation->getNumOperands();
 
     if (nvvmAnnotation == nullptr) {
