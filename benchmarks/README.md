@@ -15,3 +15,4 @@
 | hotspot | :heavy_check_mark: ||
 | hotspot3D | :heavy_check_mark: ||
 | huffman | :x: | [WIP] Compiles with both CuPBoP-AMD and HIPIFY. Both produce mismatched vectors. |
+| kmeans | :heavy_check_mark: | size *offset = NULL segfaults with HIPAMD but not CUDA|

@@ -353,7 +353,7 @@ cudaError_t cudaBindTexture(size_t *offset, const textureReference *texref,
 
     size_t offset1;
     if (offset == NULL) {
-        *offset = offset1;
+        offset = &offset1;
     }
     HIP_CHECK(hipBindTexture(offset, texref, devPtr, desc, size));
 
@@ -364,19 +364,15 @@ cudaError_t cudaBindTexture2D(size_t *offset, const textureReference *texref,
                               const void *devPtr,
                               const cudaChannelFormatDesc *desc, size_t width,
                               size_t height, size_t pitch) {
-    // printf("cudaBindTexture2d  %p\n", texref);
-    // printf("cudaBindTexture2d  %p\n", devPtr);
-    // printf("cudaBindTexture2d  %p\n", desc);
-    // hipBindTexture2D(offset, texref, devPtr, desc, width, height, pitch);
-
+   
+    size_t offset1;
+    if (offset == NULL) {
+        offset = &offset1;
+    }
     HIP_CHECK(
         hipBindTexture2D(offset, texref, devPtr, desc, width, height, pitch));
 
-    // printf("cudaBindTexture2d  %p\n", texref);
-    // printf("cudaBindTexture2d  %p\n", devPtr);
-    // printf("cudaBindTexture2d  %p\n", desc);
-
-    // exit(1);
+  
     return cudaSuccess;
 }
 
