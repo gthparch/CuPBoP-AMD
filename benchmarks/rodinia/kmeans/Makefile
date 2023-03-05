@@ -1,34 +1,51 @@
-include ../../common/make.config
+AMDCUDA_DIR=$(realpath $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))/../../..)
+HIPCC=hipcc
+HIPIFY=$(AMDCUDA_DIR)/scripts/hipify-perl
+CUPBOPCC=$(AMDCUDA_DIR)/scripts/amdcuda
+CC=clang
+CXX=clang++
+LD=ld.lld
+CXXFLAGS=-g -O0 -I/nethome/xzhou381/prefix/usr/lib64/clang/14.0.6/include/ -openmp
 
-# C compiler
-CC = gcc
-CC_FLAGS = -g -fopenmp -O2 
+# Objects required for compilation
+OBJS=kmeans_cuda.o
+CXXOBJS=kmeans_clustering.o cluster.o kmeans.o rmse.o
+BENCHMARK_NAME=kmeans
 
-# CUDA compiler
-NVCC = $(CUDA_DIR)/bin/nvcc
-NVCC_FLAGS = -I$(CUDA_DIR)/include 
+# Additional CuPBoP-CC flags, add -i to inspect IRs
+C3FLAGS=-i
 
-# 'make dbg=1' enables NVCC debugging
-ifeq ($(dbg),1)
-	NVCC_FLAGS += -g -O0
-else
-	NVCC_FLAGS += -O2
-endif
+HIPIFY_OBJS=$(OBJS:.o=.hipify.o)
+CUPBOP_OBJS=$(OBJS:.o=.cupbop.o)
 
-# 'make emu=1' compiles the CUDA kernels for emulation
-ifeq ($(emu),1)
-	NVCC_FLAGS += -deviceemu
-endif
+%.hipify.cpp: %.cu
+	$(HIPIFY) $< -o $@
 
+.SECONDARY:
+%.hipify.o: %.hipify.cpp
+	$(HIPCC) $(CXXFLAGS) -c $< -o $@
 
-kmeans: cluster.o getopt.o kmeans.o kmeans_clustering.o kmeans_cuda.o rmse.o
-	$(CC) $(CC_FLAGS) cluster.o getopt.o kmeans.o kmeans_clustering.o kmeans_cuda.o rmse.o -o kmeans -L$(CUDA_LIB_DIR) -lcuda -lcudart -lm
+%.cupbop.o: %.cu
+	$(CUPBOPCC) $(C3FLAGS) $(CXXFLAGS) -o $@ -c $<
 
-%.o: %.[ch]
-	$(CC) $(CC_FLAGS) $< -c
+%.o: %.c
+	$(CC) -openmp $(CXXFLAGS) -c $< -o $@
 
-kmeans_cuda.o: kmeans_cuda.cu 
-	$(NVCC) $(NVCC_FLAGS) -c kmeans_cuda.cu
+.PHONY: clean all
+all: $(BENCHMARK_NAME).cupbop $(BENCHMARK_NAME).hipify
+	@echo ------- CUDA is at: $(CUDA_PATH)
+	@echo - CuPBoP-AMD is at: $(AMDCUDA_DIR)
+	@echo -- CuPBoP-CC is at: $(CUPBOPCC)
+	@echo --------- CC is at: $(CC)
+	@echo -------- CXX is at: $(CXX)
+	@echo ----- HIPIFY is at: $(HIPIFY)
+	@echo ------ HIPCC is at: $(HIPCC)
 
 clean:
-	rm -f *.o *~ kmeans kmeans_cuda.linkinfo
+	rm -f $(BENCHMARK_NAME).cupbop $(BENCHMARK_NAME).hipify $(HIPIFY_OBJS) $(CUPBOP_OBJS) $(OBJS:.o=.hipify.cpp) *.ll
+
+$(BENCHMARK_NAME).cupbop: $(CXXOBJS) $(CUPBOP_OBJS)
+	$(CUPBOPCC) $(C3FLAGS) -o $@ $^
+
+$(BENCHMARK_NAME).hipify: $(CXXOBJS) $(HIPIFY_OBJS)
+	$(HIPCC) $(CXXFLAGS) -L/opt/rocm/llvm/lib/clang/14.0.0/lib/linux -o $@ $^
