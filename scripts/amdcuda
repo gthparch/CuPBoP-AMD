@@ -330,33 +330,33 @@ while test $# -gt 0; do
     AMDCUDA_INPUT_DIR="$(realpath "$(dirname "$AMDCUDA_INPUT")")"
     cd_with_logs "$AMDCUDA_INPUT_DIR"
 
-    if [[ "${AMDCUDA_INPUT_PROGNAME##*.}" = "cu" ]] || [[ "${AMDCUDA_INPUT_PROGNAME##*.}" = "cpp" ]] || [[ "${AMDCUDA_INPUT_PROGNAME##*.}" = "c" ]]; then
-        if [[ ! -d "${CUDA_PATH}" ]]; then
-            echo "[!] Cannot accept a CUDA source file as input: CUDA_PATH is undefined."
-        fi
+    # if [[ "${AMDCUDA_INPUT_PROGNAME##*.}" = "cu" ]] || [[ "${AMDCUDA_INPUT_PROGNAME##*.}" = "cpp" ]] || [[ "${AMDCUDA_INPUT_PROGNAME##*.}" = "c" ]]; then
+    #     if [[ ! -d "${CUDA_PATH}" ]]; then
+    #         echo "[!] Cannot accept a CUDA source file as input: CUDA_PATH is undefined."
+    #     fi
 
-        AMDCUDA_INPUT_SOURCEFILE="$AMDCUDA_INPUT_PROGNAME"
-        AMDCUDA_INPUT_PROGNAME="${AMDCUDA_INPUT_PROGNAME%.*}"
-        cleanup_all_temps "$AMDCUDA_INPUT_PROGNAME"
+    #     AMDCUDA_INPUT_SOURCEFILE="$AMDCUDA_INPUT_PROGNAME"
+    #     AMDCUDA_INPUT_PROGNAME="${AMDCUDA_INPUT_PROGNAME%.*}"
+    #     cleanup_all_temps "$AMDCUDA_INPUT_PROGNAME"
 
-        echo "[*] Compiling $AMDCUDA_INPUT_PROGNAME to IR..."
-        exec_with_logs "$AMDCUDA_CLANGXX" \
-            "$AMDCUDA_INPUT_SOURCEFILE" -c \
-            "${AMDCUDA_CFLAGS[@]}" \
-            "-O${AMDCUDA_OPT_OPTIMIZATION_LEVEL}" \
-            "--cuda-path=$CUDA_PATH" \
-            "--cuda-gpu-arch=sm_35" \
-            "-L${CUDA_PATH}/lib64" \
-            -lcudart_static -ldl -lrt -pthread -save-temps -fPIC -v
-    elif [[ "${AMDCUDA_INPUT##*.}" = "o" ]]; then
-        AMDCUDA_ADDITIONAL_OBJECTS+=("$AMDCUDA_INPUT")
-        echo "[*] Will link against compiled object ${AMDCUDA_INPUT}"
-        revert_cd_with_logs
-        continue
-    else
-        echo "[!] Unacceptable input ${AMDCUDA_INPUT}"
-        exit 1
-    fi
+    #     echo "[*] Compiling $AMDCUDA_INPUT_PROGNAME to IR..."
+    #     exec_with_logs "$AMDCUDA_CLANGXX" \
+    #         "$AMDCUDA_INPUT_SOURCEFILE" -c \
+    #         "${AMDCUDA_CFLAGS[@]}" \
+    #         "-O${AMDCUDA_OPT_OPTIMIZATION_LEVEL}" \
+    #         "--cuda-path=$CUDA_PATH" \
+    #         "--cuda-gpu-arch=sm_35" \
+    #         "-L${CUDA_PATH}/lib64" \
+    #         -lcudart_static -ldl -lrt -pthread -save-temps -fPIC -v
+    # elif [[ "${AMDCUDA_INPUT##*.}" = "o" ]]; then
+    #     AMDCUDA_ADDITIONAL_OBJECTS+=("$AMDCUDA_INPUT")
+    #     echo "[*] Will link against compiled object ${AMDCUDA_INPUT}"
+    #     revert_cd_with_logs
+    #     continue
+    # else
+    #     echo "[!] Unacceptable input ${AMDCUDA_INPUT}"
+    #     exit 1
+    # fi
 
     # derive related names & other info
     AMDCUDA_INPUT_MAIN_FILENAME="${AMDCUDA_INPUT_PROGNAME}.cu"

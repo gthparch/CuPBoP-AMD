@@ -36,6 +36,8 @@
 #include "TransformTexture.hpp"
 #include "cupbop_amd.hpp"
 #include "utils.hpp"
+#include "KernelArgAddressSpacePass.hpp"
+
 
 using namespace llvm;
 using namespace cupbop::amd::passes;
@@ -74,7 +76,7 @@ int main(const int argc, const char *argv[]) {
     PM.add(createRegisteredPass("transform-cuda-vprintf"));
     PM.add(createRegisteredPass("transform-cuda-math-fn"));
     PM.add(createRegisteredPass("cudaamd-shared-memory-pass"));
-    //PM.add(createRegisteredPass("cuda-texture-transform"));
+    PM.add(createRegisteredPass("cuda-texture-transform"));
     PM.add(createRegisteredPass("kernel-arg-address-space"));
     PM.add(createRegisteredPass("address-space-cast"));
     

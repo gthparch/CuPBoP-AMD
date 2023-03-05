@@ -46,7 +46,7 @@ _Z7clusteriiPPfiifPiPS0_S_ii:           # @_Z7clusteriiPPfiifPiPS0_S_ii
 	movl	-8(%rbp), %esi
 	movl	-44(%rbp), %edx
 	movq	-16(%rbp), %rcx
-	callq	_Z14allocateMemoryiiiPPf@PLT
+	callq	allocateMemory@PLT
 	movl	$0, -76(%rbp)
 .LBB0_5:                                #   Parent Loop BB0_1 Depth=1
                                         # =>  This Inner Loop Header: Depth=2
@@ -116,7 +116,7 @@ _Z7clusteriiPPfiifPiPS0_S_ii:           # @_Z7clusteriiPPfiifPiPS0_S_ii
 	movl	%eax, -76(%rbp)
 	jmp	.LBB0_5
 .LBB0_14:                               #   in Loop: Header=BB0_1 Depth=1
-	callq	_Z16deallocateMemoryv@PLT
+	callq	deallocateMemory@PLT
 # %bb.15:                               #   in Loop: Header=BB0_1 Depth=1
 	movl	-44(%rbp), %eax
 	addl	$1, %eax
@@ -146,9 +146,9 @@ min_rmse_ref:
 	.section	".note.GNU-stack","",@progbits
 	.addrsig
 	.addrsig_sym malloc
-	.addrsig_sym _Z14allocateMemoryiiiPPf
+	.addrsig_sym allocateMemory
 	.addrsig_sym _Z17kmeans_clusteringPPfiiifPi
 	.addrsig_sym free
 	.addrsig_sym _Z7rms_errPPfiiS0_i
-	.addrsig_sym _Z16deallocateMemoryv
+	.addrsig_sym deallocateMemory
 	.addrsig_sym min_rmse_ref

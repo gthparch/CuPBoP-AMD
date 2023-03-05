@@ -19478,9 +19478,9 @@ int cluster(int, int, float**, int, int, float, int*, float***, float*, int, int
 float **kmeans_clustering(float**, int, int, int, float, int*);
 # 77 "cluster.c" 2
 
-extern void allocateMemory(int npoints, int nfeatures, int nclusters, float **features);
+extern "C" void allocateMemory(int npoints, int nfeatures, int nclusters, float **features);
 
-extern void deallocateMemory();
+extern "C" void deallocateMemory();
 
 extern double wtime(void);
 float min_rmse_ref = 3.40282347e+38F;

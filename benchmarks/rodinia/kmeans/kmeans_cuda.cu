@@ -21,8 +21,7 @@
 #define CPU_DELTA_REDUCE
 #define CPU_CENTER_REDUCE
 
-extern "C"
-int setup(int argc, char** argv);									/* function prototype */
+extern "C" int setup(int argc, char** argv);									/* function prototype */
 
 // GLOBAL!!!!!
 unsigned int num_threads_perdim = THREADS_PER_DIM;					/* sqrt(256) -- see references for this choice */

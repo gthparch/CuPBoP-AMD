@@ -25478,8 +25478,7 @@ kmeansPoint(float *features,
 
 
 
-extern "C"
-int setup(int argc, char** argv);
+extern "C" int setup(int argc, char** argv);
 
 
 unsigned int num_threads_perdim = 16;
@@ -25533,7 +25532,7 @@ void allocateMemory(int npoints, int nfeatures, int nclusters, float **features)
 
  cudaMalloc((void**) &membership_d, npoints*sizeof(int));
  cudaMalloc((void**) &clusters_d, nclusters*nfeatures*sizeof(float));
-# 96 "kmeans_cuda.cu"
+# 95 "kmeans_cuda.cu"
 }
 
 
@@ -25649,7 +25648,7 @@ kmeansCuda(float **feature,
 
 
  cudaMemcpy(membership_new, membership_d, npoints*sizeof(int), cudaMemcpyDeviceToHost);
-# 236 "kmeans_cuda.cu"
+# 235 "kmeans_cuda.cu"
  delta = 0;
  for (i = 0; i < npoints; i++)
  {
@@ -25669,7 +25668,7 @@ kmeansCuda(float **feature,
   }
 
  }
-# 305 "kmeans_cuda.cu"
+# 304 "kmeans_cuda.cu"
  return delta;
 
 }
