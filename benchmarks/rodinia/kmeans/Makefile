@@ -5,7 +5,7 @@ CUPBOPCC=$(AMDCUDA_DIR)/scripts/amdcuda
 CC=clang
 CXX=clang++
 LD=ld.lld
-CXXFLAGS=-g -O0 -I/nethome/xzhou381/prefix/usr/lib64/clang/14.0.6/include/ -openmp
+CXXFLAGS=-g -O0 -I/opt/rocm-5.2.0/llvm/include/ -openmp
 
 # Objects required for compilation
 OBJS=kmeans_cuda.o
