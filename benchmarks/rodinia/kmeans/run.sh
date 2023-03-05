@@ -58,8 +58,6 @@ llvm-dis kmeans_cuda-host-x86_64-unknown-linux-gnu.bc.translated_test.bc
 # llvm-as  .ll
 
 
-# llc --relocation-model=pic --filetype=obj  kernel.bc
-
 # COVERT HOST TO ASSEMBLY (S)
 
  "/nethome/jchen706/opt/llvm/bin/clang-16" -cc1 -triple x86_64-unknown-linux-gnu -aux-triple amdgcn-amd-amdhsa -S -save-temps=cwd -disable-free -clear-ast-before-backend -disable-llvm-verifier -discard-value-names -main-file-name empty.cpp -mrelocation-model pic -pic-level 2 -pic-is-pie -mframe-pointer=none -fmath-errno -fno-rounding-math -mconstructor-aliases -funwind-tables=2 -target-cpu x86-64 -tune-cpu generic -mllvm -treat-scalable-fixed-error-as-warning -debugger-tuning=gdb -v -fcoverage-compilation-dir=/nethome/jchen706/coding/code2/amdcuda/benchmarks/rodinia/kmeans -resource-dir /nethome/jchen706/opt/llvm/lib/clang/16.0.0 -O3 -fdebug-compilation-dir=/nethome/jchen706/coding/code2/amdcuda/benchmarks/rodinia/kmeans -ferror-limit 19 -fhip-new-launch-api -fgnuc-version=4.2.1 -fcolor-diagnostics -vectorize-loops -vectorize-slp -mllvm -amdgpu-early-inline-all=true -mllvm -amdgpu-function-calls=false -cuid=7426647a80c85315 -fcuda-allow-variadic-functions -faddrsig -D__GCC_HAVE_DWARF2_CFI_ASM=1 -o empty-host-x86_64-unknown-linux-gnu-test.s -x ir kmeans_cuda-host-x86_64-unknown-linux-gnu.bc.translated_test.bc
