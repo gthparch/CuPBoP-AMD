@@ -84,7 +84,8 @@
         "stack": "cpp",
         "__functional_base": "cpp",
         "unordered_set": "cpp",
-        "charconv": "cpp"
+        "charconv": "cpp",
+        "*.inc": "cpp"
     },
     "cmake.configureArgs": [
         "-DHIP_COMMON_DIR=${env:HOME}/prefix/opt/ROCm-OpenCL-Runtime",
@@ -95,5 +96,6 @@
         "-DROCM_PATH=${env:HOME}/prefix/opt",
         "-DCMAKE_PREFIX_PATH=${env:HOME}/prefix/opt",
         "-DCMAKE_BUILD_TYPE=Debug",
-    ]
+    ],
+    "C_Cpp.intelliSenseEngine": "disabled"
 }

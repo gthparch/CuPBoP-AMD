@@ -4,7 +4,8 @@
             "name": "Linux",
             "includePath": [
                 "${workspaceFolder}/**",
-                "${env:HOME}/prefix/opt/llvm/include"
+                "${env:HOME}/prefix/opt/llvm/include",
+                "${env:HOME}/prefix/opt/cuda/**"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/gcc",

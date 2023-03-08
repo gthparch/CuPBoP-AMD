@@ -79,6 +79,7 @@ int main(const int argc, const char *argv[]) {
     PM.add(createRegisteredPass("cuda-texture-transform"));
     PM.add(createRegisteredPass("kernel-arg-address-space"));
     PM.add(createRegisteredPass("address-space-cast"));
+    PM.add(createRegisteredPass("device-trap"));
     
     PM.run(*M);
 
