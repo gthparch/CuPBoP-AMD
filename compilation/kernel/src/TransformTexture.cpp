@@ -10,73 +10,27 @@
 #include <vector>
 #include <unordered_map>
 
-#include "llvm/IR/CallingConv.h"
 #include "llvm/IR/Constants.h"
 #include "llvm/IR/IRBuilder.h"
 #include "llvm/IR/Instructions.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/Intrinsics.h"
-#include "llvm/IR/IntrinsicsAMDGPU.h"
-#include "llvm/IR/IntrinsicsNVPTX.h"
 #include "llvm/IR/Module.h"
 #include "llvm/IR/Attributes.h"
-#include <llvm/IR/DerivedTypes.h>
-
+#include "llvm/IR/DerivedTypes.h"
 #include "llvm/IR/Function.h"
-#include "llvm/Pass.h"
-
 #include "llvm/Support/raw_ostream.h"
-
-#include "llvm/CodeGen/GlobalISel/IRTranslator.h"
-#include "llvm/CodeGen/GlobalISel/InstructionSelect.h"
-#include "llvm/CodeGen/GlobalISel/Legalizer.h"
-#include "llvm/CodeGen/GlobalISel/RegBankSelect.h"
-#include "llvm/CodeGen/Passes.h"
-#include "llvm/CodeGen/TargetPassConfig.h"
 #include "llvm/IR/Attributes.h"
 #include "llvm/IR/Function.h"
-#include "llvm/IR/LegacyPassManager.h"
-#include "llvm/Pass.h"
-#include "llvm/PassInfo.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Compiler.h"
-#include "llvm/Target/TargetLoweringObjectFile.h"
-#include "llvm/Transforms/IPO.h"
-#include "llvm/Transforms/IPO/AlwaysInliner.h"
-#include "llvm/Transforms/IPO/PassManagerBuilder.h"
-#include "llvm/Transforms/Scalar.h"
-#include "llvm/Transforms/Scalar/GVN.h"
-#include "llvm/Transforms/Vectorize.h"
-
 #include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/Analysis/LoopInfo.h"
-#include "llvm/Analysis/LoopPass.h"
-#include "llvm/Analysis/PostDominators.h"
-#include "llvm/Analysis/ValueTracking.h"
 #include "llvm/IR/DataLayout.h"
 #include "llvm/IR/DerivedTypes.h"
 #include "llvm/IR/Function.h"
 #include "llvm/IR/GlobalValue.h"
 #include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/InlineAsm.h"
 #include "llvm/IR/Instructions.h"
 #include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/LegacyPassManager.h"
 #include "llvm/IR/Module.h"
 #include "llvm/IR/Value.h"
-#include "llvm/IR/ValueSymbolTable.h"
-#include "llvm/InitializePasses.h"
-#include "llvm/PassInfo.h"
-#include "llvm/PassRegistry.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Transforms/IPO/PassManagerBuilder.h"
-#include "llvm/Transforms/Utils/AMDGPUEmitPrintf.h"
-#include "llvm/Transforms/Utils/BasicBlockUtils.h"
-#include "llvm/Transforms/Utils/Cloning.h"
-#include "llvm/Transforms/Utils/ValueMapper.h"
 
-#include "llvm/IR/Module.h"
 #include "TransformTexture.hpp"
 #include "utils.hpp"
 
@@ -106,7 +60,7 @@ void transformTexture(llvm::Module &M) {
 
 
   std::vector<llvm::GlobalVariable*> allTextureMemories = discover_texture_memory(M);
-  printf("Number of Texture Memories %d \n", allTextureMemories.size());
+  printf("Number of Texture Memories %zu \n", allTextureMemories.size());
   
   
   if (allTextureMemories.size() > 0) {
@@ -138,19 +92,18 @@ void transformTexture(llvm::Module &M) {
   // vector type <4 x i32> ?
   Type *vectorIntType = VectorType::get(int32Type, 4, false);
   auto unionIntVector = StructType::create(context, "vector.int.union"); 
-  unionIntVector->setBody({vectorIntType});
+  unionIntVector->setBody(vectorIntType);
 
   // vector type <4x float>
   Type *vectorFloat4Type = VectorType::get(floatType, 4, false);
   auto unionFloat4Vector = StructType::create(context, "union.anon"); 
-  unionFloat4Vector->setBody({vectorFloat4Type});
+  unionFloat4Vector->setBody(vectorFloat4Type);
 
   auto hipVectorFloat4Base = StructType::create(context, "struct.HIP_vector_base");
-  hipVectorFloat4Base->setBody({unionFloat4Vector});
+  hipVectorFloat4Base->setBody(unionFloat4Vector);
 
   auto hipVectorFloat4Type = StructType::create(context, "struct.HIP_vector_type");
-  hipVectorFloat4Type->setBody({hipVectorFloat4Base});
-
+  hipVectorFloat4Type->setBody(hipVectorFloat4Base);
 
   // Type *vectorFloat4Type = VectorType::get(floatType, 4, false);
   // auto unionFloat4Vector = StructType::create(context, "vector.float.union"); 
@@ -348,7 +301,7 @@ void transformTexture(llvm::Module &M) {
             LoadInst* newLoadTexture = Builder.CreateLoad(textureReference, textureToBeLoaded);
             loadTexture->replaceAllUsesWith(newLoadTexture);
            
-            outs() << *newLoadTexture <<  ' \n';
+            outs() << *newLoadTexture <<  " \n";
             need_remove.push_back(nvvm_function->getPrevNode());
        
             FunctionCallee LLVMnewFunFC = M.getOrInsertFunction("_ZL5tex2DIiL18hipTextureReadMode0EEN13__hip_tex_retIT_XT0_EbE4typeE7textureIS2_Li2EXT0_EEff", LLVM2dIntReadTextureType);
@@ -365,7 +318,7 @@ void transformTexture(llvm::Module &M) {
               LoadInst* newLoadTexture = Builder.CreateLoad(textureReference, textureToBeLoaded);
               loadTexture->replaceAllUsesWith(newLoadTexture);
 
-              outs() << *newLoadTexture <<  ' \n';
+              outs() << *newLoadTexture <<  " \n";
               need_remove.push_back(nvvm_function->getPrevNode());
 
               FunctionCallee LLVMnewFunFC = M.getOrInsertFunction("_ZL10tex1DfetchIfL18hipTextureReadMode0EEN13__hip_tex_retIT_XT0_EbE4typeE7textureIS2_Li1EXT0_EEi", LLVM1dFloatReadTextureType);
@@ -396,7 +349,7 @@ void transformTexture(llvm::Module &M) {
               LoadInst* newLoadTexture = Builder.CreateLoad(textureReference, textureToBeLoaded);
               loadTexture->replaceAllUsesWith(newLoadTexture);
 
-              outs() << *newLoadTexture <<  ' \n';
+              outs() << *newLoadTexture <<  " \n";
               need_remove.push_back(nvvm_function->getPrevNode());
 
               FunctionCallee LLVMnewFunFC = M.getOrInsertFunction("_ZL10tex1DfetchI15HIP_vector_typeIfLj4EEL18hipTextureReadMode0EEN13__hip_tex_retIT_XT0_EbE4typeE7textureIS4_Li1EXT0_EEi", LLVM1dFloat4ReadTextureType);

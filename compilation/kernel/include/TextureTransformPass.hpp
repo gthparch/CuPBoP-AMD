@@ -1,5 +1,4 @@
 #pragma once
-
 #include "llvm/Pass.h"
 
 namespace cupbop {

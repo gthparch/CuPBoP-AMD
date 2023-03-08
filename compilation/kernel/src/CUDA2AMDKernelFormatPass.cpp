@@ -3,13 +3,6 @@
 #include <unordered_map>
 
 #include "llvm/IR/CallingConv.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/Intrinsics.h"
-#include "llvm/IR/IntrinsicsAMDGPU.h"
-#include "llvm/IR/IntrinsicsNVPTX.h"
-#include "llvm/IR/Module.h"
 #include "llvm/Pass.h"
 
 #include "CUDA2AMDKernelFormatPass.hpp"
@@ -19,9 +12,8 @@ using namespace llvm;
 using namespace cupbop::amd::passes;
 
 namespace {
-static RegisterPass<CUDA2AMDKernelFormatPass> cuda2amd_module_format(
-    "cuda2amd-kernel-format",
-    "Transform kernel format");
+static RegisterPass<CUDA2AMDKernelFormatPass>
+    cuda2amd_module_format("cuda2amd-kernel-format", "Transform kernel format");
 }
 
 char CUDA2AMDKernelFormatPass::ID = 0;

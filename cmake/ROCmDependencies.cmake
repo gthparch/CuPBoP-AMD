@@ -1,0 +1,48 @@
+# Find and set proper HIP_PATH if not defined from the environment
+macro(locate_hip_dependencies)
+    if(NOT DEFINED ENV{HIP_PATH})
+        message(STATUS "HIP_PATH not defined from the environment. Searching for common installation locations in the home folder.")
+        if(EXISTS "$ENV{HOME}/prefix/opt/hip")
+            set(HIP_PATH "$ENV{HOME}/prefix/opt/hip" CACHE PATH "Path to which HIP has been installed")
+        elseif(EXISTS "$ENV{HOME}/opt/hip")
+            set(HIP_PATH "$ENV{HOME}/opt/hip" CACHE PATH "Path to which HIP has been installed")
+        else()
+            message(ERROR "HIP installation not found")
+        endif()
+    else()
+        set(HIP_PATH $ENV{HIP_PATH} CACHE PATH "Path to which HIP has been installed")
+    endif()
+
+    # Add $HIP_PATH/cmake to CMAKE_MODULE_PATH
+    list(APPEND CMAKE_MODULE_PATH "${HIP_PATH}/cmake")
+    find_package(HIP REQUIRED)
+    set(HIP_INCLUDE_DIRS "${HIP_PATH}/include")
+endmacro()
+
+# Find ROCM & dependencies
+macro(locate_rocm_dependencies)
+    if(NOT DEFINED ENV{ROCM_PATH})
+        message(STATUS "ROCM_PATH not defined from the environment. Searching for common installation locations in the home folder.")
+        if(EXISTS "$ENV{HOME}/prefix/opt")
+            set(ROCM_PATH "$ENV{HOME}/prefix/opt" CACHE PATH "Path to which ROCm has been installed")
+        elseif(EXISTS "$ENV{HOME}/opt")
+            set(ROCM_PATH "$ENV{HOME}/opt" CACHE PATH "Path to which ROCm has been installed")
+        else()
+            message(ERROR "ROCm installation not found")
+        endif()
+    else()
+        set(ROCM_PATH $ENV{ROCM_PATH} CACHE PATH "Path to which ROCm has been installed")
+    endif()
+
+    list(APPEND CMAKE_MODULE_PATH "${ROCM_PATH}")
+    set(ROCM_INCLUDE_DIRS "${ROCM_PATH}/include")
+    set(ROCM_LIB_DIRS "${ROCM_PATH}/lib")
+endmacro()
+
+# Configure target to link against HIP and ROCm libraries
+macro(configure_target_linking_rocm configuring_target)
+    target_include_directories(${configuring_target} PRIVATE ${ROCM_INCLUDE_DIRS})
+    target_link_directories(${configuring_target} PRIVATE ${ROCM_LIB_DIRS})
+    target_link_directories(${configuring_target} PRIVATE ${HIP_PATH}/lib)
+    target_compile_definitions(${configuring_target} PRIVATE __HIP_PLATFORM_AMD__)
+endmacro()

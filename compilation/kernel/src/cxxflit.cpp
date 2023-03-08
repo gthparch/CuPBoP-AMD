@@ -10,19 +10,7 @@
 #include <iostream>
 
 #include "llvm/ADT/StringExtras.h"
-#include "llvm/ADT/Triple.h"
-#include "llvm/ADT/Twine.h"
 #include "llvm/Demangle/Demangle.h"
-#include "llvm/Option/Arg.h"
-#include "llvm/Option/ArgList.h"
-#include "llvm/Option/Option.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Host.h"
-#include "llvm/Support/InitLLVM.h"
-#include "llvm/Support/WithColor.h"
-#include "llvm/Support/raw_ostream.h"
-
-#include "utils.hpp"
 
 using namespace llvm;
 

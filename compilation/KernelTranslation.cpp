@@ -3,44 +3,27 @@
 #include <string>
 
 #include "llvm/Analysis/CGSCCPassManager.h"
-#include "llvm/Analysis/LoopAnalysisManager.h"
 #include "llvm/Bitcode/BitcodeWriter.h"
 #include "llvm/IR/LLVMContext.h"
 #include "llvm/IR/LegacyPassManager.h"
 #include "llvm/IR/Module.h"
 #include "llvm/IR/PassManager.h"
 #include "llvm/IRReader/IRReader.h"
-#include "llvm/InitializePasses.h"
 #include "llvm/PassInfo.h"
-#include "llvm/Passes/OptimizationLevel.h"
-#include "llvm/Passes/PassBuilder.h"
 #include "llvm/PassRegistry.h"
+#include "llvm/Passes/OptimizationLevel.h"
 #include "llvm/Support/CommandLine.h"
 #include "llvm/Support/FileSystem.h"
 #include "llvm/Support/SourceMgr.h"
 #include "llvm/Support/ToolOutputFile.h"
-#include "llvm/Transforms/IPO/PassManagerBuilder.h"
-#include "llvm/Transforms/Scalar.h"
-#include "llvm/Transforms/Scalar/GVN.h"
 #include "llvm/Transforms/Utils/BasicBlockUtils.h"
-#include "llvm/Transforms/Utils/Cloning.h"
-#include "llvm/Transforms/Utils/ValueMapper.h"
 
-#include "AddressSpaceCastPass.hpp"
-#include "CUDA2AMDKernelFormatPass.hpp"
-#include "CUDA2AMDModuleFormatPass.hpp"
-#include "GridBlockPass.hpp"
-#include "TransformVPrintfPass.hpp"
-#include "SharedMemory.hpp"
 #include "ChangeAtomics.hpp"
 #include "TransformTexture.hpp"
 #include "cupbop_amd.hpp"
 #include "utils.hpp"
-#include "KernelArgAddressSpacePass.hpp"
-
 
 using namespace llvm;
-using namespace cupbop::amd::passes;
 
 LLVMContext &getCupbopLLVMContext() {
     static LLVMContext context;
@@ -66,7 +49,7 @@ int main(const int argc, const char *argv[]) {
         diagOut.print(argv[0], errs());
         return 1;
     }
-    
+
     legacy::PassManager PM, MetadataPM;
 
     // First run the metadata passes
@@ -80,7 +63,7 @@ int main(const int argc, const char *argv[]) {
     PM.add(createRegisteredPass("kernel-arg-address-space"));
     PM.add(createRegisteredPass("address-space-cast"));
     PM.add(createRegisteredPass("device-trap"));
-    
+
     PM.run(*M);
 
     // Change Atomics
@@ -88,7 +71,7 @@ int main(const int argc, const char *argv[]) {
 
     // Transform Texture Memory
     transformTexture(*M);
-    
+
     VerifyModule(*M);
 
     // Write to Output

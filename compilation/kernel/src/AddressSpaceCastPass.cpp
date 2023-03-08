@@ -8,52 +8,16 @@
 #include <queue>
 #include <set>
 
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/Analysis/LoopInfo.h"
-#include "llvm/Analysis/LoopPass.h"
-#include "llvm/Analysis/PostDominators.h"
-#include "llvm/CodeGen/GlobalISel/IRTranslator.h"
-#include "llvm/CodeGen/GlobalISel/InstructionSelect.h"
-#include "llvm/CodeGen/GlobalISel/Legalizer.h"
-#include "llvm/CodeGen/GlobalISel/RegBankSelect.h"
-#include "llvm/CodeGen/Passes.h"
-#include "llvm/CodeGen/TargetPassConfig.h"
-#include "llvm/IR/Attributes.h"
-#include "llvm/IR/CallingConv.h"
 #include "llvm/IR/DataLayout.h"
 #include "llvm/IR/Function.h"
 #include "llvm/IR/GlobalValue.h"
 #include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/InlineAsm.h"
 #include "llvm/IR/InstIterator.h"
 #include "llvm/IR/Instructions.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/Intrinsics.h"
-#include "llvm/IR/IntrinsicsAMDGPU.h"
-#include "llvm/IR/IntrinsicsNVPTX.h"
 #include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/LegacyPassManager.h"
 #include "llvm/IR/Module.h"
 #include "llvm/IR/Value.h"
-#include "llvm/IR/ValueSymbolTable.h"
-#include "llvm/InitializePasses.h"
 #include "llvm/Pass.h"
-#include "llvm/PassInfo.h"
-#include "llvm/PassRegistry.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Compiler.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Target/TargetLoweringObjectFile.h"
-#include "llvm/Transforms/IPO.h"
-#include "llvm/Transforms/IPO/AlwaysInliner.h"
-#include "llvm/Transforms/IPO/PassManagerBuilder.h"
-#include "llvm/Transforms/Scalar.h"
-#include "llvm/Transforms/Scalar/GVN.h"
-#include "llvm/Transforms/Utils/BasicBlockUtils.h"
-#include "llvm/Transforms/Utils/Cloning.h"
-#include "llvm/Transforms/Utils/ValueMapper.h"
-#include "llvm/Transforms/Vectorize.h"
 
 #include "AddressSpaceCastPass.hpp"
 
@@ -99,7 +63,8 @@ static void processPointerStore(IRBuilder<> &builder,
     auto *valueOp = storeInst->getValueOperand();
     auto *valueOpTy = valueOp->getType();
 
-    // TODO: Figure out if its necessary to cast storing from other address spaces to flat
+    // TODO: Figure out if its necessary to cast storing from other address
+    // spaces to flat
     if (auto valueOpPtrTy = dyn_cast<PointerType>(valueOpTy);
         valueOpPtrTy && valueOpPtrTy->getAddressSpace() ==
                             dataLayout.getDefaultGlobalsAddressSpace()) {

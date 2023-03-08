@@ -1,53 +1,29 @@
 cmake_minimum_required(VERSION 3.1 FATAL_ERROR)
 
-project(CudaOnAMD)
+project(CuPBoP-AMD)
 set(CMAKE_PROJECT_DESCRIPTION "Executing CUDA on AMD architecture.")
-set(CMAKE_CXX_STANDARD "14")
+set(CMAKE_CXX_STANDARD 20)
 set(MAJOR_VERSION 0)
 set(MINOR_VERSION 1)
 set(VERSION_STRING ${MAJOR_VERSION}.${MINOR_VERSION})
-set(CMAKE_VERBOSE_MAKEFILE on)
-if(DEFINED LLVM_CONFIG_PATH)
-  if(IS_ABSOLUTE "${LLVM_CONFIG_PATH}")
-    if(EXISTS "${LLVM_CONFIG_PATH}")
-      set(LLVM_CONFIG "${LLVM_CONFIG_PATH}")
-    else()
-      message(FATAL_ERROR "llvm-config is not found in ${LLVM_CONFIG_PATH}")
-    endif()
-    message(STATUS "Using llvm-config: ${LLVM_CONFIG}")
-    execute_process(
-      COMMAND "${LLVM_CONFIG}" "--cxxflags"
-      OUTPUT_VARIABLE LLVM_CXX_FLAG
-      OUTPUT_STRIP_TRAILING_WHITESPACE)
-    execute_process(
-      COMMAND "${LLVM_CONFIG}" "--libdir"
-      OUTPUT_VARIABLE LLVM_LIB_PATH
-      OUTPUT_STRIP_TRAILING_WHITESPACE)
-    execute_process(
-      COMMAND "${LLVM_CONFIG}" "--libs"
-      OUTPUT_VARIABLE LLVM_LINK_FLAG
-      OUTPUT_STRIP_TRAILING_WHITESPACE)
-  endif()
-else()
-  message(FATAL_ERROR "llvm-config is required")
-endif()
 
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+
+# Find LLVM
 find_package(LLVM REQUIRED CONFIG)
-include_directories(${LLVM_INCLUDE_DIRS})
-add_definitions(${LLVM_DEFINITIONS})
-link_directories(${LLVM_LIBRARY_DIRS})
 include_directories(${LLVM_INCLUDE_DIRS})
 separate_arguments(LLVM_DEFINITIONS_LIST NATIVE_COMMAND ${LLVM_DEFINITIONS})
 add_definitions(${LLVM_DEFINITIONS_LIST})
-add_compile_options(-fno-rtti)
 
-set(CMAKE_CXX_FLAGS "${LLVM_CXX_FLAG} ${CMAKE_CXX_FLAGS}")
+# Find HIP and ROCm
+include(ROCmDependencies)
+locate_rocm_dependencies()
 
-# using-ltinfo Errors
-set(GCC_COVERAGE_LINK_FLAGS
-    "-L${LLVM_LIB_PATH} ${LLVM_LINK_FLAG} -fno-rtti -lz -lrt -ldl -lpthread -lm")
+# Options for compiling the translators
+set(CUPBOP_LINKED_LLVM_LIBS ${LLVM_AVAILABLE_LIBS})
+set(CUPBOP_LDFLAGS "")
+set(CUPBOP_CXXFLAGS "-fno-rtti")
 
 include_directories(include)
 add_subdirectory(compilation)
 add_subdirectory(runtime)
-

@@ -1,9 +1,6 @@
 #pragma once
-
-#include "llvm/IR/Instructions.h"
 #include "llvm/IR/Module.h"
 #include "llvm/IR/GlobalVariable.h"
-
 
 std::vector<llvm::Function*> discover_cuda_kernels(llvm::Module&);
 std::vector<llvm::GlobalVariable*> discover_texture_memory(llvm::Module&);

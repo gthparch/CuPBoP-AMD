@@ -1,18 +1,9 @@
-#include "llvm/Bitcode/BitcodeWriter.h"
-#include "llvm/IR/Constants.h"
+#include <iostream>
+
 #include "llvm/IR/Function.h"
 #include "llvm/IR/GlobalValue.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/InlineAsm.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/LLVMContext.h"
 #include "llvm/IR/Module.h"
 #include "llvm/IR/Verifier.h"
-#include "llvm/IRReader/IRReader.h"
-#include "llvm/Support/ToolOutputFile.h"
-#include "llvm/Transforms/Utils/Cloning.h"
-#include "llvm/Transforms/Utils/ValueMapper.h"
-#include <iostream>
 
 #include "utils.hpp"
 
@@ -67,14 +58,13 @@ std::vector<Function *> discover_cuda_kernels(Module &M) {
     return kernels;
 }
 
-
 std::vector<GlobalVariable *> discover_texture_memory(Module &M) {
     std::vector<GlobalVariable *> texture;
     auto *nvvmAnnotation = M.getNamedMetadata("nvvm.annotations");
     if (!nvvmAnnotation) {
         return texture;
     }
-    
+
     auto numTextures = nvvmAnnotation->getNumOperands();
 
     if (nvvmAnnotation == nullptr) {

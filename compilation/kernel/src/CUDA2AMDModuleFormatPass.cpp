@@ -2,18 +2,10 @@
 #include <string>
 #include <unordered_map>
 
-#include "llvm/IR/CallingConv.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/Intrinsics.h"
-#include "llvm/IR/IntrinsicsAMDGPU.h"
-#include "llvm/IR/IntrinsicsNVPTX.h"
 #include "llvm/IR/Module.h"
 #include "llvm/Pass.h"
 
 #include "CUDA2AMDModuleFormatPass.hpp"
-#include "utils.hpp"
 
 using namespace llvm;
 using namespace cupbop::amd::passes;

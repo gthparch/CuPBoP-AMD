@@ -1,28 +1,12 @@
-
-#include "clang/AST/Decl.h"
 #include "llvm/ADT/StringRef.h"
-
-#include "clang/Basic/Cuda.h"
-#include "clang/CodeGen/CodeGenABITypes.h"
-#include "clang/CodeGen/ConstantInitBuilder.h"
-
-#include "llvm/ADT/StringRef.h"
-#include <llvm/Bitcode/BitcodeWriter.h>
-
-#include "llvm/IR/BasicBlock.h"
 #include "llvm/IR/Constant.h"
 #include "llvm/IR/Constants.h"
 #include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/IRBuilder.h"
+#include "llvm/IR/LLVMContext.h"
 #include "llvm/IR/Module.h"
-#include <llvm/IR/LLVMContext.h>
-#include <llvm/IR/ModuleSlotTracker.h>
-#include <llvm/IRReader/IRReader.h>
-
+#include "llvm/Support/ErrorOr.h"
+#include "llvm/Support/MemoryBuffer.h"
 #include "llvm/Support/raw_ostream.h"
-#include <llvm/Support/FileSystem.h>
-#include <llvm/Support/SourceMgr.h>
-#include <llvm/Support/ToolOutputFile.h>
 
 #include <fstream>
 #include <iostream>

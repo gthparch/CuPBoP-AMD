@@ -3,66 +3,20 @@
 #include <queue>
 #include <set>
 
-#include "llvm/IR/CallingConv.h"
+#include "llvm/IR/DerivedTypes.h"
+#include "llvm/IR/Function.h"
+#include "llvm/IR/GlobalValue.h"
 #include "llvm/IR/IRBuilder.h"
 #include "llvm/IR/Instructions.h"
 #include "llvm/IR/IntrinsicInst.h"
 #include "llvm/IR/Intrinsics.h"
 #include "llvm/IR/IntrinsicsAMDGPU.h"
 #include "llvm/IR/IntrinsicsNVPTX.h"
-#include "llvm/IR/Module.h"
-
-#include "llvm/IR/Function.h"
-#include "llvm/Pass.h"
-#include "llvm/Support/raw_ostream.h"
-
-#include "llvm/CodeGen/GlobalISel/IRTranslator.h"
-#include "llvm/CodeGen/GlobalISel/InstructionSelect.h"
-#include "llvm/CodeGen/GlobalISel/Legalizer.h"
-#include "llvm/CodeGen/GlobalISel/RegBankSelect.h"
-#include "llvm/CodeGen/Passes.h"
-#include "llvm/CodeGen/TargetPassConfig.h"
-#include "llvm/IR/Attributes.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/LegacyPassManager.h"
-#include "llvm/Pass.h"
-#include "llvm/PassInfo.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Compiler.h"
-#include "llvm/Target/TargetLoweringObjectFile.h"
-#include "llvm/Transforms/IPO.h"
-#include "llvm/Transforms/IPO/AlwaysInliner.h"
-#include "llvm/Transforms/IPO/PassManagerBuilder.h"
-#include "llvm/Transforms/Scalar.h"
-#include "llvm/Transforms/Scalar/GVN.h"
-#include "llvm/Transforms/Vectorize.h"
-
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/Analysis/LoopInfo.h"
-#include "llvm/Analysis/LoopPass.h"
-#include "llvm/Analysis/PostDominators.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/GlobalValue.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/InlineAsm.h"
-#include "llvm/IR/Instructions.h"
 #include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/LegacyPassManager.h"
 #include "llvm/IR/Module.h"
 #include "llvm/IR/Value.h"
-#include "llvm/IR/ValueSymbolTable.h"
-#include "llvm/InitializePasses.h"
-#include "llvm/PassInfo.h"
-#include "llvm/PassRegistry.h"
-#include "llvm/Support/CommandLine.h"
+#include "llvm/Pass.h"
 #include "llvm/Support/AtomicOrdering.h"
-#include "llvm/Transforms/IPO/PassManagerBuilder.h"
-#include "llvm/Transforms/Utils/BasicBlockUtils.h"
-#include "llvm/Transforms/Utils/Cloning.h"
-#include "llvm/Transforms/Utils/ValueMapper.h"
 
 #include "GridBlockPass.hpp"
 #include "cupbop_amd.hpp"
@@ -97,9 +51,10 @@ void replace_call(op_context &ctx, IntrinsicInst &call,
 }
 
 void replace_barrier(op_context &ctx, IntrinsicInst &call) {
-    auto& llvmContext = ctx.M.getContext();
-    auto gcnBarrierIntrinsic = Intrinsic::getDeclaration(&ctx.M, Intrinsic::amdgcn_s_barrier);
-    IRBuilder<> builder (llvmContext);
+    auto &llvmContext = ctx.M.getContext();
+    auto gcnBarrierIntrinsic =
+        Intrinsic::getDeclaration(&ctx.M, Intrinsic::amdgcn_s_barrier);
+    IRBuilder<> builder(llvmContext);
     auto workgroupSsid = llvmContext.getOrInsertSyncScopeID("workgroup");
     builder.SetInsertPoint(&call);
     builder.CreateFence(AtomicOrdering::Release, workgroupSsid);
@@ -149,8 +104,7 @@ bool GridBlockPass::runOnFunction(Function &F) {
          custom_call("cudaamd.nvvm.read.ptx.sreg.nctaid.y")},
         {Intrinsic::nvvm_read_ptx_sreg_nctaid_z,
          custom_call("cudaamd.nvvm.read.ptx.sreg.nctaid.z")},
-        {Intrinsic::nvvm_barrier0, replace_barrier}
-    };
+        {Intrinsic::nvvm_barrier0, replace_barrier}};
     auto &M = *F.getParent();
 
     printf("Called replace_intrinsics on %s\n", F.getName().bytes_begin());
@@ -161,7 +115,6 @@ bool GridBlockPass::runOnFunction(Function &F) {
         for (auto &I : BB) {
             if (auto *call = dyn_cast<IntrinsicInst>(&I)) {
                 if (call->getCalledFunction()->getName() == "__nvvm_reflect") {
-                    
                 }
 
                 if (auto oldIntrinsicId = call->getIntrinsicID()) {

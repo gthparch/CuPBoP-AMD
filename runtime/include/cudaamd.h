@@ -1,8 +1,10 @@
-#include "hip/driver_types.h"
-#include "hip/hip_runtime_api.h"
 #include <stddef.h>
 #include <stdint.h>
 #include <string.h>
+#include <stdint.h>
+
+#include "hip/hip_runtime_api.h"
+#include "hip/driver_types.h"
 
 extern "C" {
 // typedef __int32 int32_t;
