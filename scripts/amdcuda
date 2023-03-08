@@ -21,6 +21,7 @@ fi
 
 AMDCUDA_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )/.." &> /dev/null && pwd )
 AMDCUDA_RT_DIR="$AMDCUDA_DIR/build/runtime"
+AMDCUDA_DEVICE_BITCODE_DIR="$AMDCUDA_DIR/build/device-libs"
 AMDCUDA_HOST_TTOR="$AMDCUDA_DIR/build/compilation/hostTranslator"
 AMDCUDA_KERN_TTOR="$AMDCUDA_DIR/build/compilation/kernelTranslator"
 AMDCUDA_SCRIPT_LOGFILE="$(pwd)/amdcuda.log"
@@ -45,17 +46,30 @@ AMDCUDA_CLANGRT_DIR="$(realpath "$AMDCUDA_CLANG_RES_DIR/lib/"*)"
 # Additional bitcode path
 AMDCUDA_BITCODE_PATH="$AMDCUDA_DIR/bitcode"
 
+# Paths to search for bitcode libraries, and will be modified later to include DEVICE_LIB_PATH
+AMDCUDA_BITCODE_SEARCH_PATHS=(
+    "$AMDCUDA_DIR/bitcode" "$AMDCUDA_DEVICE_BITCODE_DIR"
+)
+
 # TODO: dynamically generate this list
-AMDCUDA_BUILTIN_BYTECODE=(
+AMDCUDA_BUILTIN_HIP_DEVICE_BITCODE=(
     hip.bc ocml.bc ockl.bc oclc_daz_opt_off.bc oclc_unsafe_math_off.bc
     oclc_finite_only_off.bc oclc_correctly_rounded_sqrt_on.bc oclc_wavefrontsize64_on.bc
     oclc_isa_version_90a.bc oclc_abi_version_400.bc
 )
-AMDCUDA_LINKED_BYTECODE=(
+AMDCUDA_LINKED_HIP_DEVICE_BITCODE=(
     ockl.bc ocml.bc oclc_abi_version_400.bc oclc_finite_only_off.bc
     oclc_unsafe_math_on.bc oclc_daz_opt_on.bc oclc_correctly_rounded_sqrt_on.bc
     oclc_isa_version_90a.bc oclc_wavefrontsize64_on.bc opencl.bc
 )
+
+# Additional bitcode libraries from CuPBoP-AMD that will be linked with the translatetd IR.
+AMDCUDA_LINKED_ADDITIONAL_BITCODE=(
+    "cudaamd-gridblock-size.ll" "cudaamd-math.ll" "cuda2gcn.ll"
+    "atomic.ll" "textureInt2DReadMode.ll" "textureFloat1DReadMode.ll"
+    "textureFloat4_1DReadMode.ll"
+)
+
 AMDCUDA_KERN_ASSEMBLER_FLAGS=(
     -save-temps=cwd -disable-free
     -clear-ast-before-backend -disable-llvm-verifier
@@ -70,15 +84,6 @@ AMDCUDA_KERN_ASSEMBLER_FLAGS=(
     -fcuda-allow-variadic-functions
     -fvisibility=hidden
     -fapply-global-visibility-to-externs
-)
-AMDCUDA_BITCODE=(
-    "${AMDCUDA_BITCODE_PATH}/cudaamd-gridblock-size.ll"
-    "${AMDCUDA_BITCODE_PATH}/cudaamd-math.ll"
-    "${AMDCUDA_BITCODE_PATH}/cuda2gcn.ll"
-    "${AMDCUDA_BITCODE_PATH}/atomic.ll"
-    "${AMDCUDA_BITCODE_PATH}/textureInt2DReadMode.ll"
-    "${AMDCUDA_BITCODE_PATH}/textureFloat1DReadMode.ll"
-    "${AMDCUDA_BITCODE_PATH}/textureFloat4_1DReadMode.ll"
 )
 
 # Compiler flags
@@ -121,77 +126,9 @@ Usage: $0 [OPTIONS] inputs...
     -o <file>   Write output to <file>. The default is the input program name with the ".translated" suffix.
     -O <level>  Optimization level. The default is -O0.
     -t          Do not cleanup temporary files produced by the compilers and translators after completion.
-    -v          Print compiler and translator outputs to stdout/stderr (instead of a temporary log file that gets removed).
+    -v          Print compiler and translator outputs to stdout/stderr (instead of just stderrs and a temporary log file that gets removed).
 EOF
 }
-
-while getopts "o:O:cthiI:gl:L:" in_opt; do
-    case $in_opt in
-    c)      AMDCUDA_OPT_LINK=0;;
-    o)      AMDCUDA_OPT_OUTPUT="$OPTARG";;
-    O)      AMDCUDA_OPT_OPTIMIZATION_LEVEL="$OPTARG";;
-    t)      AMDCUDA_OPT_SAVE_TEMPS=1;;
-    i)      AMDCUDA_OPT_INSPECT_IR=1;;
-    I)      AMDCUDA_CFLAGS+=("-I$OPTARG");;
-    v)      AMDCUDA_OPT_VERBOSE=1;;
-    g)      AMDCUDA_CFLAGS+=("-g");;
-    l)      AMDCUDA_LDFLAGS+=("-l$OPTARG");;
-    L)      AMDCUDA_LDFLAGS+=("-L$OPTARG");;
-    ? | h)  print_usage
-            exit 2;;
-    esac
-done
-
-shift $(expr $OPTIND - 1 )
-
-if test $# -eq 0 ; then
-    echo "[!] No input files"
-    print_usage
-    exit 1
-fi
-
-# Set default output name if not provided
-if [[ -z "$AMDCUDA_OPT_OUTPUT" ]]; then
-    if test $# -eq 1; then
-        # Default output name to "progname.translated"
-        AMDCUDA_OPT_OUTPUT="$1"
-        AMDCUDA_OPT_OUTPUT="${AMDCUDA_OPT_OUTPUT%.*}.translated"
-    else
-        AMDCUDA_OPT_OUTPUT="a.translated"
-    fi
-fi
-
-# verify valid device lib path
-if [[ ! -z "$DEVICE_LIB_PATH" ]]; then
-    echo "[*] Will look for device-side bytecodes to link to in $DEVICE_LIB_PATH"
-elif [[ ! -z "$HIP_DEVICE_LIB_PATH" ]]; then
-    export DEVICE_LIB_PATH="$HIP_DEVICE_LIB_PATH"
-    echo "[*] Using HIP_DEVICE_LIB_PATH = $HIP_DEVICE_LIB_PATH"
-elif [[ -d "/opt/rocm/amdgcn/bitcode" ]]; then
-    export DEVICE_LIB_PATH="/opt/rocm/amdgcn/bitcode"
-    echo "[*] DEVICE_LIB_PATH not set, using device libs provided by the system."
-else
-    echo "[!] DEVICE_LIB_PATH is undefined and amdcuda couldn't find a system-provided version."
-    exit 1
-fi
-
-# verify valid clang-rt built-ins
-if [[ ! -f "$AMDCUDA_CLANGRT_DIR/libclang_rt.builtins.a" ]]; then
-    echo "[!] Unable to find libclang_rt.builtins.a in clang's resource directory. Is this version of clang not built with the runtime builtins?"
-    exit 1
-fi
-
-# verify HIP_PATH is set and valid
-if [[ -z "$HIP_PATH" ]] || [[ ! -d "$HIP_PATH" ]]; then
-    echo "[!] HIP_PATH must be set and points to a directory where HIP is."
-    exit 1
-fi
-
-# verify ROCM_PATH is set and valid
-if [[ -z "$ROCM_PATH" ]] || [[ ! -d "$ROCM_PATH" ]]; then
-    echo "[!] ROCM_PATH must be set and points to a directory where the rocm installation is."
-    exit 1
-fi
 
 # ====== helper fns ======
 
@@ -212,25 +149,74 @@ EOF
 set -o errtrace
 trap "on_nonzero" ERR
 
-exec_with_logs() {
+log_section_start() {
+    cat >>"$AMDCUDA_SCRIPT_LOGFILE" <<EOF
+===================================================
+$@
+EOF
     if [[ "$AMDCUDA_OPT_VERBOSE" = "1" ]]; then
-        "$@"
-    else
-        cat >>"$AMDCUDA_SCRIPT_LOGFILE" <<EOF
+        echo "[*] $@"
+    fi
+}
+
+log_section_output() {
+    echo "$@" >>"$AMDCUDA_SCRIPT_LOGFILE"
+}
+
+log_section_end() {
+    cat >>"$AMDCUDA_SCRIPT_LOGFILE" <<EOF
+===================================================
+
+EOF
+}
+
+log_fatal() {
+    echo "[!] $@"
+    cat >>"$AMDCUDA_SCRIPT_LOGFILE" <<EOF
+===================================================
+Fatal error: $@
+Exiting...
+===================================================
+EOF
+    exit 1
+}
+
+log_info() {
+    if [[ "$AMDCUDA_OPT_VERBOSE" = "1" ]]; then
+        echo "[*] $@"
+    fi
+}
+
+log_warn() {
+    echo "[!] $@"
+}
+
+exec_with_logs() {
+    cat >>"$AMDCUDA_SCRIPT_LOGFILE" <<EOF
 ===================================================
 Running command: $@
 Working directory: $(pwd)
 
 EOF
-        "$@" >>"$AMDCUDA_SCRIPT_LOGFILE" 2>&1 0>&1
-        local exit_code=$?
+
+    local exit_code=0
+    # Actually running the command
+    if [[ "$AMDCUDA_OPT_VERBOSE" = "1" ]]; then
+        # In verbose mode, dump everything to both the terminal and the log file
+        "$@" | tee -a "$AMDCUDA_SCRIPT_LOGFILE"
+        exit_code=$?
+    else
+        # In non-verbose mode, we still dump the stderr, but silently logs everything else to the log file
+        "$@" 2>&1 >>"$AMDCUDA_SCRIPT_LOGFILE" | tee -a "$AMDCUDA_SCRIPT_LOGFILE"
+        exit_code=$?
+    fi
+
         cat >>"$AMDCUDA_SCRIPT_LOGFILE" <<EOF
 
 Program exited with code: $exit_code
 ===================================================
 
 EOF
-    fi
 }
 
 cd_with_logs() {
@@ -282,6 +268,22 @@ find_translated_ir() {
     fi
 }
 
+# Search for the bitcode library with the given name, saves the full path to the FOUND_IR variable
+find_bitcode_lib() {
+    FOUND_IR=""
+    local libname="$1"
+
+    for search_path in "${AMDCUDA_BITCODE_SEARCH_PATHS[@]}"; do
+        if [[ -f "$search_path/$libname" ]]; then
+            FOUND_IR="$search_path/$libname"
+            return
+        fi
+    done
+
+    echo "[!] Unable to find a required bitcode named: $libname"
+    exit 1
+}
+
 postprocess_ir() {
     local ir_name=$1
     if [[ "${ir_name:0-3}" = ".bc" ]] && [[ "$AMDCUDA_OPT_INSPECT_IR" = "1" ]]; then
@@ -319,6 +321,78 @@ cleanup_all_temps() {
         -type f -exec rm {} \;
 }
 
+# ====== initialization ======
+
+while getopts "o:O:cthiI:gl:L:v" in_opt; do
+    case $in_opt in
+    c)      AMDCUDA_OPT_LINK=0;;
+    o)      AMDCUDA_OPT_OUTPUT="$OPTARG";;
+    O)      AMDCUDA_OPT_OPTIMIZATION_LEVEL="$OPTARG";;
+    t)      AMDCUDA_OPT_SAVE_TEMPS=1;;
+    i)      AMDCUDA_OPT_INSPECT_IR=1;;
+    I)      AMDCUDA_CFLAGS+=("-I$OPTARG");;
+    v)      AMDCUDA_OPT_VERBOSE=1
+            AMDCUDA_CFLAGS+=("-v")
+            AMDCUDA_LDFLAGS+=("-v")
+            ;;
+    g)      AMDCUDA_CFLAGS+=("-g");;
+    l)      AMDCUDA_LDFLAGS+=("-l$OPTARG");;
+    L)      AMDCUDA_LDFLAGS+=("-L$OPTARG");;
+    ? | h)  print_usage
+            exit 2;;
+    esac
+done
+
+shift $(expr $OPTIND - 1 )
+
+if test $# -eq 0 ; then
+    echo "[!] No input files"
+    print_usage
+    exit 1
+fi
+
+# Set default output name if not provided
+if [[ -z "$AMDCUDA_OPT_OUTPUT" ]]; then
+    if test $# -eq 1; then
+        # Default output name to "progname.translated"
+        AMDCUDA_OPT_OUTPUT="$1"
+        AMDCUDA_OPT_OUTPUT="${AMDCUDA_OPT_OUTPUT%.*}.translated"
+    else
+        AMDCUDA_OPT_OUTPUT="a.translated"
+    fi
+fi
+
+# verify valid device lib path
+if [[ ! -z "$DEVICE_LIB_PATH" ]]; then
+    log_info "Will look for device-side bytecodes to link to in $DEVICE_LIB_PATH"
+elif [[ ! -z "$HIP_DEVICE_LIB_PATH" ]]; then
+    export DEVICE_LIB_PATH="$HIP_DEVICE_LIB_PATH"
+    log_info "Using HIP_DEVICE_LIB_PATH = $HIP_DEVICE_LIB_PATH"
+elif [[ -d "/opt/rocm/amdgcn/bitcode" ]]; then
+    export DEVICE_LIB_PATH="/opt/rocm/amdgcn/bitcode"
+    log_info "DEVICE_LIB_PATH not set, using device libs provided by the system."
+else
+    log_fatal "DEVICE_LIB_PATH is undefined and amdcuda couldn't find a system-provided version."
+fi
+
+# add system device lib path to search paths
+AMDCUDA_BITCODE_SEARCH_PATHS+=("$DEVICE_LIB_PATH")
+
+# verify valid clang-rt built-ins
+if [[ ! -f "$AMDCUDA_CLANGRT_DIR/libclang_rt.builtins.a" ]]; then
+    log_warn "Unable to find libclang_rt.builtins.a in clang's resource directory. Is this version of clang not built with the runtime builtins?"
+fi
+
+# verify HIP_PATH is set and valid
+if [[ -z "$HIP_PATH" ]] || [[ ! -d "$HIP_PATH" ]]; then
+    log_fatal "HIP_PATH must be set and points to a directory where HIP is."
+fi
+
+# verify ROCM_PATH is set and valid
+if [[ -z "$ROCM_PATH" ]] || [[ ! -d "$ROCM_PATH" ]]; then
+    log_fatal "ROCM_PATH must be set and points to a directory where the rocm installation is."
+fi
+
 # ===========================================
 
 while test $# -gt 0; do
@@ -332,14 +406,14 @@ while test $# -gt 0; do
 
     if [[ "${AMDCUDA_INPUT_PROGNAME##*.}" = "cu" ]] || [[ "${AMDCUDA_INPUT_PROGNAME##*.}" = "cpp" ]] || [[ "${AMDCUDA_INPUT_PROGNAME##*.}" = "c" ]]; then
         if [[ ! -d "${CUDA_PATH}" ]]; then
-            echo "[!] Cannot accept a CUDA source file as input: CUDA_PATH is undefined."
+            log_fatal "[!] Cannot accept a CUDA source file as input: CUDA_PATH is undefined."
         fi
 
         AMDCUDA_INPUT_SOURCEFILE="$AMDCUDA_INPUT_PROGNAME"
         AMDCUDA_INPUT_PROGNAME="${AMDCUDA_INPUT_PROGNAME%.*}"
         cleanup_all_temps "$AMDCUDA_INPUT_PROGNAME"
 
-        echo "[*] Compiling $AMDCUDA_INPUT_PROGNAME to IR..."
+        log_info "Compiling $AMDCUDA_INPUT_PROGNAME to IR..."
         exec_with_logs "$AMDCUDA_CLANGXX" \
             "$AMDCUDA_INPUT_SOURCEFILE" -c \
             "${AMDCUDA_CFLAGS[@]}" \
@@ -347,14 +421,14 @@ while test $# -gt 0; do
             "--cuda-path=$CUDA_PATH" \
             "--cuda-gpu-arch=sm_35" \
             "-L${CUDA_PATH}/lib64" \
-            -lcudart_static -ldl -lrt -pthread -save-temps -fPIC -v
+            -lcudart_static -ldl -lrt -pthread -save-temps -fPIC
     elif [[ "${AMDCUDA_INPUT##*.}" = "o" ]]; then
         AMDCUDA_ADDITIONAL_OBJECTS+=("$AMDCUDA_INPUT")
-        echo "[*] Will link against compiled object ${AMDCUDA_INPUT}"
+        log_info "Will link against compiled object ${AMDCUDA_INPUT}"
         revert_cd_with_logs
         continue
     else
-        echo "[!] Unacceptable input ${AMDCUDA_INPUT}"
+        log_fatal "[!] Unacceptable input ${AMDCUDA_INPUT}"
         exit 1
     fi
 
@@ -371,62 +445,54 @@ while test $# -gt 0; do
     AMDCUDA_OUTPUT_HOST_LINKED="${AMDCUDA_INPUT_PROGNAME}.translated"
     AMDCUDA_LINKED_BITCODE_FULLPATHS=()
 
-    for builtin_bc in "${AMDCUDA_BUILTIN_BYTECODE[@]}"; do
-        if [[ -f "${DEVICE_LIB_PATH}/${builtin_bc}" ]]; then
-            AMDCUDA_KERN_ASSEMBLER_FLAGS+=(
-                "-mlink-builtin-bitcode" "${DEVICE_LIB_PATH}/${builtin_bc}"
-            )
-        elif [[ -f "${AMDCUDA_BITCODE_PATH}/${builtin_bc}" ]]; then
-            AMDCUDA_KERN_ASSEMBLER_FLAGS+=(
-                "-mlink-builtin-bitcode" "${AMDCUDA_BITCODE_PATH}/${builtin_bc}"
-            )
-        else
-            echo "[!] Bitcode $builtin_bc not found under DEVICE_LIB_PATH...compilation will continue but may fail as a result."
-        fi
+    log_section_start "Gathering bitcode libraries"
+    for builtin_bc in "${AMDCUDA_BUILTIN_HIP_DEVICE_BITCODE[@]}"; do
+        find_bitcode_lib "$builtin_bc"
+        AMDCUDA_KERN_ASSEMBLER_FLAGS+=(
+            "-mlink-builtin-bitcode" "$FOUND_IR"
+        )
+        log_section_output "* Built-in Bitcode $builtin_bc at $FOUND_IR"
     done
 
-    for linked_bc in "${AMDCUDA_LINKED_BYTECODE[@]}"; do
-        if [[ -f "${DEVICE_LIB_PATH}/${linked_bc}" ]]; then
-            AMDCUDA_LINKED_BITCODE_FULLPATHS+=(
-                "${DEVICE_LIB_PATH}/${linked_bc}"
-            )
-        elif [[ -f "${AMDCUDA_BITCODE_PATH}/${linked_bc}" ]]; then
-            AMDCUDA_LINKED_BITCODE_FULLPATHS+=(
-                "${AMDCUDA_BITCODE_PATH}/${linked_bc}"
-            )
-        else
-            echo "[!] Linked bitcode $linked_bc not found under DEVICE_LIB_PATH...compilation will continue but may fail as a result."
-        fi
+    for linked_bc in "${AMDCUDA_LINKED_HIP_DEVICE_BITCODE[@]}"; do
+        find_bitcode_lib "$linked_bc"
+        AMDCUDA_LINKED_BITCODE_FULLPATHS+=(
+            "$FOUND_IR"
+        )
+        log_section_output "* Linked Bitcode $linked_bc at $FOUND_IR"
     done
+    log_section_end
 
     # locate host and kernel IRs
-    find_raw_ir "${AMDCUDA_INPUT_PROGNAME}-host"
-    AMDCUDA_INPUT_HOST_IR="$FOUND_IR"
-    postprocess_ir "$AMDCUDA_INPUT_HOST_IR"
-    echo "[*] Found host IR at $AMDCUDA_INPUT_HOST_IR"
+    log_section_start "Locating compiled IRs"
+        find_raw_ir "${AMDCUDA_INPUT_PROGNAME}-host"
+        AMDCUDA_INPUT_HOST_IR="$FOUND_IR"
+        postprocess_ir "$AMDCUDA_INPUT_HOST_IR"
+        log_section_output "Found host IR at $AMDCUDA_INPUT_HOST_IR"
 
-    find_raw_ir "${AMDCUDA_INPUT_PROGNAME}-cuda"
-    AMDCUDA_INPUT_KERN_IR="$FOUND_IR"
-    postprocess_ir "$AMDCUDA_INPUT_KERN_IR"
-    echo "[*] Found device IR at $AMDCUDA_INPUT_KERN_IR"
+        find_raw_ir "${AMDCUDA_INPUT_PROGNAME}-cuda"
+        AMDCUDA_INPUT_KERN_IR="$FOUND_IR"
+        postprocess_ir "$AMDCUDA_INPUT_KERN_IR"
+        log_section_output "[*] Found device IR at $AMDCUDA_INPUT_KERN_IR"
+    log_section_end
 
     # translate kernel
-    echo "[*] Translating kernel IR..."
+    log_info "Translating kernel IR..."
     exec_with_logs "$AMDCUDA_KERN_TTOR" "$AMDCUDA_INPUT_KERN_IR"
 
     find_translated_ir "$AMDCUDA_INPUT_KERN_IR"
     AMDCUDA_TRANSLATED_KERN_IR="$FOUND_IR"
     postprocess_ir "$AMDCUDA_TRANSLATED_KERN_IR"
 
-    echo "[*] Linking CUDAAMD bitcode..."
+    log_info "Linking CUDAAMD bitcode..."
     exec_with_logs "$AMDCUDA_LLVM_LINK" \
         -o "$AMDCUDA_OUTPUT_KERNEL_LINKED_BITCODE" \
         "$AMDCUDA_TRANSLATED_KERN_IR" \
-        "${AMDCUDA_BITCODE[@]}"
+        "${AMDCUDA_LINKED_BITCODE_FULLPATHS[@]}"
     postprocess_ir "$AMDCUDA_OUTPUT_KERNEL_LINKED_BITCODE"
 
     # compile translated kernel
-    echo "[*] Compiling translated kernel IR to assembly..."
+    log_info "Compiling translated kernel IR to assembly..."
     exec_with_logs "$AMDCUDA_CLANG" \
         -cc1 -triple amdgcn-amd-amdhsa \
         -aux-triple x86_64-unknown-linux-gnu -S \
@@ -437,7 +503,6 @@ while test $# -gt 0; do
         -mllvm \
         -treat-scalable-fixed-error-as-warning \
         -debugger-tuning=gdb \
-        -v \
         -resource-dir "$AMDCUDA_CLANG_RES_DIR" \
         -fno-autolink "-fdebug-compilation-dir=$(pwd)" \
         -ferror-limit 19 \
@@ -457,7 +522,7 @@ while test $# -gt 0; do
         -x ir \
         "$AMDCUDA_OUTPUT_KERNEL_LINKED_BITCODE"
 
-    echo "[*] Aseembling compiled kernel..."
+    log_info "Aseembling compiled kernel..."
     exec_with_logs "$AMDCUDA_CLANG" \
         -cc1as \
         -triple amdgcn-amd-amdhsa \
@@ -475,7 +540,7 @@ while test $# -gt 0; do
         -o "$AMDCUDA_OUTPUT_KERNEL_OBJECT" \
         "$AMDCUDA_OUTPUT_KERNEL_ASSEMBLY"
 
-    echo "[*] Extracting libbc-clang runtime built-ins..."
+    log_info "Extracting libbc-clang runtime built-ins..."
     exec_with_logs "$AMDCUDA_CLANG_OFFLOAD_BUNDLER" \
         -unbundle \
         -type=a \
@@ -485,7 +550,7 @@ while test $# -gt 0; do
         -allow-missing-bundles \
         -hip-openmp-compatible
 
-    echo "[*] Linking kernel..."
+    log_info "Linking kernel..."
     exec_with_logs "$AMDCUDA_LLD" \
         -flavor gnu \
         --no-undefined \
@@ -498,10 +563,9 @@ while test $# -gt 0; do
         -save-temps \
         -o "$AMDCUDA_OUTPUT_KERNEL_LINKED" \
         "$AMDCUDA_OUTPUT_KERNEL_OBJECT" \
-        "${AMDCUDA_LINKED_BITCODE_FULLPATHS[@]}" \
         "$AMDCUDA_EXTRACTED_RT_BUILTINS"
 
-    echo "[*] Bundling kernel..."
+    log_info "Bundling kernel..."
     exec_with_logs "$AMDCUDA_CLANG_OFFLOAD_BUNDLER" \
         -type=o \
         -bundle-align=4096 \
@@ -510,13 +574,13 @@ while test $# -gt 0; do
         "-input=$AMDCUDA_OUTPUT_KERNEL_LINKED" \
         "-output=$AMDCUDA_OUTPUT_KERNEL_FATBIN"
 
-    echo "[*] Swapping kernel code and translating host-side program..."
+    log_info "Swapping kernel code and translating host-side program..."
     exec_with_logs "$AMDCUDA_HOST_TTOR" "$AMDCUDA_INPUT_HOST_IR" "$AMDCUDA_OUTPUT_KERNEL_FATBIN"
     find_translated_ir "$AMDCUDA_INPUT_HOST_IR"
     AMDCUDA_TRANSLATED_HOST_IR="$FOUND_IR"
     postprocess_ir "$AMDCUDA_TRANSLATED_HOST_IR"
 
-    echo "[*] Compiling translated host IR to assembly..."
+    log_info "Compiling translated host IR to assembly..."
     exec_with_logs "$AMDCUDA_CLANG" \
         -cc1 \
         -triple x86_64-unknown-linux-gnu \
@@ -540,7 +604,6 @@ while test $# -gt 0; do
         -mllvm \
         -treat-scalable-fixed-error-as-warning \
         -debugger-tuning=gdb \
-        -v \
         "-fcoverage-compilation-dir=$(pwd)" \
         -resource-dir "$AMDCUDA_CLANG_RES_DIR" \
         "-O${AMDCUDA_OPT_OPTIMIZATION_LEVEL}" \
@@ -563,7 +626,7 @@ while test $# -gt 0; do
         -x ir \
         "$AMDCUDA_TRANSLATED_HOST_IR"
 
-    echo "[*] Aseembling compiled program..."
+    log_info "Aseembling compiled program..."
     exec_with_logs "$AMDCUDA_CLANG" \
         -cc1as \
         -triple x86_64-unknown-linux-gnu \
@@ -586,7 +649,7 @@ while test $# -gt 0; do
     AMDCUDA_COMPILED_OBJECTS+=("$(pwd)/$AMDCUDA_INPUT_PROGNAME.o")
 
     if [[ "$AMDCUDA_OPT_SAVE_TEMPS" = "0" ]]; then
-        echo "[*] Cleaning up $AMDCUDA_INPUT_PROGNAME..."
+        log_info "Cleaning up $AMDCUDA_INPUT_PROGNAME..."
         cleanup_all_temps "$AMDCUDA_INPUT_PROGNAME"
     fi
 
@@ -595,7 +658,7 @@ while test $# -gt 0; do
 done
 
 if [[ "$AMDCUDA_OPT_LINK" = "1" ]]; then
-    echo "[*] Linking compiled program..."
+    log_info "Linking compiled program..."
     # "$AMDCUDA_LD" \
     #     -pie \
     #     --hash-style=gnu \
@@ -657,7 +720,7 @@ elif [[ "${#AMDCUDA_COMPILED_OBJECTS[*]}" = "1" ]]; then
     # Move the object to the output
     mv "${AMDCUDA_COMPILED_OBJECTS[0]}" "$AMDCUDA_OPT_OUTPUT"
 else
-    echo "[!] Multiple objects were compiled, but no linking was requested. Output file specified by -o will be ignored."
+    log_warn "Multiple objects were compiled, but no linking was requested. Output file specified by -o will be ignored."
 fi
 
 # Remove logfiles

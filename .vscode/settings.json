@@ -5,6 +5,7 @@
         "array": "cpp",
         "atomic": "cpp",
         "*.tcc": "cpp",
+        "*.cl": "cpp",
         "bitset": "cpp",
         "cctype": "cpp",
         "chrono": "cpp",
