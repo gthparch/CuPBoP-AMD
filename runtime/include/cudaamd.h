@@ -10,6 +10,15 @@ extern "C" {
 // typedef __int32 int32_t;
 // typedef unsigned __int32 uint32_t;
 
+/** Memory can be accessed by any stream on any device*/
+#define cudaMemAttachGlobal 0x01
+
+/** Memory cannot be accessed by any stream on any device.*/
+#define cudaMemAttachHost 0x02
+
+/** Memory can only be accessed by a single stream on the associated device.*/
+#define cudaMemAttachSingle 0x04
+
 enum cudaError_t { cudaSuccess, cudaErrorInvalidValue };
 
 enum cudaMemcpyKind {
@@ -187,6 +196,8 @@ cudaError_t cudaGetLastError();
 cudaError_t cudaPeekAtLastError();
 
 cudaError_t cudaMalloc(void **devPtr, size_t size);
+
+cudaError_t cudaMallocManaged(void** devPtr, size_t size, unsigned int flags = cudaMemAttachGlobal);
 
 cudaError_t cudaMallocHost(void **hostPtr, size_t size);
 

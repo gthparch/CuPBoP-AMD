@@ -7,42 +7,64 @@
 
 namespace cg = cooperative_groups;
 
-__device__ int reduce_sum(cg::thread_group g, int *temp,
-                          int val) {
+// __device__ int reduce_sum(cg::thread_group g, int *temp,
+//                           int val) {
 
-    int lane = g.thread_rank();
+//     int lane = g.thread_rank();
 
-    for (int i = g.size() / 2; i > 0; i /= 2) {
+//     for (int i = g.size() / 2; i > 0; i /= 2) {
 
-        temp[lane] = val;
-        g.sync();
-        if (lane < i)
-            val += temp[lane + i];
-        g.sync();
-    }
-    // printf("val returned in reduced_sum =%d\n",val);
-    return val;
-}
+//         temp[lane] = val;
+//         g.sync();
+//         if (lane < i)
+//             val += temp[lane + i];
+//         g.sync();
+//     }
+//     // printf("val returned in reduced_sum =%d\n",val);
+//     return val;
+// }
 
-__device__ int thread_sum(int *input, int n) {
-    int sum = 0;
-    for (int i = blockIdx.x * blockDim.x + threadIdx.x; i < n / 4;
-         i += blockDim.x * gridDim.x) {
-        int4 in = ((int4 *)input)[i];
-        sum += in.x + in.y + in.z + in.w;
-    }
-    // printf("sum returned from thrad_sum =%d\n",sum);
-    return sum;
-}
+// __device__ int thread_sum(int *input, int n) {
+//     int sum = 0;
+//     for (int i = blockIdx.x * blockDim.x + threadIdx.x; i < n / 4;
+//          i += blockDim.x * gridDim.x) {
+//         int4 in = ((int4 *)input)[i];
+//         sum += in.x + in.y + in.z + in.w;
+//     }
+//     // printf("sum returned from thrad_sum =%d\n",sum);
+//     return sum;
+// }
+
+// struct tg_data {
+//     unsigned int is_tiled : 1;
+//     unsigned int type : 7;
+//     unsigned int size : 24;
+//     // packed to 4b
+//     unsigned int metaGroupSize : 16;
+//     unsigned int metaGroupRank : 16;
+//     // packed to 8b
+//     unsigned int mask;
+//     // packed to 12b
+//     unsigned int _res;
+// };
 
 __global__ void sum_kernel_block(int *sum, int *input, int n) {
-    extern __shared__ int temp[];
-    int my_sum = thread_sum(input, n);
+    // extern __shared__ int temp[];
+    // int my_sum = thread_sum(input, n);
     auto g = cg::this_thread_block();
-    int block_sum = reduce_sum(g, temp, my_sum);
+    // int block_sum = reduce_sum(g, temp, my_sum);
+    int i = g.thread_rank();
+    
+    if (threadIdx.x < 5 && blockIdx.x == 1) {
+        printf("Rank %d, TID.x = %d, BID.x = %d\n", i, threadIdx.x, blockIdx.x);
+    }
 
-    if (g.thread_rank() == 0)
-        atomicAdd(sum, block_sum);
+    // if (threadIdx.x == 0 && blockIdx.x == 0) {
+    //     printf("Size is %d, rank is %d\n", g.size(), g.thread_rank());
+    // }
+
+    // if (g.thread_rank() == 0)
+    //     atomicAdd(sum, block_sum);
 }
 
 int main(void) {

@@ -21,7 +21,7 @@ fi
 
 AMDCUDA_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )/.." &> /dev/null && pwd )
 AMDCUDA_RT_DIR="$AMDCUDA_DIR/build/runtime"
-AMDCUDA_DEVICE_BITCODE_DIR="$AMDCUDA_DIR/build/device-libs"
+AMDCUDA_DEVICE_BITCODE_DIR="$AMDCUDA_DIR/build"
 AMDCUDA_HOST_TTOR="$AMDCUDA_DIR/build/compilation/hostTranslator"
 AMDCUDA_KERN_TTOR="$AMDCUDA_DIR/build/compilation/kernelTranslator"
 AMDCUDA_SCRIPT_LOGFILE="$(pwd)/amdcuda.log"
@@ -43,12 +43,10 @@ AMDCUDA_CLANG_OFFLOAD_BUNDLER="$LLVM_PREFIX/bin/clang-offload-bundler"
 AMDCUDA_CLANG_RES_DIR="$(realpath "$LLVM_PREFIX/lib/clang/"*)"
 AMDCUDA_CLANGRT_DIR="$(realpath "$AMDCUDA_CLANG_RES_DIR/lib/"*)"
 
-# Additional bitcode path
-AMDCUDA_BITCODE_PATH="$AMDCUDA_DIR/bitcode"
-
 # Paths to search for bitcode libraries, and will be modified later to include DEVICE_LIB_PATH
 AMDCUDA_BITCODE_SEARCH_PATHS=(
-    "$AMDCUDA_DIR/bitcode" "$AMDCUDA_DEVICE_BITCODE_DIR"
+    "$AMDCUDA_DIR/bitcode"
+    "$AMDCUDA_DEVICE_BITCODE_DIR"
 )
 
 # TODO: dynamically generate this list
@@ -57,17 +55,18 @@ AMDCUDA_BUILTIN_HIP_DEVICE_BITCODE=(
     oclc_finite_only_off.bc oclc_correctly_rounded_sqrt_on.bc oclc_wavefrontsize64_on.bc
     oclc_isa_version_90a.bc oclc_abi_version_400.bc
 )
-AMDCUDA_LINKED_HIP_DEVICE_BITCODE=(
-    ockl.bc ocml.bc oclc_abi_version_400.bc oclc_finite_only_off.bc
-    oclc_unsafe_math_on.bc oclc_daz_opt_on.bc oclc_correctly_rounded_sqrt_on.bc
-    oclc_isa_version_90a.bc oclc_wavefrontsize64_on.bc opencl.bc
-)
 
 # Additional bitcode libraries from CuPBoP-AMD that will be linked with the translatetd IR.
 AMDCUDA_LINKED_ADDITIONAL_BITCODE=(
+    # Linked CuPBoP-AMD bitcode
     "cudaamd-gridblock-size.ll" "cudaamd-math.ll" "cuda2gcn.ll"
     "atomic.ll" "textureInt2DReadMode.ll" "textureFloat1DReadMode.ll"
-    "textureFloat4_1DReadMode.ll"
+    "textureFloat4_1DReadMode.ll" "cupbop-amd-bitcode.bc"
+    
+    # Re-link against ROCm-Device-Libs
+    ockl.bc ocml.bc oclc_abi_version_400.bc oclc_finite_only_off.bc
+    oclc_unsafe_math_on.bc oclc_daz_opt_on.bc oclc_correctly_rounded_sqrt_on.bc
+    oclc_isa_version_90a.bc oclc_wavefrontsize64_on.bc opencl.bc
 )
 
 AMDCUDA_KERN_ASSEMBLER_FLAGS=(
@@ -204,11 +203,11 @@ EOF
     if [[ "$AMDCUDA_OPT_VERBOSE" = "1" ]]; then
         # In verbose mode, dump everything to both the terminal and the log file
         "$@" | tee -a "$AMDCUDA_SCRIPT_LOGFILE"
-        exit_code=$?
+        exit_code=${PIPESTATUS[0]}
     else
         # In non-verbose mode, we still dump the stderr, but silently logs everything else to the log file
         "$@" 2>&1 >>"$AMDCUDA_SCRIPT_LOGFILE" | tee -a "$AMDCUDA_SCRIPT_LOGFILE"
-        exit_code=$?
+        exit_code=${PIPESTATUS[0]}
     fi
 
         cat >>"$AMDCUDA_SCRIPT_LOGFILE" <<EOF
@@ -217,6 +216,10 @@ Program exited with code: $exit_code
 ===================================================
 
 EOF
+
+    if [[ $exit_code != 0 ]]; then
+        exit $exit_code
+    fi
 }
 
 cd_with_logs() {
@@ -454,7 +457,7 @@ while test $# -gt 0; do
         log_section_output "* Built-in Bitcode $builtin_bc at $FOUND_IR"
     done
 
-    for linked_bc in "${AMDCUDA_LINKED_HIP_DEVICE_BITCODE[@]}"; do
+    for linked_bc in "${AMDCUDA_LINKED_ADDITIONAL_BITCODE[@]}"; do
         find_bitcode_lib "$linked_bc"
         AMDCUDA_LINKED_BITCODE_FULLPATHS+=(
             "$FOUND_IR"

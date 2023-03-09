@@ -1,5 +1,6 @@
 #!/bin/bash
 
+set -e
 rm -f *.ll
-../../../scripts/amdcuda -i main.cu
+../../../scripts/amdcuda -v main.cu
 ./main.translated

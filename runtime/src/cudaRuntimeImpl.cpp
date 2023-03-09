@@ -120,6 +120,10 @@ cudaError_t cudaMalloc(void **devPtr, size_t size) {
     return cudaSuccess;
 }
 
+cudaError_t cudaMallocManaged(void** devPtr, size_t size, unsigned int flags) {
+    return (cudaError_t) hipMallocManaged(devPtr, size, flags);
+}
+
 cudaError_t cudaMallocHost(void **ptr, size_t size) {
     return (cudaError_t) hipMallocHost(ptr, size);
 }
