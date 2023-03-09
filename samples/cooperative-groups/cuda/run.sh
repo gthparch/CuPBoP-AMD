@@ -2,5 +2,5 @@
 
 set -e
 rm -f *.ll
-../../../scripts/amdcuda -v main.cu
+../../../scripts/amdcuda -v -i main.cu
 ./main.translated

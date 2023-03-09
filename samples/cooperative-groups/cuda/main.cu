@@ -54,9 +54,12 @@ __global__ void sum_kernel_block(int *sum, int *input, int n) {
     auto g = cg::this_thread_block();
     // int block_sum = reduce_sum(g, temp, my_sum);
     int i = g.thread_rank();
+    int s = g.size();
+
+    g.sync();
     
     if (threadIdx.x < 5 && blockIdx.x == 1) {
-        printf("Rank %d, TID.x = %d, BID.x = %d\n", i, threadIdx.x, blockIdx.x);
+        printf("Rank %d, Size %d, TID.x = %d, BID.x = %d\n", i, s, threadIdx.x, blockIdx.x);
     }
 
     // if (threadIdx.x == 0 && blockIdx.x == 0) {

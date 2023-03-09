@@ -40,6 +40,13 @@ bool CooperativeGroupsPass::runOnModule(Module &M) {
             f->replaceAllUsesWith(repFn);
             f->dropAllReferences();
             f->eraseFromParent();
+        }},
+        {"__barrier_sync(unsigned int)", [&](Function *f) {
+            auto repFnCallee = M.getOrInsertFunction("cupbop_syncwarp", f->getFunctionType());
+            auto* repFn = cast<Function>(repFnCallee.getCallee());
+            f->replaceAllUsesWith(repFn);
+            f->dropAllReferences();
+            f->eraseFromParent();
         }}
     };
     std::vector<std::pair<fn_replacer, Function*>> pendingOps {};
