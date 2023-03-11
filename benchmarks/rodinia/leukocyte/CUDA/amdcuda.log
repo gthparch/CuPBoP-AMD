@@ -1,0 +1,216 @@
+===================================================
+Changing directory to: /nethome/jchen706/coding/code2/amdcuda/benchmarks/rodinia/leukocyte/CUDA
+Working directory: /nethome/jchen706/coding/code2/amdcuda/benchmarks/rodinia/leukocyte/CUDA
+===================================================
+
+===================================================
+Changing directory to: /nethome/jchen706/coding/code2/amdcuda/benchmarks/rodinia/leukocyte/CUDA
+Working directory: /nethome/jchen706/coding/code2/amdcuda/benchmarks/rodinia/leukocyte/CUDA
+===================================================
+
+===================================================
+Changing directory to: /nethome/jchen706/coding/code2/amdcuda/benchmarks/rodinia/leukocyte/CUDA
+Working directory: /nethome/jchen706/coding/code2/amdcuda/benchmarks/rodinia/leukocyte/CUDA
+===================================================
+
+===================================================
+Changing directory to: /nethome/jchen706/coding/code2/amdcuda/benchmarks/rodinia/leukocyte/CUDA
+Working directory: /nethome/jchen706/coding/code2/amdcuda/benchmarks/rodinia/leukocyte/CUDA
+===================================================
+
+===================================================
+Changing directory to: /nethome/jchen706/coding/code2/amdcuda/benchmarks/rodinia/leukocyte/CUDA
+Working directory: /nethome/jchen706/coding/code2/amdcuda/benchmarks/rodinia/leukocyte/CUDA
+===================================================
+
+===================================================
+Changing directory to: /nethome/jchen706/coding/code2/amdcuda/benchmarks/rodinia/leukocyte/CUDA
+Working directory: /nethome/jchen706/coding/code2/amdcuda/benchmarks/rodinia/leukocyte/CUDA
+===================================================
+
+===================================================
+Changing directory to: /nethome/jchen706/coding/code2/amdcuda/benchmarks/rodinia/leukocyte/CUDA
+Working directory: /nethome/jchen706/coding/code2/amdcuda/benchmarks/rodinia/leukocyte/CUDA
+===================================================
+
+===================================================
+Changing directory to: /nethome/jchen706/coding/code2/amdcuda/benchmarks/rodinia/leukocyte/CUDA
+Working directory: /nethome/jchen706/coding/code2/amdcuda/benchmarks/rodinia/leukocyte/CUDA
+===================================================
+
+===================================================
+Changing directory to: /nethome/jchen706/coding/code2/amdcuda/benchmarks/rodinia/leukocyte/CUDA
+Working directory: /nethome/jchen706/coding/code2/amdcuda/benchmarks/rodinia/leukocyte/CUDA
+===================================================
+
+===================================================
+Changing directory to: /nethome/jchen706/coding/code2/amdcuda/benchmarks/rodinia/leukocyte/CUDA
+Working directory: /nethome/jchen706/coding/code2/amdcuda/benchmarks/rodinia/leukocyte/CUDA
+===================================================
+
+===================================================
+Changing directory to: /nethome/jchen706/coding/code2/amdcuda/benchmarks/rodinia/leukocyte/CUDA
+Working directory: /nethome/jchen706/coding/code2/amdcuda/benchmarks/rodinia/leukocyte/CUDA
+===================================================
+
+===================================================
+Changing directory to: /nethome/jchen706/coding/code2/amdcuda/benchmarks/rodinia/leukocyte/CUDA
+Working directory: /nethome/jchen706/coding/code2/amdcuda/benchmarks/rodinia/leukocyte/CUDA
+===================================================
+
+===================================================
+Changing directory to: /nethome/jchen706/coding/code2/amdcuda/benchmarks/rodinia/leukocyte/CUDA
+Working directory: /nethome/jchen706/coding/code2/amdcuda/benchmarks/rodinia/leukocyte/CUDA
+===================================================
+
+===================================================
+Changing directory to: /nethome/jchen706/coding/code2/amdcuda/benchmarks/rodinia/leukocyte/CUDA
+Working directory: /nethome/jchen706/coding/code2/amdcuda/benchmarks/rodinia/leukocyte/CUDA
+===================================================
+
+===================================================
+Running command: /nethome/jchen706/prefix/opt/llvm/bin/clang -o leukocyte.cupbop -L/nethome/jchen706/coding/code2/amdcuda/build/runtime -L/nethome/jchen706/prefix/opt/lib -L/nethome/jchen706/prefix/opt/hip/lib -Wl,-rpath=/nethome/jchen706/coding/code2/amdcuda/build/runtime:/nethome/jchen706/prefix/opt/hip/lib:/nethome/jchen706/prefix/opt/lib,--enable-new-dtags -lcudaonamd -lpthread -lamdhip64 -lstdc++ -lrt -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc -lstdc++ detect_main.o avilib.o find_ellipse.o track_ellipse.o misc_math.o find_ellipse_kernel.cupbop.o track_ellipse_kernel.cupbop.o
+Working directory: /nethome/jchen706/coding/code2/amdcuda/benchmarks/rodinia/leukocyte/CUDA
+
+/usr/bin/ld: Dwarf Error: Invalid or unhandled FORM value: 0x25.
+detect_main.o: In function `main':
+detect_main.c:(.text+0x17e): undefined reference to `m_free'
+detect_main.c:(.text+0x503): undefined reference to `m_get'
+detect_main.c:(.text+0x514): undefined reference to `m_get'
+detect_main.c:(.text+0x741): undefined reference to `m_get'
+detect_main.c:(.text+0x757): undefined reference to `m_get'
+detect_main.c:(.text+0x768): undefined reference to `v_get'
+detect_main.c:(.text+0x779): undefined reference to `v_get'
+/usr/bin/ld: Dwarf Error: found dwarf version '3328', this reader only handles version 2, 3, 4 and 5 information.
+detect_main.c:(.text+0x793): undefined reference to `get_row'
+detect_main.c:(.text+0x7ad): undefined reference to `get_row'
+detect_main.c:(.text+0x86e): undefined reference to `m_get'
+detect_main.c:(.text+0x884): undefined reference to `m_get'
+detect_main.c:(.text+0x8a2): undefined reference to `mmtr_mlt'
+detect_main.c:(.text+0x8c0): undefined reference to `mmtr_mlt'
+detect_main.c:(.text+0x8df): undefined reference to `m_get'
+detect_main.c:(.text+0xadf): undefined reference to `v_get'
+detect_main.c:(.text+0xbb7): undefined reference to `v_get'
+detect_main.c:(.text+0xc97): undefined reference to `v_get'
+/usr/bin/ld: Dwarf Error: found dwarf version '15620', this reader only handles version 2, 3, 4 and 5 information.
+detect_main.c:(.text+0xdcf): undefined reference to `v_free'
+detect_main.c:(.text+0xddb): undefined reference to `v_free'
+detect_main.c:(.text+0xde7): undefined reference to `v_free'
+/usr/bin/ld: Dwarf Error: found dwarf version '9984', this reader only handles version 2, 3, 4 and 5 information.
+detect_main.c:(.text+0xdf3): undefined reference to `v_free'
+detect_main.c:(.text+0xdff): undefined reference to `v_free'
+detect_main.c:(.text+0xe0b): undefined reference to `m_free'
+detect_main.c:(.text+0xe17): undefined reference to `m_free'
+detect_main.c:(.text+0xe23): undefined reference to `v_free'
+detect_main.c:(.text+0xe2f): undefined reference to `v_free'
+detect_main.c:(.text+0xe3b): undefined reference to `m_free'
+detect_main.c:(.text+0xe47): undefined reference to `m_free'
+/usr/bin/ld: Dwarf Error: found dwarf version '15620', this reader only handles version 2, 3, 4 and 5 information.
+detect_main.c:(.text+0xe53): undefined reference to `m_free'
+detect_main.c:(.text+0xe5f): undefined reference to `v_free'
+detect_main.c:(.text+0xe6b): undefined reference to `v_free'
+/usr/bin/ld: Dwarf Error: found dwarf version '58624', this reader only handles version 2, 3, 4 and 5 information.
+detect_main.c:(.text+0xe77): undefined reference to `m_free'
+detect_main.c:(.text+0xe83): undefined reference to `m_free'
+detect_main.c:(.text+0xef6): undefined reference to `m_free'
+detect_main.c:(.text+0xeff): undefined reference to `m_free'
+detect_main.c:(.text+0xf08): undefined reference to `m_free'
+detect_main.o:detect_main.c:(.text+0xf14): more undefined references to `m_free' follow
+/usr/bin/ld: Dwarf Error: Invalid or unhandled FORM value: 0x25.
+find_ellipse.o: In function `chop_flip_image':
+find_ellipse.c:(.text+0x176): undefined reference to `m_get'
+find_ellipse.o: In function `GICOV':
+find_ellipse.c:(.text+0x70d): undefined reference to `m_get'
+find_ellipse.o: In function `dilate':
+find_ellipse.c:(.text+0x809): undefined reference to `m_get'
+find_ellipse.o: In function `TMatrix':
+find_ellipse.c:(.text+0xa40): undefined reference to `m_get'
+find_ellipse.c:(.text+0xa4f): undefined reference to `m_get'
+find_ellipse.c:(.text+0xa6f): undefined reference to `m_zero'
+find_ellipse.c:(.text+0xd6a): undefined reference to `mtrm_mlt'
+/usr/bin/ld: Dwarf Error: found dwarf version '10496', this reader only handles version 2, 3, 4 and 5 information.
+find_ellipse.c:(.text+0xd7b): undefined reference to `m_inverse'
+find_ellipse.c:(.text+0xd90): undefined reference to `mmtr_mlt'
+find_ellipse.c:(.text+0xd9d): undefined reference to `m_free'
+find_ellipse.c:(.text+0xda6): undefined reference to `m_free'
+find_ellipse.c:(.text+0xdaf): undefined reference to `m_free'
+find_ellipse.c:(.text+0xdb8): undefined reference to `m_free'
+find_ellipse.o: In function `getsampling':
+find_ellipse.c:(.text+0x13d1): undefined reference to `v_get'
+find_ellipse.o: In function `getfdriv':
+find_ellipse.c:(.text+0x17e1): undefined reference to `v_get'
+find_ellipse.o: In function `linear_interp2':
+find_ellipse.c:(.text+0x1b80): undefined reference to `m_get'
+find_ellipse.o: In function `splineenergyform01':
+find_ellipse.c:(.text+0x1d94): undefined reference to `v_get'
+find_ellipse.c:(.text+0x1e6f): undefined reference to `v_get'
+find_ellipse.c:(.text+0x1f52): undefined reference to `v_get'
+find_ellipse.c:(.text+0x1fda): undefined reference to `v_get'
+/usr/bin/ld: Dwarf Error: found dwarf version '2053', this reader only handles version 2, 3, 4 and 5 information.
+find_ellipse.c:(.text+0x2062): undefined reference to `v_get'
+find_ellipse.o:find_ellipse.c:(.text+0x210a): more undefined references to `v_get' follow
+find_ellipse.o: In function `splineenergyform01':
+find_ellipse.c:(.text+0x2269): undefined reference to `get_row'
+find_ellipse.c:(.text+0x2285): undefined reference to `get_row'
+find_ellipse.c:(.text+0x22a1): undefined reference to `get_row'
+find_ellipse.c:(.text+0x22bd): undefined reference to `get_row'
+/usr/bin/ld: Dwarf Error: found dwarf version '521', this reader only handles version 2, 3, 4 and 5 information.
+find_ellipse.c:(.text+0x24c6): undefined reference to `v_get'
+find_ellipse.c:(.text+0x2547): undefined reference to `v_get'
+find_ellipse.c:(.text+0x25c8): undefined reference to `v_get'
+/usr/bin/ld: Dwarf Error: found dwarf version '522', this reader only handles version 2, 3, 4 and 5 information.
+find_ellipse.c:(.text+0x2649): undefined reference to `v_get'
+find_ellipse.c:(.text+0x265b): undefined reference to `v_get'
+find_ellipse.c:(.text+0x3dec): undefined reference to `v_free'
+find_ellipse.c:(.text+0x3df8): undefined reference to `v_free'
+find_ellipse.c:(.text+0x3e04): undefined reference to `v_free'
+find_ellipse.c:(.text+0x3e10): undefined reference to `v_free'
+find_ellipse.c:(.text+0x3e1c): undefined reference to `v_free'
+find_ellipse.o:find_ellipse.c:(.text+0x3e58): more undefined references to `v_free' follow
+find_ellipse.o: In function `splineenergyform01':
+find_ellipse.c:(.text+0x3e88): undefined reference to `m_free'
+find_ellipse.c:(.text+0x3e94): undefined reference to `m_free'
+find_ellipse.c:(.text+0x3ea0): undefined reference to `m_free'
+find_ellipse.c:(.text+0x3eac): undefined reference to `m_free'
+/usr/bin/ld: Dwarf Error: found dwarf version '523', this reader only handles version 2, 3, 4 and 5 information.
+find_ellipse.c:(.text+0x3eb8): undefined reference to `v_free'
+find_ellipse.c:(.text+0x3ec4): undefined reference to `v_free'
+find_ellipse.c:(.text+0x3ecd): undefined reference to `v_free'
+find_ellipse.c:(.text+0x3ed6): undefined reference to `v_free'
+find_ellipse.c:(.text+0x3edf): undefined reference to `v_free'
+find_ellipse.o:find_ellipse.c:(.text+0x3ee8): more undefined references to `v_free' follow
+/usr/bin/ld: Dwarf Error: Invalid or unhandled FORM value: 0x25.
+track_ellipse.o: In function `ellipsetrack':
+track_ellipse.c:(.text+0x9f5): undefined reference to `m_get'
+track_ellipse.c:(.text+0xb76): undefined reference to `m_get'
+track_ellipse.c:(.text+0x10f6): undefined reference to `m_free'
+track_ellipse.c:(.text+0x110d): undefined reference to `m_free'
+track_ellipse.c:(.text+0x1124): undefined reference to `m_free'
+track_ellipse.c:(.text+0x113b): undefined reference to `m_free'
+track_ellipse.c:(.text+0x1152): undefined reference to `m_free'
+/usr/bin/ld: Dwarf Error: found dwarf version '20224', this reader only handles version 2, 3, 4 and 5 information.
+track_ellipse.o: In function `MGVF':
+track_ellipse.c:(.text+0x16c2): undefined reference to `m_get'
+track_ellipse.o: In function `ellipseevolve':
+track_ellipse.c:(.text+0x19ac): undefined reference to `v_get'
+track_ellipse.c:(.text+0x19bb): undefined reference to `v_get'
+track_ellipse.c:(.text+0x1faa): undefined reference to `m_get'
+track_ellipse.c:(.text+0x22ad): undefined reference to `m_free'
+track_ellipse.c:(.text+0x22b9): undefined reference to `m_free'
+track_ellipse.c:(.text+0x22c5): undefined reference to `m_free'
+track_ellipse.c:(.text+0x22d1): undefined reference to `m_free'
+track_ellipse.c:(.text+0x2367): undefined reference to `v_free'
+track_ellipse.c:(.text+0x2373): undefined reference to `v_free'
+/usr/bin/ld: Dwarf Error: found dwarf version '15620', this reader only handles version 2, 3, 4 and 5 information.
+track_ellipse.c:(.text+0x237f): undefined reference to `m_free'
+track_ellipse.c:(.text+0x238b): undefined reference to `m_free'
+/usr/bin/ld: Dwarf Error: Invalid or unhandled FORM value: 0x25.
+misc_math.o: In function `gradient_x':
+misc_math.c:(.text+0x5a): undefined reference to `m_get'
+misc_math.o: In function `gradient_y':
+misc_math.c:(.text+0x20a): undefined reference to `m_get'
+clang-16: error: linker command failed with exit code 1 (use -v to see invocation)
+
+Program exited with code: 1
+===================================================
+
