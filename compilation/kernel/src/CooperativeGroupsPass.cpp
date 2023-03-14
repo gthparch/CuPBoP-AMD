@@ -48,13 +48,21 @@ bool CooperativeGroupsPass::runOnModule(Module &M) {
     std::unordered_map<std::string, fn_replacer> known_cg_fns = {
         {"cooperative_groups::__v1::thread_block::thread_rank()",
          direct_replacement("cupbop_cg_thread_block_thread_rank")},
+        // Also just getting the thread rank in the block
+        {"cooperative_groups::__v1::details::cta::thread_rank()",
+         direct_replacement("cupbop_cg_thread_block_thread_rank")},
+
         {"cooperative_groups::__v1::grid_group::thread_rank() const",
          direct_replacement("cupbop_cg_grid_group_thread_rank")},
         {"cooperative_groups::__v1::grid_group::sync() const",
          direct_replacement("cupbop_cg_grid_group_sync")},
         {"cooperative_groups::__v1::grid_group::size() const",
          direct_replacement("cupbop_cg_grid_group_size")},
-         {"cooperative_groups::__v1::grid_group::is_valid() const", direct_replacement("cupbop_cg_grid_group_is_valid")},
+        {"cooperative_groups::__v1::grid_group::is_valid() const",
+         direct_replacement("cupbop_cg_grid_group_is_valid")},
+         
+        {"cooperative_groups::__v1::details::laneid()",
+         direct_replacement("cupbop_cg_laneid")},
 
         // For grid groups, we cannot completely reuse CUDA's way of
         // constructing it with a pointer read by the kernel (GCN doesn't have

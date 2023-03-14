@@ -71,3 +71,8 @@ uint cupbop_cg_grid_group_size() {
 uint cupbop_cg_grid_group_is_valid() {
     return __ockl_grid_is_valid();
 }
+
+/// cooperative_groups::__v1::details::laneid()
+uint cupbop_cg_laneid() {
+    return __ockl_lane_u32();
+};
