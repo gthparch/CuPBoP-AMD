@@ -1,7 +1,7 @@
-#include <stdio.h>
 #include <iostream>
+#include <stdio.h>
+#include <cstdint>
 #include <hip/hip_runtime.h>
-#include <hip/amd_detail/amd_channel_descriptor.h>
 #include <hip/driver_types.h>
 
 #include "cudaamd.h"
@@ -21,9 +21,7 @@ cudaError_t cudaDeviceReset() {
     return cudaSuccess;
 }
 
-cudaError_t cudaThreadExit() {
-    return cudaDeviceReset();
-}
+cudaError_t cudaThreadExit() { return cudaDeviceReset(); }
 
 cudaError_t cudaGetLastError() {
     // printf("insideGetLastError\n");
@@ -120,12 +118,12 @@ cudaError_t cudaMalloc(void **devPtr, size_t size) {
     return cudaSuccess;
 }
 
-cudaError_t cudaMallocManaged(void** devPtr, size_t size, unsigned int flags) {
-    return (cudaError_t) hipMallocManaged(devPtr, size, flags);
+cudaError_t cudaMallocManaged(void **devPtr, size_t size, unsigned int flags) {
+    return (cudaError_t)hipMallocManaged(devPtr, size, flags);
 }
 
 cudaError_t cudaMallocHost(void **ptr, size_t size) {
-    return (cudaError_t) hipMallocHost(ptr, size);
+    return (cudaError_t)hipMallocHost(ptr, size);
 }
 
 cudaError_t cudaMallocArray(cudaArray_t *array,
@@ -170,14 +168,17 @@ cudaError_t cudaMemcpy(void *dst, const void *src, size_t count,
     return cudaSuccess;
 }
 
-cudaError_t cudaMemcpyAsync (void* dst, const void* src, size_t count, cudaMemcpyKind kind, cudaStream_t stream) {
-    return (cudaError_t) hipMemcpyAsync(dst, src, count, (hipMemcpyKind)kind, (hipStream_t)stream);
+cudaError_t cudaMemcpyAsync(void *dst, const void *src, size_t count,
+                            cudaMemcpyKind kind, cudaStream_t stream) {
+    return (cudaError_t)hipMemcpyAsync(dst, src, count, (hipMemcpyKind)kind,
+                                       (hipStream_t)stream);
 }
 
 cudaError_t cudaMemcpyToSymbol(const void *symbol, const void *src,
                                size_t count, size_t offset,
                                cudaMemcpyKind kind) {
-    return (cudaError_t) hipMemcpyToSymbol(symbol, src, count, offset, (hipMemcpyKind)kind);
+    return (cudaError_t)hipMemcpyToSymbol(symbol, src, count, offset,
+                                          (hipMemcpyKind)kind);
 }
 
 cudaError_t cudaMemcpy2D(void *dst, size_t dpitch, const void *src,
@@ -196,6 +197,13 @@ cudaError_t cudaLaunchKernel(const void *func, dim3 gridDim, dim3 blockDim,
                               (hipStream_t)stream));
     // printf("cudaLaunchKernel\n");
     return cudaSuccess;
+}
+
+cudaError_t cudaLaunchCooperativeKernel(const void *func, dim3 gridDim,
+                                        dim3 blockDim, void **args,
+                                        size_t sharedMem, cudaStream_t stream) {
+    return (cudaError_t)hipLaunchCooperativeKernel(
+        func, gridDim, blockDim, args, sharedMem, (hipStream_t)stream);
 }
 
 cudaError_t cudaEventCreate(cudaEvent_t *event) {
@@ -368,7 +376,7 @@ cudaError_t cudaBindTexture2D(size_t *offset, const textureReference *texref,
                               const void *devPtr,
                               const cudaChannelFormatDesc *desc, size_t width,
                               size_t height, size_t pitch) {
-   
+
     size_t offset1;
     if (offset == NULL) {
         offset = &offset1;
@@ -376,7 +384,6 @@ cudaError_t cudaBindTexture2D(size_t *offset, const textureReference *texref,
     HIP_CHECK(
         hipBindTexture2D(offset, texref, devPtr, desc, width, height, pitch));
 
-  
     return cudaSuccess;
 }
 

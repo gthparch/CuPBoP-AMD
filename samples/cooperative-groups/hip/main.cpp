@@ -18,7 +18,7 @@ __device__ void cg_sync(cg::thread_group g) {
 
 __attribute__((noinline))
 __device__ cg::thread_group cg_this_thread_block() {
-    return cg::this_thread_block();
+    return cg::this_grid();
 }
 
 __device__ int reduce_sum(cg::thread_group g, int *temp,
@@ -76,6 +76,8 @@ int main(void) {
     hipMemset(sum, 0, sizeof(int));
 
     hipLaunchKernelGGL(sum_kernel_block, nBlocks, blockSize, sharedBytes, 0, sum, data, n);
+
+    hipDeviceSynchronize();
     hipMemcpy(&result, sum, sizeof(int), hipMemcpyDeviceToHost);
     printf("Sum of 16M array number = %d, expecting %d\n", result, cpu_res);
 

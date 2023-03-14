@@ -200,8 +200,10 @@ void changeAtomics(Module &M) {
         for (Function::iterator E = F->end(); I != E; ++I) {
             for (BasicBlock::iterator BI = I->begin(); BI != I->end(); BI++) {
                 if (auto *nvvm_atomic = dyn_cast<CallInst>(BI)) {
-                    auto func_name =
-                        nvvm_atomic->getCalledFunction()->getName();
+                    auto called_fn = nvvm_atomic->getCalledFunction();
+                    if (!called_fn)
+                        continue;
+                    auto func_name = called_fn->getName();
 
                     // atomicAdd i32
                     if (func_name == "_ZL9atomicAddPjj") {
