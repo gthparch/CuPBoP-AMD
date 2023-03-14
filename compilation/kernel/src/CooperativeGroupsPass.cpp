@@ -54,6 +54,7 @@ bool CooperativeGroupsPass::runOnModule(Module &M) {
          direct_replacement("cupbop_cg_grid_group_sync")},
         {"cooperative_groups::__v1::grid_group::size() const",
          direct_replacement("cupbop_cg_grid_group_size")},
+         {"cooperative_groups::__v1::grid_group::is_valid() const", direct_replacement("cupbop_cg_grid_group_is_valid")},
 
         // For grid groups, we cannot completely reuse CUDA's way of
         // constructing it with a pointer read by the kernel (GCN doesn't have

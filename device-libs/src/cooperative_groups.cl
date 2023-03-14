@@ -66,3 +66,8 @@ uint cupbop_cg_grid_group_size() {
     return ((cbBlockDim_z * cbGridDim_z) * (cbBlockDim_y * cbGridDim_y) *
             (cbBlockDim_x * cbGridDim_x));
 }
+
+/// cooperative_groups::__v1::grid_group::is_valid() const
+uint cupbop_cg_grid_group_is_valid() {
+    return __ockl_grid_is_valid();
+}
