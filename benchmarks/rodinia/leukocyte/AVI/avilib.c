@@ -1,3 +1,7 @@
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /*
  *  avilib.c
  *
@@ -40,14 +44,14 @@ static char id_str[MAX_INFO_STRLEN];
 #define FRAME_RATE_SCALE 1000000
 
 #ifndef PACKAGE
-#define PACKAGE "my"
-#define VERSION "0.00"
+	#define PACKAGE "my"
+	#define VERSION "0.00"
 #endif
 
 #ifndef O_BINARY
-/* win32 wants a binary flag to open(); this sets it to null
-   on platforms that don't have it. */
-#define O_BINARY 0
+	/* win32 wants a binary flag to open(); this sets it to null
+	   on platforms that don't have it. */
+	#define O_BINARY 0
 #endif
 
 /*******************************************************************
@@ -596,7 +600,7 @@ static int avi_close_output_file(avi_t *AVI)
 
    idxerror = 0;
    //   fprintf(stderr, "pos=%lu, index_len=%ld             \n", AVI->pos, AVI->n_idx*16);
-   ret = avi_add_chunk(AVI, (unsigned char *)"idx1", (void*)AVI->idx, AVI->n_idx*16);
+   ret = avi_add_chunk(AVI, (unsigned char *)"idx1", (unsigned char *)((void*)AVI->idx), AVI->n_idx*16);
    hasIndex = (ret==0);
    //fprintf(stderr, "pos=%lu, index_len=%d\n", AVI->pos, hasIndex);
 
@@ -1610,25 +1614,18 @@ int AVI_set_audio_bitrate(avi_t *AVI, long bitrate)
 long AVI_read_frame(avi_t *AVI, char *vidbuf, int *keyframe)
 {
    long n;
-
    if(AVI->mode==AVI_MODE_WRITE) { AVI_errno = AVI_ERR_NOT_PERM; return -1; }
    if(!AVI->video_index)         { AVI_errno = AVI_ERR_NO_IDX;   return -1; }
-
    if(AVI->video_pos < 0 || AVI->video_pos >= AVI->video_frames) return -1;
    n = AVI->video_index[AVI->video_pos].len;
-
    *keyframe = (AVI->video_index[AVI->video_pos].key==0x10) ? 1:0;
-
    lseek(AVI->fdes, AVI->video_index[AVI->video_pos].pos, SEEK_SET);
-
    if (avi_read(AVI->fdes,vidbuf,n) != n)
    {
       AVI_errno = AVI_ERR_READ;
       return -1;
    }
-
    AVI->video_pos++;
-
    return n;
 }
 
@@ -1771,21 +1768,21 @@ int AVI_read_data(avi_t *AVI, char *vidbuf, long max_vidbuf,
 
 char *(avi_errors[]) =
 {
-  /*  0 */ "avilib - No Error",
-  /*  1 */ "avilib - AVI file size limit reached",
-  /*  2 */ "avilib - Error opening AVI file",
-  /*  3 */ "avilib - Error reading from AVI file",
-  /*  4 */ "avilib - Error writing to AVI file",
-  /*  5 */ "avilib - Error writing index (file may still be useable)",
-  /*  6 */ "avilib - Error closing AVI file",
-  /*  7 */ "avilib - Operation (read/write) not permitted",
-  /*  8 */ "avilib - Out of memory (malloc failed)",
-  /*  9 */ "avilib - Not an AVI file",
-  /* 10 */ "avilib - AVI file has no header list (corrupted?)",
-  /* 11 */ "avilib - AVI file has no MOVI list (corrupted?)",
-  /* 12 */ "avilib - AVI file has no video data",
-  /* 13 */ "avilib - operation needs an index",
-  /* 14 */ "avilib - Unkown Error"
+  /*  0 */ (char *) "avilib - No Error",
+  /*  1 */ (char *) "avilib - AVI file size limit reached",
+  /*  2 */ (char *) "avilib - Error opening AVI file",
+  /*  3 */ (char *) "avilib - Error reading from AVI file",
+  /*  4 */ (char *) "avilib - Error writing to AVI file",
+  /*  5 */ (char *) "avilib - Error writing index (file may still be useable)",
+  /*  6 */ (char *) "avilib - Error closing AVI file",
+  /*  7 */ (char *) "avilib - Operation (read/write) not permitted",
+  /*  8 */ (char *) "avilib - Out of memory (malloc failed)",
+  /*  9 */ (char *) "avilib - Not an AVI file",
+  /* 10 */ (char *) "avilib - AVI file has no header list (corrupted?)",
+  /* 11 */ (char *) "avilib - AVI file has no MOVI list (corrupted?)",
+  /* 12 */ (char *) "avilib - AVI file has no video data",
+  /* 13 */ (char *) "avilib - operation needs an index",
+  /* 14 */ (char *) "avilib - Unkown Error"
 };
 static int num_avi_errors = sizeof(avi_errors)/sizeof(char*);
 
@@ -1837,3 +1834,6 @@ uint64_t AVI_max_size()
   return((uint64_t) AVI_MAX_LEN);
 }
 
+#ifdef __cplusplus
+}
+#endif

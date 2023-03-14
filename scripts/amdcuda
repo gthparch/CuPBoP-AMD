@@ -218,6 +218,7 @@ Program exited with code: $exit_code
 EOF
 
     if [[ $exit_code != 0 ]]; then
+        echo "[!] Fatal error: the previous command exited with code $exit_code. Outputs from the command can be found in \"$AMDCUDA_SCRIPT_LOGFILE\"."
         exit $exit_code
     fi
 }
