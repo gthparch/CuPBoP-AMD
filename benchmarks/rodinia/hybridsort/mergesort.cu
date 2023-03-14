@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
-#include "mergesort.cuh"
+#include "mergesort.h"
 #include "mergesort_kernel.cu"
 ////////////////////////////////////////////////////////////////////////////////
 // Defines

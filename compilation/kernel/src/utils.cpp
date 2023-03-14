@@ -6,6 +6,7 @@
 #include "llvm/IR/Verifier.h"
 
 #include "utils.hpp"
+#include <string_view>
 
 using namespace llvm;
 
@@ -95,6 +96,26 @@ std::vector<GlobalVariable *> discover_texture_memory(Module &M) {
 
     return texture;
 }
+
+/*
+    function with string "__cuda_" maybe cuda builtin
+*/
+
+bool isCudaBuiltin(std::string  functionName) {
+
+    if (functionName.find("__cuda_") != std::string::npos) {
+        return true;
+    }
+    if (functionName.find("__nv_") != std::string::npos) {
+        return true;
+    }
+    if (functionName.find("llvm.") != std::string::npos) {
+        return true;
+    }
+    return false;
+
+}
+
 
 void VerifyModule(llvm::Module &M) {
     std::string msg;

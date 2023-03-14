@@ -2,6 +2,7 @@
 #define _BUCKETSORT_KERNEL_H_
 
 #include <stdio.h>
+#include "bucketsort.h"
 
 #define BUCKET_WARP_LOG_SIZE	5
 #define BUCKET_WARP_N			1
