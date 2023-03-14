@@ -1,11 +1,11 @@
 #ifndef FIND_ELLIPSE_H
 #define FIND_ELLIPSE_H
 
-#include "avilib.h"
-#include "matrix.h"
-#include "misc_math.h"
+#include <avilib.h>
+#include <matrix.h>
 #include <math.h>
 #include <stdlib.h>
+#include "misc_math.h"
 
 // Defines the region in the video frame containing the blood vessel
 #define TOP 110

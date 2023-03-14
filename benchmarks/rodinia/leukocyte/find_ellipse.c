@@ -12,7 +12,6 @@
 // The number of different sample ellipses to try
 #define NCIRCLES 7
 
-
 extern MAT * m_inverse(MAT * A, MAT * out);
 
 // Returns the current system time in microseconds
