@@ -60,9 +60,10 @@ bool CooperativeGroupsPass::runOnModule(Module &M) {
          direct_replacement("cupbop_cg_grid_group_size")},
         {"cooperative_groups::__v1::grid_group::is_valid() const",
          direct_replacement("cupbop_cg_grid_group_is_valid")},
-         
         {"cooperative_groups::__v1::details::laneid()",
          direct_replacement("cupbop_cg_laneid")},
+        {"cooperative_groups::__v1::details::lanemask32_lt()",
+         direct_replacement("cupbop_cg_lanemask32_lt")},
 
         // For grid groups, we cannot completely reuse CUDA's way of
         // constructing it with a pointer read by the kernel (GCN doesn't have
@@ -81,6 +82,7 @@ bool CooperativeGroupsPass::runOnModule(Module &M) {
         // thread_block.sync()
         {"__barrier_sync(unsigned int)", direct_replacement("cupbop_syncwarp")},
         {"__syncwarp(unsigned int)", direct_replacement("cupbop_syncwarp")},
+        {"__activemask()", direct_replacement("cupbop_activemask")},
     };
     std::vector<std::pair<fn_replacer, Function *>> pendingOps{};
 

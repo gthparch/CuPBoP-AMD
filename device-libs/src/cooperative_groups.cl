@@ -74,5 +74,11 @@ uint cupbop_cg_grid_group_is_valid() {
 
 /// cooperative_groups::__v1::details::laneid()
 uint cupbop_cg_laneid() {
-    return __ockl_lane_u32();
-};
+    return cupbop_laneid();
+}
+
+/// cooperative_groups::__v1::details::lanemask32_lt()
+uint cupbop_cg_lanemask32_lt() {
+    // return cupbop's implementation
+    return cupbop_lanemask_lt();
+}
