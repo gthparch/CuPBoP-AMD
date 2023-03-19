@@ -161,6 +161,10 @@ cudaError_t cudaHostAlloc(void **ptr, size_t size, unsigned int flag) {
     return cudaSuccess;
 }
 
+cudaError_t cudaMemGetInfo(size_t *free, size_t *total) {
+    return (cudaError_t)hipMemGetInfo(free, total);
+}
+
 cudaError_t cudaMemcpy(void *dst, const void *src, size_t count,
                        cudaMemcpyKind kind) {
     // printf("insideCudaMemcpy\n");
