@@ -17,6 +17,8 @@
 | huffman | :x: | [WIP] Compiles with both CuPBoP-AMD and HIPIFY. Both produce mismatched vectors. |
 | kmeans | :heavy_check_mark: | size *offset = NULL segfaults with HIPAMD but not CUDA |
 | leukocyte | :heavy_check_mark: ||
+| particlefilter-float | :heavy_check_mark: ||
+| particlefilter-naive | :heavy_check_mark: ||
 | pathfinder | :x: ||
 | srad-v2 | :x: | [WIP] Compiles with both CuPBoP-AMD and HIPIFY. Both segfaults. |
 | streamcluster | :heavy_check_mark: ||
