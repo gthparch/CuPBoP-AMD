@@ -1,5 +1,9 @@
 ## CuPBoP-AMD Benchmarks
 
+### Additional Benchmarks
+
+Read [benchmark boilerplate](./boilerplate) for instructions and sample code for adding new benchmarks.
+
 ### Rodinia GPU
 
 | Name | Working | Notes |
