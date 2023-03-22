@@ -256,6 +256,8 @@ cudaError_t cudaFreeHost(void *ptr);
 
 cudaError_t cudaHostAlloc(void **ptr, size_t size, unsigned int flag);
 
+cudaError_t cudaMemGetInfo(size_t *free, size_t *total);
+
 cudaError_t cudaMemcpy(void *dst, const void *src, size_t count,
                        cudaMemcpyKind kind);
 
