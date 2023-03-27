@@ -50,6 +50,12 @@ enum cudaFuncCache {
     cudaFuncCachePreferEqual = 3
 };
 
+enum cudaStreamCaptureMode {
+    cudaStreamCaptureModeGlobal = 0x01,
+    cudaStreamCaptureModeThreadLocal = 0x02,
+    cudaStreamCaptureModeRelaxed = 0x04
+};
+
 typedef struct CUuuid_st { /**< CUDA definition of UUID */
     char bytes[16];
 } CUuuid;
@@ -80,6 +86,10 @@ typedef hipChannelFormatDesc cudaChannelFormatDesc;
 typedef hipResourceDesc cudaResourceDesc;
 typedef hipTextureDesc cudaTextureDesc;
 typedef struct hipResourceViewDesc cudaResourceViewDesc;
+
+typedef struct CUgraphExec_st* cudaGraphExec_t;
+typedef struct CUgraph_st* cudaGraph_t;
+typedef struct CUgraphNode_st* cudaGraphNode_t;
 
 typedef struct cudaDeviceProp {
     char name[256];  /**< ASCII string identifying device */
@@ -212,6 +222,16 @@ typedef struct callParams {
     size_t shareMem;
     void *stream;
 } callParams;
+
+cudaError_t cudaStreamBeginCapture(cudaStream_t stream, cudaStreamCaptureMode mode);
+
+cudaError_t cudaStreamEndCapture(cudaStream_t stream, cudaGraph_t *pGraph);
+
+cudaError_t cudaGraphCreate(cudaGraph_t *pGraph, unsigned int flags);
+
+cudaError_t cudaGraphInstantiate(cudaGraphExec_t *pGraphExec, cudaGraph_t graph, cudaGraphNode_t *pErrorNode, char *pLogBuffer, size_t bufferSize);
+
+cudaError_t cudaGraphLaunch(cudaGraphExec_t graphExec, cudaStream_t stream);
 
 cudaError_t cudaSetDevice(int device);
 

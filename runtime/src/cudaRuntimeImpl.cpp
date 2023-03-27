@@ -5,6 +5,7 @@
 #include <hip/driver_types.h>
 
 #include "cudaamd.h"
+#include "hip/hip_runtime_api.h"
 
 #define HIP_CHECK(status)                                                      \
     if (status != hipSuccess) {                                                \
@@ -396,6 +397,26 @@ cudaError_t cudaUnbindTexture(const textureReference *texref) {
     return cudaSuccess;
 }
 
+cudaError_t cudaStreamBeginCapture(cudaStream_t stream, cudaStreamCaptureMode mode) {
+    return (cudaError_t) hipStreamBeginCapture(stream, (hipStreamCaptureMode)mode);
+}
+
+cudaError_t cudaStreamEndCapture(cudaStream_t stream, cudaGraph_t *pGraph) {
+    return (cudaError_t) hipStreamEndCapture(stream, (hipGraph_t*) pGraph);
+}
+
+cudaError_t cudaGraphCreate(cudaGraph_t *pGraph, unsigned int flags) {
+    return (cudaError_t) hipGraphCreate((hipGraph_t*) pGraph, flags);
+}
+
+cudaError_t cudaGraphInstantiate(cudaGraphExec_t *pGraphExec, cudaGraph_t graph, cudaGraphNode_t *pErrorNode, char *pLogBuffer, size_t bufferSize) {
+    return (cudaError_t) hipGraphInstantiate((hipGraphExec_t*) pGraphExec, (hipGraph_t) graph, (hipGraphNode_t*) pErrorNode, pLogBuffer, bufferSize);
+}
+
+cudaError_t cudaGraphLaunch(cudaGraphExec_t graphExec, cudaStream_t stream) {
+    return (cudaError_t) hipGraphLaunch((hipGraphExec_t) graphExec, stream);
+}
+
 static callParams callParamTemp;
 /*
   Internal Cuda Library Functions
@@ -456,15 +477,15 @@ extern unsigned __cudaPushCallConfiguration(dim3 gridDim, dim3 blockDim,
 
 extern "C" {
 extern void **__cudaRegisterFatBinary(void *fatCubin) {
-    printf("before __cudaRegisterFatBinary %p\n", fatCubin);
+    // printf("before __cudaRegisterFatBinary %p\n", fatCubin);
     void **temp = __hipRegisterFatBinary(fatCubin);
-    printf("after __cudaRegisterFatBinary %p\n", temp);
+    // printf("after __cudaRegisterFatBinary %p\n", temp);
     return temp;
 }
 
 // seems to be in cuda 10
 extern void __cudaRegisterFatBinaryEnd(void **fatCubinHandle) {
-    printf("__cudaRegisterFatBinaryEnd Called\n");
+    // printf("__cudaRegisterFatBinaryEnd Called\n");
 }
 
 extern void __cudaUnregisterFatBinary(void **fatCubinHandle) {
@@ -529,9 +550,9 @@ extern void __cudaRegisterFunction(void **fatCubinHandle, const char *hostFun,
                                    char *deviceFun, const char *deviceName,
                                    int thread_limit, uint3 *tid, uint3 *bid,
                                    dim3 *bDim, dim3 *gDim, int *wSize) {
-    printf("__cudaRegisterFunction Called: hostFun_stubPtr=%p, deviceFun=%s, "
-           "deviceName=%s , fatbin_ptr=%p\n",
-           hostFun, deviceFun, deviceName, fatCubinHandle);
+    // printf("__cudaRegisterFunction Called: hostFun_stubPtr=%p, deviceFun=%s, "
+    //        "deviceName=%s , fatbin_ptr=%p\n",
+    //        hostFun, deviceFun, deviceName, fatCubinHandle);
     __hipRegisterFunction(fatCubinHandle, hostFun, deviceFun, deviceName,
                           thread_limit, tid, bid, bDim, gDim, wSize);
 }
