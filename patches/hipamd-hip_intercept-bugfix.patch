@@ -1,0 +1,36 @@
+From be33ec55acc104a59d01df5912261d007c7f3ee9 Mon Sep 17 00:00:00 2001
+From: Laurent Morichetti <laurent.morichetti@amd.com>
+Date: Wed, 28 Sep 2022 23:32:40 -0700
+Subject: [PATCH] Fix a build error when compiling with clang
+
+Fix the following error:
+
+hip_intercept.cpp:52:7: error: reinterpret_cast from 'const void *' to 'decltype(activity_prof::report_activity.load())' (aka 'int (*)(activity_domain_t, unsigned int, void *)') casts away qualifiers
+      reinterpret_cast<decltype(activity_prof::report_activity.load())>(function),
+      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+by replacing the 'const void *function' argument with the correct type.
+
+Change-Id: I859d45ee01b7aaa1e46563cdc37de57b4159d330
+---
+ src/hip_intercept.cpp | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
+
+diff --git a/src/hip_intercept.cpp b/src/hip_intercept.cpp
+index e4e7e769..3b07fd89 100644
+--- a/src/hip_intercept.cpp
++++ b/src/hip_intercept.cpp
+@@ -47,10 +47,9 @@ const char* hipKernelNameRefByPtr(const void* host_function, hipStream_t stream)
+                                     : nullptr;
+ }
+ 
+-void hipRegisterTracerCallback(const void* function) {
+-  activity_prof::report_activity.store(
+-      reinterpret_cast<decltype(activity_prof::report_activity.load())>(function),
+-      std::memory_order_relaxed);
++void hipRegisterTracerCallback(int (*function)(activity_domain_t domain, uint32_t operation_id,
++                                               void* data)) {
++  activity_prof::report_activity.store(function, std::memory_order_relaxed);
+ }
+ 
+ const char* hipApiName(uint32_t id) { return hip_api_name(id); }

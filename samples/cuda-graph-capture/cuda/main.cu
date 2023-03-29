@@ -4,8 +4,8 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define N 4096
-#define BLOCK_SIZE 32
+#define N (256 * 256)
+#define BLOCK_SIZE 128
 #define GRID_SIZE (N / BLOCK_SIZE)
 #define NUM_LAUNCHES 4096
 
@@ -26,8 +26,8 @@ __global__ void kernel_c(int *out_a, int *out_b, int *output) {
 
 __host__ void prepare_inputs(int *a, int *b, int *d_a, int *d_b) {
     for (int i = 0; i < N; ++i) {
-        a[i] = rand() % 100;
-        b[i] = rand() % 100;
+        a[i] = rand() & 0xff;
+        b[i] = rand() & 0xff;
     }
 
     cudaMemcpy(d_a, a, N * sizeof(int), cudaMemcpyHostToDevice);

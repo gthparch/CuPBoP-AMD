@@ -33,7 +33,7 @@ pushd "$HOME/prefix/opt"
     echo "[*] Log file is $LOG_FILE"
 
     export ROCM_PATH="$HOME/prefix/opt"
-    export HIP_BRANCH=rocm-5.2.0 #rocm-5.4.3
+    export HIP_BRANCH=rocm-5.3.3 #rocm-5.4.3
     export LLVM_BRANCH=llvmorg-16-init
     export HIP_PLATFORM=amd
 
@@ -43,6 +43,7 @@ pushd "$HOME/prefix/opt"
         echo "[*] Cloning LLVM in scratch..."
         pushd "$SCRATCH_PATH"
             rm -rf llvm-project
+            # git clone --recursive --depth=1 -b "$HIP_BRANCH" https://github.com/RadeonOpenCompute/llvm-project.git
             git clone --recursive --depth=1 -b "$LLVM_BRANCH" https://github.com/llvm/llvm-project
             pushd llvm-project
                 # echo "[*] Applying patches..."
@@ -129,25 +130,14 @@ pushd "$HOME/prefix/opt"
             popd
         popd
 
-        # build rocr amd hsa runtime
-        echo "[*] Fetching ROCR-Runtime..."
-        git clone -b "$HIP_BRANCH" https://github.com/RadeonOpenCompute/ROCR-Runtime.git ROCR-Runtime
-        pushd ROCR-Runtime
-            mkdir -p build
-            pushd build
-                echo "[*] Building ROCR-Runtime"
-                cmake -DCMAKE_INSTALL_PREFIX="$ROCM_PATH" ../src >> "$LOG_FILE" 2>&1
-                cmake --build . -j$(nproc) >> "$LOG_FILE" 2>&1
-                cmake --install . >> "$LOG_FILE" 2>&1
-            popd
-        popd
-
         # build rocm device libs
         echo "[*] Fetching device libs..."
         git clone https://github.com/RadeonOpenCompute/ROCm-Device-Libs.git -b "$HIP_BRANCH"
         pushd ROCm-Device-Libs
             # need to change this to where the amdcuda repo is
+            echo "[*] Applying patches..."
             git apply "$AMDCUDA_REPO_PATH/patches/enable-cuda2gcn.patch"
+            # git apply "$AMDCUDA_REPO_PATH/patches/enable-cuda2gcn.stg-open.patch"
             mkdir -p build
             pushd build
                 echo "[*] Configuring device libs...logs are in $LOG_FILE"
@@ -163,6 +153,19 @@ pushd "$HOME/prefix/opt"
                 echo
                 echo "    export DEVICE_LIB_PATH=\"$ROCM_PATH/amdgcn/bitcode\""
                 echo
+            popd
+        popd
+
+        # build rocr amd hsa runtime
+        echo "[*] Fetching ROCR-Runtime..."
+        git clone -b "$HIP_BRANCH" https://github.com/RadeonOpenCompute/ROCR-Runtime.git ROCR-Runtime
+        pushd ROCR-Runtime
+            mkdir -p build
+            pushd build
+                echo "[*] Building ROCR-Runtime"
+                cmake -DCMAKE_INSTALL_PREFIX="$ROCM_PATH" ../src >> "$LOG_FILE" 2>&1
+                cmake --build . -j$(nproc) >> "$LOG_FILE" 2>&1
+                cmake --install . >> "$LOG_FILE" 2>&1
             popd
         popd
 
@@ -203,6 +206,9 @@ pushd "$HOME/prefix/opt"
         echo "[*] Fetching hipamd..."
         git clone -b "$HIP_BRANCH" https://github.com/ROCm-Developer-Tools/hipamd hipamd
         pushd hipamd
+            # echo "[*] Applying patches..."
+            # git apply "$AMDCUDA_REPO_PATH/patches/hipamd-hip_intercept-bugfix.patch"
+
             mkdir -p build
             pushd build
                 echo "[*] Configuring hipamd...logs are in $LOG_FILE"

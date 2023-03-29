@@ -1,0 +1,36 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index bfc0032..c39dad1 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -68,6 +68,7 @@ add_subdirectory(ockl)
+ add_subdirectory(opencl)
+ add_subdirectory(hip)
+ add_subdirectory(asanrtl)
++add_subdirectory(cuda2gcn)
+ 
+ enable_testing()
+ add_subdirectory(test/compile)
+diff --git a/cuda2gcn/src/bitsbytes.cl b/cuda2gcn/src/bitsbytes.cl
+index 19caa9e..8ce46d3 100644
+--- a/cuda2gcn/src/bitsbytes.cl
++++ b/cuda2gcn/src/bitsbytes.cl
+@@ -14,7 +14,7 @@
+ ATTR int __nv_brev(int x) { return __builtin_bitreverse32(x); }
+ 
+ //-------- T __nv_brevll
+-ATTR long __nv_brevll(long x) { return __builitn_bitreverse64(x); }
++ATTR long __nv_brevll(long x) { return __builtin_bitreverse64(x); }
+ 
+ //-------- T __nv_clz
+ ATTR int __nv_clz(int x)
+@@ -39,8 +39,8 @@ ATTR int __nv_ffs(int x) { return (32 - __nv_clz(x&(-x))); }
+ ATTR int __nv_ffsll(long x) { return (int)(64 - __nv_clzll(x&(-x))); }
+ 
+ //-------- T __nv_popc
+-ATTR int __nv_popc(int x) { return __llvm_ctpop_i32(x); }
++ATTR int __nv_popc(int x) { return (int)__ockl_popcount_u32((uint)x); }
+ 
+ //-------- T __nv_popcll
+-ATTR int __nv_popcll(long x) { return (int)__llvm_ctpop_i64(x); }
++ATTR int __nv_popcll(long x) { return (long)__ockl_popcount_u64((ulong)x); }
+ 
