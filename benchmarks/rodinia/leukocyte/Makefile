@@ -45,7 +45,7 @@ all: $(BENCHMARK_NAME).cupbop $(BENCHMARK_NAME).hipify
 clean:
 	rm -f $(BENCHMARK_NAME).cupbop $(BENCHMARK_NAME).hipify $(HIPIFY_OBJS) $(CUPBOP_OBJS) $(OBJS:.o=.hipify.cpp) $(CXXOBJS) *.ll
 	make -C AVI clean
-	make -C meschach_lib clean
+	make -C meschach_lib cleanup
 
 .PHONY: avilib meschach_lib external_deps
 avilib:
