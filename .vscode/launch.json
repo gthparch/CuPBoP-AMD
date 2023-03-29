@@ -18,6 +18,17 @@
             "args": [
                 "-cc1", "-triple", "amdgcn-amd-amdhsa", "-aux-triple", "x86_64-unknown-linux-gnu", "-S", "-main-file-name", "backprop_cuda.cu", "-save-temps=cwd[@]", "-O0", "-target-cpu", "gfx90a", "-mllvm", "-treat-scalable-fixed-error-as-warning", "-debugger-tuning=gdb", "-v", "-resource-dir", "/net/netscratch/xzhou381/llvm-install-prefix/lib/clang/16.0.0", "-fno-autolink", "-fdebug-compilation-dir=/nethome/xzhou381/amdcuda/benchmarks/rodinia/backprop", "-ferror-limit", "19", "-fhip-new-launch-api", "-fgnuc-version=4.2.1", "-fcolor-diagnostics", "-vectorize-loops", "-vectorize-slp", "-mllvm", "-amdgpu-early-inline-all=true", "-mllvm", "-amdgpu-function-calls=false", "-cuid=7426647a80c85315", "-fcuda-allow-variadic-functions", "-faddrsig", "-o", "backprop_cuda-cuda.translated.s", "-x", "ir", "backprop_cuda-cuda.translated.linked.ll",
             ]
+        },
+        {
+            "name": "Debug Host Translator",
+            "type": "lldb",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/compilation/hostTranslator",
+            "args": [
+                "${workspaceFolder}/samples/addrspacecast/cuda/empty-host-x86_64-unknown-linux-gnu.ll",
+                "empty-cuda.translated.hipfb"
+            ],
+            "cwd": "${workspaceFolder}/samples/addrspacecast/cuda"
         }
     ]
 }

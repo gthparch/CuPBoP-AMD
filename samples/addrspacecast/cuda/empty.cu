@@ -11,6 +11,16 @@ __global__ void empty(int *N) {
     }
 }
 
+struct myStruct {
+    int a;
+    int b;
+    int c;
+};
+
+__global__ void empty_byval(myStruct x, int *N) {
+    *N = x.a + x.b + x.c;
+}
+
 // 10 + 10 * 5 = 60
 // 60 + 6- * 5
 // __global__ void empty(int* N) {
@@ -26,17 +36,27 @@ __global__ void empty(int *N) {
 int main(int argc, char **argv) {
     int *host_n;
     int *device_n;
+    myStruct x { 3, 2, 1 };
 
     host_n = (int *)malloc(sizeof(int));
     cudaMalloc(&device_n, sizeof(int));
 
+    // With simple argument
     empty<<<1, 1>>>(device_n);
-
     cudaMemcpy(host_n, device_n, sizeof(int), cudaMemcpyDeviceToHost);
 
     printf("Value: %d\n", *host_n); // 310
     if (*host_n == 310) {
-        printf("Success\n");
+        printf("Success 1\n");
+    }
+
+    // With one byval() struct
+    empty_byval<<<1, 1>>>(x, device_n);
+    cudaMemcpy(host_n, device_n, sizeof(int), cudaMemcpyDeviceToHost);
+
+    printf("Value: %d\n", *host_n);
+    if (*host_n == 6) {
+        printf("Success 2\n");
     }
 
     cudaFree(device_n);

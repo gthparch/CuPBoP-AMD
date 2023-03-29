@@ -20,6 +20,7 @@ Read [benchmark boilerplate](./boilerplate) for instructions and sample code for
 | hotspot3D | :heavy_check_mark: ||
 | huffman | :x: | [WIP] Compiles with both CuPBoP-AMD and HIPIFY. Both produce mismatched vectors. |
 | kmeans | :heavy_check_mark: | size *offset = NULL segfaults with HIPAMD but not CUDA |
+| lavaMD | :heavy_check_mark: ||
 | leukocyte | :heavy_check_mark: ||
 | lud | :heavy_check_mark: ||
 | myocyte | :heavy_check_mark: ||

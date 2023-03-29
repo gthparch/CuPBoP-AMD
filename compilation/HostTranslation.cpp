@@ -1,7 +1,9 @@
 
 #include <cassert>
+#include <cstdlib>
 #include <iostream>
 #include <string>
+#include <unistd.h>
 
 #include "llvm/Bitcode/BitcodeWriter.h"
 #include "llvm/IR/LLVMContext.h"
@@ -42,12 +44,20 @@ int main(const int argc, const char *argv[]) {
     // std::set<Function*> need_remove;
 
     // Write to Output
-    std::error_code writeError;
-    auto outputFilename = std::string(argv[1]) + ".translated_test.bc";
-    ToolOutputFile toolOutput(outputFilename.data(), writeError,
+    {
+        std::error_code writeError;
+        auto outputFilename = std::string(argv[1]) + ".translated_test.bc";
+        ToolOutputFile toolOutput(outputFilename.data(), writeError,
                               sys::fs::OF_None);
-    WriteBitcodeToFile(*M, toolOutput.os());
-    toolOutput.keep();
+        WriteBitcodeToFile(*M, toolOutput.os());
+        toolOutput.keep();
+        toolOutput.os().flush();
+        toolOutput.os().close();
+    }
 
+    fprintf(stdout, "Conversion done.");
+
+    // TODO: diagnose why LLVM cleanup fails.
+    std::quick_exit(0);
     return 0;
 }

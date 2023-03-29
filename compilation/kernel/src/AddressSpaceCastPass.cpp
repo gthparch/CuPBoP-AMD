@@ -3,6 +3,7 @@
  *
  */
 
+#include <cstdio>
 #include <iostream>
 #include <memory>
 #include <queue>
@@ -18,6 +19,7 @@
 #include "llvm/IR/Module.h"
 #include "llvm/IR/Value.h"
 #include "llvm/Pass.h"
+#include "llvm/Support/raw_ostream.h"
 
 #include "AddressSpaceCastPass.hpp"
 
@@ -75,6 +77,38 @@ static void processPointerStore(IRBuilder<> &builder,
         storeInst->setOperand(0, castedPtr);
     }
 }
+
+/// Fix getelementptr instructions that uses potentially unsafe addresses
+///
+/// Change:
+///  %2 = getelementptr inbounds ptr, ptr addrspace(1) %0, i64 0
+/// To:
+///  %2 = addrspacecast ptr addrspace(1) %0 to ptr
+///  %3 = getelementptr inbounds ptr, ptr %2, i64 0
+/// Then replace uses of 2 with 3
+static void processGEP(IRBuilder<> &builder, const DataLayout &dataLayout,
+                       GetElementPtrInst *gepInst) {
+    auto gepPtrTy = cast<PointerType>(gepInst->getPointerOperandType());
+    auto gepPtrAS = gepInst->getPointerAddressSpace();
+    auto gepSrcTy = gepInst->getSourceElementType();
+    auto gepResTy = gepInst->getResultElementType();
+
+    std::string inst_str;
+    raw_string_ostream(inst_str) << *gepInst;
+
+    if (gepPtrAS != 0 && gepSrcTy->isStructTy()) {
+        builder.SetInsertPoint(gepInst);
+        auto castToTy = PointerType::getWithSamePointeeType(gepPtrTy, 0);
+        auto *castedPtr = cast<AddrSpaceCastInst>(builder.CreateAddrSpaceCast(
+            gepInst->getPointerOperand(), gepInst->getType()));
+        castedPtr->setDebugLoc(DebugLoc());
+        gepInst->setOperand(0, castedPtr);
+
+        std::string changed_inst_str;
+        raw_string_ostream(changed_inst_str) << *castedPtr << "\n" << *gepInst;
+        printf("Changed GEP instruction from:\n>>> %s\nto:\n<<< %s\n", inst_str.c_str(), changed_inst_str.c_str());
+    }
+}
 }; // namespace
 
 AddressSpaceCastPass::AddressSpaceCastPass() : FunctionPass(ID) {}
@@ -96,6 +130,11 @@ bool AddressSpaceCastPass::runOnFunction(Function &F) {
         // Storage into pointer types need to be double checked
         if (auto *storeInst = dyn_cast<StoreInst>(&inst); storeInst) {
             processPointerStore(Builder, dataLayout, storeInst);
+        }
+
+        // GetElementPtr instructions need to be double checked
+        if (auto *gepInst = dyn_cast<GetElementPtrInst>(&inst); gepInst) {
+            processGEP(Builder, dataLayout, gepInst);
         }
     }
 

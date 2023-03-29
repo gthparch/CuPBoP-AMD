@@ -97,8 +97,21 @@ std::vector<GlobalVariable *> discover_texture_memory(Module &M) {
 }
 
 void VerifyModule(llvm::Module &M) {
+    fprintf(stdout, "Verifying module...\n");
     std::string msg;
     llvm::raw_string_ostream os(msg);
-    if (llvm::verifyModule(M, &(llvm::errs())))
+    if (llvm::verifyModule(M, &os))
         llvm::report_fatal_error(os.str().c_str());
+}
+
+std::string llvm_to_string(const llvm::Value &V) {
+    std::string res;
+    llvm::raw_string_ostream(res) << V;
+    return res;
+}
+
+std::string llvm_type_to_string(const llvm::Type &Ty) {
+    std::string res;
+    llvm::raw_string_ostream(res) << Ty;
+    return res;
 }

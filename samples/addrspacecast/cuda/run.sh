@@ -1,3 +1,3 @@
 # export AMD_LOG_LEVEL=4
-../../../scripts/amdcuda -g empty.cu
+../../../scripts/amdcuda -g -v empty.cu
 ./empty.translated

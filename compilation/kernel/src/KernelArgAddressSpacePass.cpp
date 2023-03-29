@@ -15,6 +15,7 @@
 #include "llvm/Pass.h"
 
 #include "KernelArgAddressSpacePass.hpp"
+#include "utils.hpp"
 
 using namespace llvm;
 using namespace cupbop::amd::passes;
@@ -28,14 +29,40 @@ Function *KernelArgAddressSpacePass::processKernel(Module &M, Function &F) {
     std::vector<Type *> modifiedParamsTy = {};
 
     // Add global address space attribute to all pointer arguments to the kernel
-    for (auto *paramTy : FTy->params()) {
-        if (paramTy->isPointerTy()) {
-            auto *ptrTy = cast<PointerType>(paramTy);
-            auto *modifiedPtrTy = PointerType::getWithSamePointeeType(
-                ptrTy, dataLayout.getDefaultGlobalsAddressSpace());
+    // for (auto *paramTy : FTy->params()) {
+    //     auto paramTyStr = llvm_type_to_string(*paramTy);
+    //     if (paramTy->isPointerTy()) {
+    //         auto *ptrTy = cast<PointerType>(paramTy);
+    //         auto *modifiedPtrTy = PointerType::getWithSamePointeeType(
+    //             ptrTy, dataLayout.getDefaultGlobalsAddressSpace());
+    //         modifiedParamsTy.push_back(modifiedPtrTy);
+    //     } else {
+    //         modifiedParamsTy.push_back(paramTy);
+    //     }
+    // }
+
+    for (auto argIt = F.arg_begin(), argEnd = F.arg_end(); argIt != argEnd; ++argIt) {
+        auto* arg = &*argIt;
+        auto* argTy = arg->getType();
+
+        if (argTy->isPointerTy()) {
+            auto *ptrTy = cast<PointerType>(argTy);
+            auto ptrAS = dataLayout.getDefaultGlobalsAddressSpace();
+
+            // For pass by-value arguments, use constant address space and change it to by-ref instead.
+            if (arg->hasByValAttr()) {
+                ptrAS = 4; // Constant address space
+                auto byValAttr = arg->getAttribute(Attribute::AttrKind::ByVal);
+                auto* byValTy = byValAttr.getValueAsType();
+                arg->removeAttr(Attribute::AttrKind::ByVal);
+                auto byRefAttr = Attribute::getWithByRefType(context, byValTy);
+                arg->addAttr(byRefAttr);
+            }
+
+            auto *modifiedPtrTy = PointerType::getWithSamePointeeType(ptrTy, ptrAS);
             modifiedParamsTy.push_back(modifiedPtrTy);
         } else {
-            modifiedParamsTy.push_back(paramTy);
+            modifiedParamsTy.push_back(argTy);
         }
     }
 

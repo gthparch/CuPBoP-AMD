@@ -73,8 +73,6 @@ int main(const int argc, const char *argv[]) {
     // Transform Texture Memory
     transformTexture(*M);
 
-    VerifyModule(*M);
-
     // Write to Output
     std::error_code writeError;
     auto outputFilename = std::string(argv[1]) + ".translated_test.bc";
@@ -82,6 +80,8 @@ int main(const int argc, const char *argv[]) {
                               sys::fs::OF_None);
     WriteBitcodeToFile(*M, toolOutput.os());
     toolOutput.keep();
+
+    VerifyModule(*M);
 
     return 0;
 }
