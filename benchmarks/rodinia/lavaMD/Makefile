@@ -47,7 +47,7 @@ CUPBOPCC=$(AMDCUDA_DIR)/scripts/amdcuda
 CC=clang
 CXX=clang++
 LD=ld.lld
-CXXFLAGS=-g -O0 -I/opt/rocm-5.2.0/llvm/include/ -openmp
+CXXFLAGS=-g -O0 -I/opt/rocm/llvm/include/ -openmp
 
 HIPIFY_OBJS=$(OBJS:.o=.hipify.o)
 CUPBOP_OBJS=$(OBJS:.o=.cupbop.o)
@@ -85,4 +85,4 @@ $(BENCHMARK_NAME).cupbop: $(CXXOBJS) $(CUPBOP_OBJS) external_deps
 	$(CUPBOPCC) $(C3FLAGS) -o $@ $(LDFLAGS) $(CUPBOP_OBJS) $(CXXOBJS)
 
 $(BENCHMARK_NAME).hipify: $(CXXOBJS) $(HIPIFY_OBJS) external_deps
-	$(HIPCC) $(CXXFLAGS) -L/opt/rocm/llvm/lib/clang/14.0.0/lib/linux -o $@ $(HIPIFY_OBJS) $(CXXOBJS) $(LDFLAGS)
+	$(HIPCC) $(CXXFLAGS) -o $@ $(HIPIFY_OBJS) $(CXXOBJS) $(LDFLAGS)

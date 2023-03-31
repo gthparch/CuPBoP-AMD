@@ -1,11 +1,4 @@
 AMDCUDA_DIR=$(realpath $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))/../../..)
-HIPCC=hipcc
-HIPIFY=$(AMDCUDA_DIR)/scripts/hipify-perl
-CUPBOPCC=$(AMDCUDA_DIR)/scripts/amdcuda
-CC=clang
-CXX=clang++
-LD=ld.lld
-CXXFLAGS=-g -O0 -I/opt/rocm-5.2.0/llvm/include/ -openmp
 
 # Objects required for compilation
 OBJS=kmeans_cuda.o
@@ -14,6 +7,15 @@ BENCHMARK_NAME=kmeans
 
 # Additional CuPBoP-CC flags, add -i to inspect IRs
 C3FLAGS=-i
+
+# Other flags that you probably don't need to change
+HIPCC=hipcc
+HIPIFY=$(AMDCUDA_DIR)/scripts/hipify-perl
+CUPBOPCC=$(AMDCUDA_DIR)/scripts/amdcuda
+CC=clang
+CXX=clang++
+LD=ld.lld
+CXXFLAGS=-g -O0 -I/opt/rocm/llvm/include/ -openmp
 
 HIPIFY_OBJS=$(OBJS:.o=.hipify.o)
 CUPBOP_OBJS=$(OBJS:.o=.cupbop.o)
@@ -42,10 +44,13 @@ all: $(BENCHMARK_NAME).cupbop $(BENCHMARK_NAME).hipify
 	@echo ------ HIPCC is at: $(HIPCC)
 
 clean:
-	rm -f $(BENCHMARK_NAME).cupbop $(BENCHMARK_NAME).hipify $(HIPIFY_OBJS) $(CUPBOP_OBJS) $(OBJS:.o=.hipify.cpp) *.ll
+	rm -f $(BENCHMARK_NAME).cupbop $(BENCHMARK_NAME).hipify $(HIPIFY_OBJS) $(CUPBOP_OBJS) $(OBJS:.o=.hipify.cpp) $(CXXOBJS) *.ll */*.ll */*/*.ll
 
-$(BENCHMARK_NAME).cupbop: $(CXXOBJS) $(CUPBOP_OBJS)
-	$(CUPBOPCC) $(C3FLAGS) -o $@ $^
+.PHONY:external_deps
+external_deps:
 
-$(BENCHMARK_NAME).hipify: $(CXXOBJS) $(HIPIFY_OBJS)
-	$(HIPCC) $(CXXFLAGS) -L/opt/rocm/llvm/lib/clang/14.0.0/lib/linux -o $@ $^
+$(BENCHMARK_NAME).cupbop: $(CXXOBJS) $(CUPBOP_OBJS) external_deps
+	$(CUPBOPCC) $(C3FLAGS) -o $@ $(LDFLAGS) $(CUPBOP_OBJS) $(CXXOBJS)
+
+$(BENCHMARK_NAME).hipify: $(CXXOBJS) $(HIPIFY_OBJS) external_deps
+	$(HIPCC) $(CXXFLAGS) -o $@ $(HIPIFY_OBJS) $(CXXOBJS) $(LDFLAGS)
