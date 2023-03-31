@@ -4,12 +4,12 @@
 namespace cupbop {
 namespace amd {
 namespace passes {
-class TextureTransformPass : public llvm::FunctionPass {
+class TextureTransformPass : public llvm::ModulePass  {
   public:
     static char ID;
     
     TextureTransformPass();
-    virtual bool runOnFunction(llvm::Function &F);
+    virtual bool runOnModule(llvm::Module &M);
 };
 } // namespace passes
 } // namespace amd

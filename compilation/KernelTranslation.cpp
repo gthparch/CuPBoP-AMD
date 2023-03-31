@@ -22,6 +22,7 @@
 #include "TransformTexture.hpp"
 #include "cupbop_amd.hpp"
 #include "utils.hpp"
+#include "vectorTypes.hpp"
 
 using namespace llvm;
 
@@ -36,6 +37,8 @@ Pass *createRegisteredPass(std::string id) {
     assert(registeredPassInfo != nullptr);
     return registeredPassInfo->createPass();
 }
+
+CupbopVectorType* CupbopVectorType::instance = NULL;
 
 int main(const int argc, const char *argv[]) {
     assert(argc == 2);
@@ -52,6 +55,8 @@ int main(const int argc, const char *argv[]) {
 
     legacy::PassManager PM, MetadataPM;
 
+   
+
     // First run the metadata passes
     PM.add(createRegisteredPass("cuda2amd-module-format"));
     PM.add(createRegisteredPass("cuda2amd-kernel-format"));
@@ -59,21 +64,39 @@ int main(const int argc, const char *argv[]) {
     PM.add(createRegisteredPass("transform-cuda-vprintf"));
     PM.add(createRegisteredPass("transform-cuda-math-fn"));
     PM.add(createRegisteredPass("cudaamd-shared-memory-pass"));
-    PM.add(createRegisteredPass("cuda-texture-transform"));
+   
+  
+
     PM.add(createRegisteredPass("kernel-arg-address-space"));
     PM.add(createRegisteredPass("address-space-cast"));
-    PM.add(createRegisteredPass("device-trap"));
-    PM.add(createRegisteredPass("cooperative-groups"));
+    PM.add(createRegisteredPass("vector-arg"));
+    PM.add(createRegisteredPass("vector-pass"));
+    PM.add(createRegisteredPass("cuda-texture-transform"));
 
+    // PM.add(createRegisteredPass("device-trap"));
+    // PM.add(createRegisteredPass("cooperative-groups"));
+
+    // Global Vector Types in Singleton Class
+    CupbopVectorType* cvt = CupbopVectorType::getInstance();
+    // initialize the vector types
+    cvt->setModule(*M);
+    
+    
     PM.run(*M);
+
+    
+    // outs() << *M << '\n';
 
     // Change Atomics
     changeAtomics(*M);
 
     // Transform Texture Memory
-    transformTexture(*M);
+    // transformTexture(*M);
 
-    VerifyModule(*M);
+    outs() << *M << '\n';
+
+    
+    // VerifyModule(*M);
 
     // Write to Output
     std::error_code writeError;

@@ -33,6 +33,7 @@
 
 #include "TransformTexture.hpp"
 #include "utils.hpp"
+#include "vectorTypes.hpp"
 
 using namespace llvm;
 
@@ -89,21 +90,7 @@ void transformTexture(llvm::Module &M) {
   textureStruct->setBody({textureReference}, false);
   std::unordered_map<std::string, GlobalVariable*> umap;
 
-  // vector type <4 x i32> ?
-  Type *vectorIntType = VectorType::get(int32Type, 4, false);
-  auto unionIntVector = StructType::create(context, "vector.int.union"); 
-  unionIntVector->setBody(vectorIntType);
-
-  // vector type <4x float>
-  Type *vectorFloat4Type = VectorType::get(floatType, 4, false);
-  auto unionFloat4Vector = StructType::create(context, "union.anon"); 
-  unionFloat4Vector->setBody(vectorFloat4Type);
-
-  auto hipVectorFloat4Base = StructType::create(context, "struct.HIP_vector_base");
-  hipVectorFloat4Base->setBody(unionFloat4Vector);
-
-  auto hipVectorFloat4Type = StructType::create(context, "struct.HIP_vector_type");
-  hipVectorFloat4Type->setBody(hipVectorFloat4Base);
+ 
 
   // Type *vectorFloat4Type = VectorType::get(floatType, 4, false);
   // auto unionFloat4Vector = StructType::create(context, "vector.float.union"); 
@@ -114,6 +101,23 @@ void transformTexture(llvm::Module &M) {
 
   // auto hipVectorFloat4Type = StructType::create(context, "struct.HIP_vector_type");
   // hipVectorFloat4Type->setBody({hipVectorFloat4Base});
+
+  // vector type <4 x i32> ?
+Type *vectorIntType = VectorType::get(int32Type, 4, false);
+auto unionIntVector = StructType::create(context, "vector.int.union"); 
+unionIntVector->setBody(vectorIntType);
+
+// vector type <4x float>
+Type *vectorFloat4Type = VectorType::get(floatType, 4, false);
+auto unionFloat4Vector = StructType::create(context, "union.anon"); 
+unionFloat4Vector->setBody(vectorFloat4Type);
+
+auto hipVectorFloat4Base = StructType::create(context, "struct.HIP_vector_base");
+hipVectorFloat4Base->setBody(unionFloat4Vector);
+
+auto hipVectorFloat4Type = StructType::create(context, "struct.HIP_vector_type");
+hipVectorFloat4Type->setBody(hipVectorFloat4Base);
+
 
   for(GlobalVariable* global: allTextureMemories) {
     std::string new_name = "cupbop_" + global->getName().str(); 
@@ -266,7 +270,7 @@ void transformTexture(llvm::Module &M) {
             if ( got == umap.end() ) {
               std::cout << "not found";
               outs() << *F << '\n';
-              exit(1);
+              // exit(1);
             } else {
                 std::cout << " foound " << std::endl;
                 SmallVector<Value *, 4> memcpyArgs;
@@ -477,7 +481,7 @@ void transformTexture(llvm::Module &M) {
                 if ( gotValue == operand_map.end() ) {
                   std::cerr << "not found";
                   outs() << *F << '\n';
-                  exit(1);
+                  // exit(1);
                 } else {
                   texArgs.push_back(newGEP);
                   texArgs.push_back(gotValue->second);

@@ -112,6 +112,11 @@ bool isCudaBuiltin(std::string  functionName) {
     if (functionName.find("llvm.") != std::string::npos) {
         return true;
     }
+     if (functionName.find(".nvvm.") != std::string::npos) {
+        return true;
+    }
+
+   
     return false;
 
 }
@@ -123,3 +128,7 @@ void VerifyModule(llvm::Module &M) {
     if (llvm::verifyModule(M, &(llvm::errs())))
         llvm::report_fatal_error(os.str().c_str());
 }
+
+
+
+
