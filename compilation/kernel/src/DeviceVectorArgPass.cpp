@@ -44,7 +44,7 @@ Function *VectorArgPass::processKernel(Module &M, Function &F) {
     std::cout << "Process Device Side Vector Function Type " << F.getName().str()  << std::endl;
     
     CupbopVectorType* cvt = CupbopVectorType::getInstance();
-
+    bool vectorContinue = false;
     for (auto *paramTy : FTy->params()) {
       
       if(paramTy->isPointerTy()) {
@@ -52,6 +52,7 @@ Function *VectorArgPass::processKernel(Module &M, Function &F) {
         if (StructType* StructTy = (ptype != nullptr ? dyn_cast<StructType>(ptype) : nullptr)){
           if (ptype->getStructName().str() == "struct.float4") {
             modifiedParamsTy.push_back(cvt->getFloat4Base());
+            vectorContinue = true;
           } else {
             modifiedParamsTy.push_back(paramTy);
           }
@@ -69,7 +70,11 @@ Function *VectorArgPass::processKernel(Module &M, Function &F) {
     if (auto StructTy = dyn_cast<StructType>(rt)) {
       if (rt->getStructName().str() == "struct.float4") {
         rt = cvt->getFloat4Type();
+        vectorContinue = true;
       }
+    }
+    if (!vectorContinue) {
+      return nullptr;
     }
     
 
