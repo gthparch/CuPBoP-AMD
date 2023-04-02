@@ -3,10 +3,6 @@
 
 #include <stdio.h>
 
-// declare texture reference for 1D float texture
-texture<float4, 1, cudaReadModeElementType> tex;
-texture<float, 1, cudaReadModeElementType> txt; 
-
 __device__ float4 sortElem(float4 r) {
 	float4 nr;
 

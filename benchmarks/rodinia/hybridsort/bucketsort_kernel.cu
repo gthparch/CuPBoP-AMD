@@ -14,8 +14,6 @@
 #define BUCKET_BLOCK_MEMORY		(DIVISIONS * BUCKET_WARP_N)
 #define BUCKET_BAND				128
 
-texture<float, 1, cudaReadModeElementType> texPivot; 
-
 __device__ int addOffset(volatile unsigned int *s_offset, unsigned int data, unsigned int threadTag){
     unsigned int count;
 

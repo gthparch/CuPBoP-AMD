@@ -49,7 +49,7 @@ Function *VectorArgPass::processKernel(Module &M, Function &F) {
       
       if(paramTy->isPointerTy()) {
         Type *ptype = F.getParamByValType(modifiedParamsTy.size());
-        if ( StructType* StructTy = dyn_cast<StructType>(ptype)){
+        if (StructType* StructTy = (ptype != nullptr ? dyn_cast<StructType>(ptype) : nullptr)){
           if (ptype->getStructName().str() == "struct.float4") {
             modifiedParamsTy.push_back(cvt->getFloat4Base());
           } else {
