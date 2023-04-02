@@ -1,5 +1,6 @@
 #pragma once
-
+#ifndef __HISTOGRAM
+#define __HISTOGRAM
 void initHistogram1024(void);
 void closeHistogram1024(void);
 void histogram1024GPU(
@@ -8,3 +9,4 @@ void histogram1024GPU(
 	float minimum,
 	float maximum,
     int dataN);
+#endif

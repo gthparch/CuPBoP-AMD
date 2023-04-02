@@ -19,7 +19,9 @@ using namespace std;
 ////////////////////////////////////////////////////////////////////////////////
 // Size of the testset (Bitwise shift of 1 over 22 places)
 ////////////////////////////////////////////////////////////////////////////////
-#define SIZE	(1 << 22)
+// #define SIZE	(1 << 22)
+#define SIZE	(1 << 12)
+
 ////////////////////////////////////////////////////////////////////////////////
 // Number of tests to average over
 ////////////////////////////////////////////////////////////////////////////////
@@ -117,7 +119,7 @@ main( int argc, char** argv)
 	for (int i = 0; i < TEST; i++) 
 		cudaSort(cpu_idata, datamin, datamax, gpu_odata, numElements);		
 	cout << "done.\n";
-#ifdef VERIFY
+// #ifdef VERIFY
 	cout << "Sorting on CPU..." << flush; 
 	// CPU Sort
 	memcpy(cpu_odata, cpu_idata, mem_size); 		
@@ -134,11 +136,13 @@ main( int argc, char** argv)
 			printf("Sort missmatch on element %d: \n", i); 
 			printf("CPU = %f : GPU = %f\n", cpu_odata[i], gpu_odata[i]); 
 			count++; 
-			break; 
+			// break; 
+		} else {
+			printf("CPU = %f : GPU = %f\n", cpu_odata[i], gpu_odata[i]);
 		}
 	if(count == 0) cout << "PASSED.\n";
-	else cout << "FAILED.\n";
-#endif
+	else cout << "FAILED. " << count << " mismatches \n";
+// #endif
 	// Timer report
 	printf("GPU iterations: %d\n", TEST); 
 #ifdef TIMER

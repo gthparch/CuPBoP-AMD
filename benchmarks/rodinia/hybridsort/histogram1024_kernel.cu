@@ -40,6 +40,7 @@
 
 #include <cuda.h>
 #include "helper_cuda.h"
+#include "histogram1024_kernel.h"
 
 //Total number of possible data values
 #define BIN_COUNT 1024 // Changed from 256
@@ -66,6 +67,8 @@
 #define BLOCK_MEMORY (WARP_N * BIN_COUNT)
 #define IMUL(a, b) __mul24(a, b)
 
+// #include "histogram1024_kernel.h"
+
 __device__ void addData1024(volatile unsigned int *s_WarpHist, unsigned int data, unsigned int threadTag){
     unsigned int count;
     do{
@@ -79,9 +82,13 @@ __device__ void addData1024(volatile unsigned int *s_WarpHist, unsigned int data
 __global__ void histogram1024Kernel(unsigned int *d_Result, float *d_Data, float minimum, float maximum, int dataN){
 
     //Current global thread index
-    const int    globalTid = IMUL(blockIdx.x, blockDim.x) + threadIdx.x;
+    // const int    globalTid = IMUL(blockIdx.x, blockDim.x) + threadIdx.x;
+
+    const int    globalTid = (blockIdx.x* blockDim.x) + threadIdx.x;
     //Total number of threads in the compute grid
-    const int   numThreads = IMUL(blockDim.x, gridDim.x);
+    // const int   numThreads = IMUL(blockDim.x, gridDim.x);
+    const int   numThreads = (blockDim.x *gridDim.x);
+
     //WARP_LOG_SIZE higher bits of counter values are tagged 
     //by lower WARP_LOG_SIZE threadID bits
 	// Will correctly issue warning when compiling for debug (x<<32-0)
@@ -90,7 +97,7 @@ __global__ void histogram1024Kernel(unsigned int *d_Result, float *d_Data, float
     //Declare as volatile to prevent incorrect compiler optimizations in addPixel()
     volatile __shared__ unsigned int s_Hist[BLOCK_MEMORY];
     //Current warp shared memory frame
-    const int warpBase = IMUL(threadIdx.x >> WARP_LOG_SIZE, BIN_COUNT);
+    const int warpBase = (threadIdx.x >> WARP_LOG_SIZE) * BIN_COUNT;
     
     //Clear shared memory buffer for current thread block before processing
     for(int pos = threadIdx.x; pos < BLOCK_MEMORY; pos += blockDim.x)
