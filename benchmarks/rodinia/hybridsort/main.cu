@@ -3,6 +3,7 @@
 #  define NOMINMAX
 #  include <windows.h>
 #endif
+#include <cuda.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -11,8 +12,8 @@
 #include "helper_cuda.h"
 #include "helper_timer.h"
 #include <iostream>
-#include "bucketsort.cuh"
-#include "mergesort.cuh"
+#include "bucketsort.h"
+#include "mergesort.h"
 using namespace std; 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -218,7 +219,7 @@ void cudaSort(float *origList, float minimum, float maximum,
 
 	// Download result
 	sdkStartTimer(&downloadTimer); 
-		checkCudaErrors(	cudaMemcpy((void *) resultList, 
+		(	cudaMemcpy((void *) resultList, 
 				(void *)mergeresult, numElements * sizeof(float), cudaMemcpyDeviceToHost) );
 	sdkStopTimer(&downloadTimer); 
 

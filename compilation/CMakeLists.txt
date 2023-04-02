@@ -12,6 +12,6 @@ add_executable(hostTranslator HostTranslation.cpp)
 target_link_libraries(hostTranslator cupbop-amd-host ${CUPBOP_LINKED_LLVM_LIBS})
 
 
-add_executable(hipParser HipParse.cpp)
-target_link_libraries(hipParser cupbop-amd-host ${CUPBOP_LINKED_LLVM_LIBS})
+# add_executable(hipParser HipParse.cpp)
+# target_link_libraries(hipParser cupbop-amd-host ${CUPBOP_LINKED_LLVM_LIBS})
 

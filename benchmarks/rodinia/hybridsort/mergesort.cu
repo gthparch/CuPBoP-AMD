@@ -5,7 +5,13 @@
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
+#include <cuda.h>
 #include "mergesort.h"
+
+// declare texture reference for 1D float texture
+texture<float4, 1, cudaReadModeElementType> tex;
+texture<float, 1, cudaReadModeElementType> txt; 
+
 #include "mergesort_kernel.cu"
 #include "bucketsort.h"
 ////////////////////////////////////////////////////////////////////////////////
