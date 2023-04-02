@@ -73,8 +73,8 @@ int main(const int argc, const char *argv[]) {
     PM.add(createRegisteredPass("vector-pass"));
     PM.add(createRegisteredPass("cuda-texture-transform"));
 
-    // PM.add(createRegisteredPass("device-trap"));
-    // PM.add(createRegisteredPass("cooperative-groups"));
+    PM.add(createRegisteredPass("device-trap"));
+    PM.add(createRegisteredPass("cooperative-groups"));
 
     // Global Vector Types in Singleton Class
     CupbopVectorType* cvt = CupbopVectorType::getInstance();
@@ -93,10 +93,10 @@ int main(const int argc, const char *argv[]) {
     // Transform Texture Memory
     // transformTexture(*M);
 
-    outs() << *M << '\n';
+    // outs() << *M << '\n';
 
     
-    // VerifyModule(*M);
+    VerifyModule(*M);
 
     // Write to Output
     std::error_code writeError;

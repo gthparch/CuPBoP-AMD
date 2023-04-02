@@ -106,6 +106,9 @@ bool isCudaBuiltin(std::string  functionName) {
     if (functionName.find("__cuda_") != std::string::npos) {
         return true;
     }
+    if (functionName.find("_builtin_") != std::string::npos) {
+        return true;
+    }
     if (functionName.find("__nv_") != std::string::npos) {
         return true;
     }
