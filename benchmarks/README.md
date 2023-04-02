@@ -21,7 +21,7 @@ Read [benchmark boilerplate](./boilerplate) for instructions and sample code for
 | huffman | :x: | [WIP] Compiles with both CuPBoP-AMD and HIPIFY. Both produce mismatched vectors. |
 | hybridsort | :heavy_check_mark: | Works until SIZE is greater than around 2700 - 4096 |
 | kmeans | :heavy_check_mark: | size *offset = NULL segfaults with HIPAMD but not CUDA |
-| leukocyte | :heavy_check_mark: ||
+| leukocyte | :heavy_check_mark: | size *offset = NULL segfaults with HIPAMD but not CUDA |
 | lud | :heavy_check_mark: ||
 | myocyte | :heavy_check_mark: ||
 | nn | :heavy_check_mark: | Nearest Neighbor |
