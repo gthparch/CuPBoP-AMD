@@ -169,7 +169,7 @@ bool TextureTransformPass::runOnModule(Module &M) {
 
                 std::cout << "Function: " << F.getName().str() << std::endl;
 
-                // if (F.getName().str() != "_Z9mergepackPfS_") continue;
+                // if (F.getName().str() != "_Z13mergeSortPassP6float4ii") continue;
 
                 Function::iterator I = F.begin();
                 BasicBlock::iterator firstBB = I->getFirstInsertionPt();
@@ -215,10 +215,14 @@ bool TextureTransformPass::runOnModule(Module &M) {
                             llvm::Value* zero_operand = nvvm_function->getArgOperand(0);
                             if (getElementPtrBefore.find(one_operand) != getElementPtrBefore.end()) {
                                 std::unordered_map<Value*,Value*>::iterator gotValue = operand_map.find(zero_operand);
-                                if ( gotValue == operand_map.end() ) {  
+                                std::unordered_map<Value*,Value*>::iterator gotValue2 = operand_map.find(one_operand);
+
+                                if ( gotValue == operand_map.end() || gotValue2 == operand_map.end() ) {  
                                     outs() << " Unknown Case " << '\n';
                                 } else {
                                     nvvm_function->setArgOperand(0, gotValue->second);
+                                    nvvm_function->setArgOperand(1, gotValue2->second);
+
 
                                     Builder.SetInsertPoint(nvvm_function);
 
@@ -410,7 +414,8 @@ bool TextureTransformPass::runOnModule(Module &M) {
                                 Builder.CreateCall(LLVMmemcpyFn, memcpyArgs);
                                 Value *i32zero = ConstantInt::get(context, APInt(32, 0));
                                 Value *indices[2] = {i32zero, i32zero};
-                                textureToBeLoaded = Builder.CreateGEP(textureReference, newtex, ArrayRef<Value *>(indices, 2) ,"", true);
+                                // changed this line
+                                textureToBeLoaded = Builder.CreateGEP(textureStruct, newtex, ArrayRef<Value *>(indices, 2) ,"", true);
                                 // %35 = getelementptr inbounds %struct.texture, ptr %16, i32 0, i32 0
                                 // %36 = load %struct.textureReference, ptr %35, align 8
 
@@ -1030,8 +1035,13 @@ bool TextureTransformPass::runOnModule(Module &M) {
                         } else {
                                 Builder.SetInsertPoint(getelementptr);
                                 Value *operand_zero = dyn_cast<Value>(getelementptr->getOperand(0));
+                                std::unordered_map<Value*,Value*>::iterator gotValue = operand_map.find(operand_zero);
+                                if ( gotValue == operand_map.end() ) {
+                                    outs() << " Unknown Case 1025 " << '\n';
+                                    std::exit(1035);
+                                }
                                 
-                                auto newGep = Builder.CreateStructGEP(cvt->getFloat4Base(), operand_zero , 0  ,"");
+                                auto newGep = Builder.CreateStructGEP(cvt->getFloat4Base(), gotValue->second , 0  ,"");
                
                                 getElementPtrBefore.insert(getelementptr->getOperand(0));
               
@@ -1041,7 +1051,7 @@ bool TextureTransformPass::runOnModule(Module &M) {
                                 getelementptr->replaceAllUsesWith(newGepUnion);
                         
                                 need_remove.insert(getelementptr);
-                                //   outs() << " More \n";
+                                // outs() << F << " \n";
                                 // outs() << " More \n";
                                 // std::exit(11);
                         }
@@ -1073,6 +1083,24 @@ bool TextureTransformPass::runOnModule(Module &M) {
                
 
                 // remove 
+                 for ( const auto &addrInstr : operand_map ) {
+                     if (auto addrSpaceCastInstr = dyn_cast<AddrSpaceCastInst>(addrInstr.first)) {
+                        if (auto allocaInstr = dyn_cast<AllocaInst>(addrSpaceCastInstr->getPointerOperand())) {
+                            if (allocaInstr->getAllocatedType()->isStructTy()) {
+                            if (allocaInstr->getAllocatedType()->getStructName().str() == "struct.float4") {
+                                   
+                                    
+                                    need_remove.insert(addrSpaceCastInstr);
+                                    need_remove.insert(allocaInstr);
+
+                            }
+
+                            }
+                        }
+                        
+                    }
+
+                }
                 for(auto remove: need_remove) {
                     remove->dropAllReferences();
                     remove->eraseFromParent();
