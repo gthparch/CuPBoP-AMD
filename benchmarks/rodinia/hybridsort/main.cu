@@ -19,8 +19,8 @@ using namespace std;
 ////////////////////////////////////////////////////////////////////////////////
 // Size of the testset (Bitwise shift of 1 over 22 places)
 ////////////////////////////////////////////////////////////////////////////////
-// #define SIZE	(1 << 22)
-#define SIZE	(1 << 12)
+#define SIZE	(1 << 22)
+// #define SIZE	((4000)) 
 
 ////////////////////////////////////////////////////////////////////////////////
 // Number of tests to average over
@@ -63,6 +63,7 @@ main( int argc, char** argv)
     // Number of elements in the test bed
        	if(strcmp(argv[1],"r") ==0) {
 	numElements = SIZE; 
+	
 	}
 	else {
 		FILE *fp;
@@ -119,7 +120,7 @@ main( int argc, char** argv)
 	for (int i = 0; i < TEST; i++) 
 		cudaSort(cpu_idata, datamin, datamax, gpu_odata, numElements);		
 	cout << "done.\n";
-// #ifdef VERIFY
+#ifdef VERIFY
 	cout << "Sorting on CPU..." << flush; 
 	// CPU Sort
 	memcpy(cpu_odata, cpu_idata, mem_size); 		
@@ -138,11 +139,11 @@ main( int argc, char** argv)
 			count++; 
 			// break; 
 		} else {
-			printf("CPU = %f : GPU = %f\n", cpu_odata[i], gpu_odata[i]);
+			// printf("CPU = %f : GPU = %f\n", cpu_odata[i], gpu_odata[i]);
 		}
 	if(count == 0) cout << "PASSED.\n";
 	else cout << "FAILED. " << count << " mismatches \n";
-// #endif
+#endif
 	// Timer report
 	printf("GPU iterations: %d\n", TEST); 
 #ifdef TIMER
@@ -204,6 +205,9 @@ void cudaSort(float *origList, float minimum, float maximum,
 		unsigned int *origOffsets = (unsigned int *) malloc((DIVISIONS + 1) * sizeof(int)); 
 		bucketSort(d_input, d_output, numElements, sizes, nullElements, 
 				   minimum, maximum, origOffsets); 
+
+
+		
 	sdkStopTimer(&bucketTimer); 
 
 	// Mergesort the result
