@@ -874,11 +874,17 @@ bool TextureTransformPass::runOnModule(Module &M) {
                                         if (callFnName == "llvm.memcpy.p0.p0.i64") {
                                             if (memcpyFn->getArgOperand(1) == gep->getOperand(0)) {
                                                 outs() << " hhhhh \n";
+
+                                               
+
                                                 if (gep->getSourceElementType()->isStructTy()
                                                 && gep->getSourceElementType()->getStructName().str() == "struct.float4") {
                                                     outs() << " hhhhh \n";
                                                     llvm::Value* first_operand = memcpyFn->getArgOperand(0);
 
+                                                    
+                                                std::unordered_map<Value*,Value*>::iterator gotValue = operand_map.find(memcpyFn->getArgOperand(0));
+                                                if ( gotValue == operand_map.end() ) {
                                                     if (auto addrSpaceCastInstr = dyn_cast<AddrSpaceCastInst>(first_operand)) {
                                                         if (auto allocaInstr = dyn_cast<AllocaInst>(addrSpaceCastInstr->getPointerOperand())) {
                                                             if (allocaInstr->getAllocatedType()->isStructTy()) {
@@ -898,6 +904,9 @@ bool TextureTransformPass::runOnModule(Module &M) {
                                                         }
                                                         
                                                     }
+                                                } else {
+                                                    memcpyFn->setArgOperand(0, gotValue->second);                                                     
+                                                }
 
                                                     Builder.SetInsertPoint(prev);
 
