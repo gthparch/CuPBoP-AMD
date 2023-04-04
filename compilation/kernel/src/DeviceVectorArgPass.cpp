@@ -51,10 +51,40 @@ Function *VectorArgPass::processKernel(Module &M, Function &F) {
         Type *ptype = F.getParamByValType(modifiedParamsTy.size());
         if (StructType* StructTy = (ptype != nullptr ? dyn_cast<StructType>(ptype) : nullptr)){
           if (ptype->getStructName().str() == "struct.float4") {
+            F.removeParamAttr(modifiedParamsTy.size(),Attribute::AttrKind::ByVal);
+            F.removeParamAttr(modifiedParamsTy.size(),Attribute::AttrKind::Alignment);
+
             modifiedParamsTy.push_back(cvt->getFloat4Base());
+
             vectorContinue = true;
-          } else {
-            modifiedParamsTy.push_back(paramTy);
+          } else if(ptype->getStructName().str() == "struct.uint4") {
+             F.removeParamAttr(modifiedParamsTy.size(),Attribute::AttrKind::ByVal);
+            F.removeParamAttr(modifiedParamsTy.size(),Attribute::AttrKind::Alignment);
+
+            modifiedParamsTy.push_back(cvt->getI32_4Base());
+
+            vectorContinue = true;
+
+          }  else if(ptype->getStructName().str() == "struct.int2") {
+
+            F.removeParamAttr(modifiedParamsTy.size(),Attribute::AttrKind::ByVal);
+            F.removeParamAttr(modifiedParamsTy.size(),Attribute::AttrKind::Alignment);
+
+            modifiedParamsTy.push_back(cvt->getI32_2Base());
+
+            vectorContinue = true;
+          }  else if(ptype->getStructName().str() == "struct.uchar3") {
+            F.removeParamAttr(modifiedParamsTy.size(),Attribute::AttrKind::ByVal);
+            F.removeParamAttr(modifiedParamsTy.size(),Attribute::AttrKind::Alignment);
+
+            modifiedParamsTy.push_back(cvt->getI8_3Base());
+
+            vectorContinue = true;
+
+          }
+          else {
+              modifiedParamsTy.push_back(paramTy);
+
           }
         } else {
             modifiedParamsTy.push_back(paramTy);
@@ -71,12 +101,23 @@ Function *VectorArgPass::processKernel(Module &M, Function &F) {
       if (rt->getStructName().str() == "struct.float4") {
         rt = cvt->getFloat4Type();
         vectorContinue = true;
+      } else if(rt->getStructName().str() == "struct.uint4") {
+        rt = cvt->getI32_4Type();
+        vectorContinue = true;
+      } else if(rt->getStructName().str() == "struct.int2") {
+        rt = cvt->getI32_2Type();
+        vectorContinue = true;
+      } else if(rt->getStructName().str() == "struct.uchar3") {
+         rt = cvt->getI8_3Type();
+        vectorContinue = true;
       }
     }
     if (!vectorContinue) {
       return nullptr;
     }
     
+    // outs() << F << '\n';
+    // std::exit(22);
 
     auto *replacementFTy = FunctionType::get(rt,
                                              modifiedParamsTy, FTy->isVarArg());
@@ -84,7 +125,7 @@ Function *VectorArgPass::processKernel(Module &M, Function &F) {
         Function::Create(replacementFTy, F.getLinkage(), F.getAddressSpace());
     
     // Remove ByVal attributes from arugments:
-    // replacementF->copyAttributesFrom(&F);
+    replacementF->copyAttributesFrom(&F);
 
     replacementF->setCallingConv(F.getCallingConv());
     replacementF->setComdat(F.getComdat());

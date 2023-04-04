@@ -51,6 +51,12 @@ bool VectorPass::runOnFunction(Function &F) {
     if (F.getCallingConv() != CallingConv::AMDGPU_KERNEL
         && !isCudaBuiltin(F.getName().str())) {
 
+
+      // if (F.getName().str() != "_Z14arrayToAddress6uchar3Rj") continue;
+
+      std::cout << "Function: " << F.getName().str() << std::endl;
+
+
       /*
         First Step:
         If parameter is the already converted  %struct.HIP_vector_base %0,
@@ -77,30 +83,73 @@ bool VectorPass::runOnFunction(Function &F) {
           Type *ArgType = I->getType();
           Value *val = dyn_cast<Value>(I);
           if (StructType* StructTy = dyn_cast<StructType>(ArgType)){
-            if (ArgType->getStructName().str().find("HIP_vector_base") != std::string::npos) {
+            StructType* vecType = nullptr;
+            StructType* vecBase;
+            StructType* vecUnion;
+            Builder.SetInsertPoint(first_instr);   
+            if (ArgType->getStructName().str().find("HIP_vector_base_float.4") != std::string::npos) {
+                vecType = cvt->getFloat4Type();
+                vecBase = cvt->getFloat4Base();
+                vecUnion = cvt->getFloat4Union();
 
-                Builder.SetInsertPoint(first_instr);   
-
-                AllocaInst *newVector = Builder.CreateAlloca(cvt->getFloat4Type(), DL.getAllocaAddrSpace() , 0, "");
-                auto *newVec = Builder.CreateAddrSpaceCast(newVector , llvmI32PtrTy); // int32ptr or int64ptr
-                val->replaceAllUsesWith(newVec);
-                auto vectorTypeToGEP = Builder.CreateStructGEP(cvt->getFloat4Type(), newVec, 0 /*ArrayRef<Value *>(indices, 2)*/ ,"");
-
-                auto vectorToUnion= Builder.CreateStructGEP(cvt->getFloat4Base(), vectorTypeToGEP, 0  ,"");
-
-                auto vectorToBase = Builder.CreateStructGEP(cvt->getFloat4Union(), vectorToUnion, 0  ,"");
                 
-                auto vectorToBeExtract = Builder.CreateStructGEP(cvt->getFloat4Base(), vectorToBase, 0  ,"");
 
-                auto newEEV = Builder.CreateExtractValue(val, ArrayRef<unsigned int>({0}), "");
+                // AllocaInst *newVector = Builder.CreateAlloca(cvt->getFloat4Type(), DL.getAllocaAddrSpace() , 0, "");
+                // auto *newVec = Builder.CreateAddrSpaceCast(newVector , llvmI32PtrTy); // int32ptr or int64ptr
+                // val->replaceAllUsesWith(newVec);
+                // auto vectorTypeToGEP = Builder.CreateStructGEP(cvt->getFloat4Type(), newVec, 0 /*ArrayRef<Value *>(indices, 2)*/ ,"");
+
+                // auto vectorToUnion= Builder.CreateStructGEP(cvt->getFloat4Base(), vectorTypeToGEP, 0  ,"");
+
+                // auto vectorToBase = Builder.CreateStructGEP(cvt->getFloat4Union(), vectorToUnion, 0  ,"");
+                
+                // auto vectorToBeExtract = Builder.CreateStructGEP(cvt->getFloat4Base(), vectorToBase, 0  ,"");
+
+                // auto newEEV = Builder.CreateExtractValue(val, ArrayRef<unsigned int>({0}), "");
                
-                auto newStore = Builder.CreateStore(newEEV, vectorToBeExtract);
+                // auto newStore = Builder.CreateStore(newEEV, vectorToBeExtract);
             
-                // replace uses of the param with newVec
+                // // replace uses of the param with newVec
 
                 
+                
+          } else if(ArgType->getStructName().str().find("HIP_vector_base_float.2") != std::string::npos) {
+               vecType = cvt->getFloat2Type();
+                vecBase = cvt->getFloat2Base();
+                vecUnion = cvt->getFloat2Union();
+          } else if(ArgType->getStructName().str().find("HIP_vector_base_int.4") != std::string::npos) {
+                vecType = cvt->getI32_4Type();
+                vecBase = cvt->getI32_4Base();
+                vecUnion = cvt->getI32_4Union();
+          } else if(ArgType->getStructName().str().find("HIP_vector_base_int.2") != std::string::npos) {
+                vecType = cvt->getI32_2Type();
+                vecBase = cvt->getI32_2Base();
+                vecUnion = cvt->getI32_2Union();
+          } else if(ArgType->getStructName().str().find("HIP_vector_base_i8.3") != std::string::npos) {
+                vecType = cvt->getI8_3Type();
+                vecBase = cvt->getI8_3Base();
+                vecUnion = cvt->getI8_3Union();
                 
           }
+
+          if(vecType) {
+            AllocaInst *newVector = Builder.CreateAlloca(vecType, DL.getAllocaAddrSpace() , 0, "");
+            auto *newVec = Builder.CreateAddrSpaceCast(newVector , llvmI32PtrTy); // int32ptr or int64ptr
+            val->replaceAllUsesWith(newVec);
+            auto vectorTypeToGEP = Builder.CreateStructGEP(vecType, newVec, 0 /*ArrayRef<Value *>(indices, 2)*/ ,"");
+
+            auto vectorToUnion= Builder.CreateStructGEP(vecBase, vectorTypeToGEP, 0  ,"");
+
+            auto vectorToBase = Builder.CreateStructGEP(vecUnion, vectorToUnion, 0  ,"");
+            
+            auto vectorToBeExtract = Builder.CreateStructGEP(vecBase, vectorToBase, 0  ,"");
+
+            auto newEEV = Builder.CreateExtractValue(val, ArrayRef<unsigned int>({0}), "");
+            
+            auto newStore = Builder.CreateStore(newEEV, vectorToBeExtract);
+          }
+
+
       }
       }
 
@@ -156,17 +205,31 @@ bool VectorPass::runOnFunction(Function &F) {
             if (auto addrSpaceCastInstr = dyn_cast<AddrSpaceCastInst>(&I)) {
               if (auto allocaInstr = dyn_cast<AllocaInst>(addrSpaceCastInstr->getPointerOperand())) {
                  if (allocaInstr->getAllocatedType()->isStructTy()) {
+                  StructType* vecType = nullptr;
                   if (allocaInstr->getAllocatedType()->getStructName().str() == "struct.float4") {
-                        Builder.SetInsertPoint(addrSpaceCastInstr);
-                        AllocaInst *newVector = Builder.CreateAlloca(cvt->getFloat4Type(), DL.getAllocaAddrSpace() , 0, "");
-                        auto *newVec = Builder.CreateAddrSpaceCast(newVector , llvmI32PtrTy); // int32ptr or int64ptr
                         
-                        // replace all uses
-                        addrSpaceCastInstr->replaceAllUsesWith(newVec);
-                        
-                        need_remove.push_back(addrSpaceCastInstr);
-                        need_remove.push_back(allocaInstr);
+                        vecType = cvt->getFloat4Type();
+              
+                  } else if(allocaInstr->getAllocatedType()->getStructName().str() == "struct.uchar3") {
+                    vecType = cvt->getI8_3Type();
+                  } else if(allocaInstr->getAllocatedType()->getStructName().str() == "struct.uint4") {
+                    vecType = cvt->getI32_4Type();
+                  } else if(allocaInstr->getAllocatedType()->getStructName().str() == "struct.int2") {
+                    vecType = cvt->getI32_2Type();
+                  } else if(allocaInstr->getAllocatedType()->getStructName().str() == "struct.float2") {
+                    vecType = cvt->getFloat2Type();
+                  }
 
+                  if(vecType) {
+                      Builder.SetInsertPoint(addrSpaceCastInstr);
+                      AllocaInst *newVector = Builder.CreateAlloca(vecType, DL.getAllocaAddrSpace() , 0, "");
+                      auto *newVec = Builder.CreateAddrSpaceCast(newVector , llvmI32PtrTy); // int32ptr or int64ptr
+                      
+                      // replace all uses
+                      addrSpaceCastInstr->replaceAllUsesWith(newVec);
+                      
+                      need_remove.push_back(addrSpaceCastInstr);
+                      need_remove.push_back(allocaInstr);
                   }
 
                 }
@@ -182,10 +245,13 @@ bool VectorPass::runOnFunction(Function &F) {
 
               outs() << *getelementpr << '\n';
               if(auto structTy = dyn_cast<StructType>(getelementpr->getSourceElementType())) {
-               
+                StructType* vecBase = nullptr;
+                StructType* vecStruct;
                 // getelementptr inbounds %struct.float4, %struct.HIP_vector_base %0
                 if (getelementpr->getSourceElementType()->getStructName().str() == "struct.float4") {
-                 
+                  
+                  vecBase = cvt->getFloat4Base();
+                  vecStruct = cvt->getFloat4Struct();
                   //  outs() << *getelementpr  << " source pass " << '\n';
 
                  
@@ -200,17 +266,35 @@ bool VectorPass::runOnFunction(Function &F) {
                     %20 = getelementptr inbounds %struct.anon, ptr %19, i32 0, i32 1
                     %21 = load float, ptr %20, align 4, !tbaa !12
                   */
+                 
+                           
+                } else if (getelementpr->getSourceElementType()->getStructName().str() == "struct.uchar3") {
+                  vecBase = cvt->getI8_3Base();
+                  vecStruct = cvt->getI8_3Struct();
+                } else if (getelementpr->getSourceElementType()->getStructName().str() == "struct.uint4") {
+                  vecBase = cvt->getI32_4Base();
+                  vecStruct = cvt->getI32_4Struct();
+                } else if (getelementpr->getSourceElementType()->getStructName().str() == "struct.int2") {
+                  vecBase = cvt->getI32_2Base();
+                  vecStruct = cvt->getI32_2Struct();
+                } else if (getelementpr->getSourceElementType()->getStructName().str() == "struct.float2") {
+                  vecBase = cvt->getFloat2Base();
+                  vecStruct = cvt->getFloat2Struct();
+                }
+
+                if(vecBase) {
                   Builder.SetInsertPoint(getelementpr);
                   Value *operand_zero = dyn_cast<Value>(getelementpr->getOperand(0));
-                 
-                  auto newGep = Builder.CreateStructGEP(cvt->getFloat4Base(), operand_zero , 0  ,"");
+                  auto newGep = Builder.CreateStructGEP(vecBase, operand_zero , 0  ,"");
                
 
               
                   if (getelementpr->getNumIndices() == 2) {
                     llvm::ConstantInt* CI = dyn_cast<llvm::ConstantInt>(getelementpr->getOperand(2));
                     unsigned int secondIndex = CI->getZExtValue();
-                    auto newGepUnion = Builder.CreateStructGEP(cvt->getFloat4Struct(), newGep ,secondIndex ,"");
+
+                   
+                    auto newGepUnion = Builder.CreateStructGEP(vecStruct, newGep ,secondIndex ,"");
                     getelementpr->replaceAllUsesWith(newGepUnion);
             
                     need_remove.push_back(getelementpr);
@@ -225,7 +309,9 @@ bool VectorPass::runOnFunction(Function &F) {
                     errs() << "Unknown case for Device Vector Pass\n";
                     std::exit(1);
                   }
-                           
+
+
+                  
                 }
                  
               }
@@ -238,13 +324,29 @@ bool VectorPass::runOnFunction(Function &F) {
                 ret %struct.float4 %213
               */
               if (loadInstr->getType()->isStructTy()) {
+                 StructType* vecType = nullptr;
                   if (loadInstr->getType()->getStructName().str() == "struct.float4") {
-                        Builder.SetInsertPoint(loadInstr);
-                        LoadInst* newLoad = Builder.CreateLoad(cvt->getFloat4Type(), loadInstr->getPointerOperand());
-                        loadInstr->replaceAllUsesWith(newLoad);
-                        need_remove.push_back(loadInstr);
+                      vecType = cvt->getFloat4Type();
+                       
+                  } else if (loadInstr->getType()->getStructName().str() == "struct.uchar3") {
+                     vecType = cvt->getI8_3Type();
+                  } else if (loadInstr->getType()->getStructName().str() == "struct.uint4") {
+                    vecType = cvt->getI32_4Type();
+                  } else if (loadInstr->getType()->getStructName().str() == "struct.int2") {
+                    vecType = cvt->getI32_2Type();
+                  } else if (loadInstr->getType()->getStructName().str() == "struct.float2") {
+                    vecType = cvt->getFloat2Type();
                   }
+
+                if(vecType) {
+                  Builder.SetInsertPoint(loadInstr);
+                  LoadInst* newLoad = Builder.CreateLoad(cvt->getFloat4Type(), loadInstr->getPointerOperand());
+                  loadInstr->replaceAllUsesWith(newLoad);
+                  need_remove.push_back(loadInstr);
+                }
               }
+
+            
 
            
               

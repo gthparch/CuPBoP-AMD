@@ -156,6 +156,12 @@ bool TextureTransformPass::runOnModule(Module &M) {
         llvm::FunctionType *LLVMFloat4VectorType = FunctionType::get(llvmI8PtrTy,
                 float4VectorTypeParams, false);
 
+
+      
+
+
+        // vector types
+
         llvm::IRBuilder<> Builder(M.getContext());
         const DataLayout &DL = M.getDataLayout();
         int count = 0;
@@ -169,7 +175,7 @@ bool TextureTransformPass::runOnModule(Module &M) {
 
                 std::cout << "Function: " << F.getName().str() << std::endl;
 
-                // if (F.getName().str() != "_Z13mergeSortPassP6float4ii") continue;
+                // if (F.getName().str() != "_Z9mergepackPfS_") continue;
 
                 Function::iterator I = F.begin();
                 BasicBlock::iterator firstBB = I->getFirstInsertionPt();
@@ -219,6 +225,7 @@ bool TextureTransformPass::runOnModule(Module &M) {
 
                                 if ( gotValue == operand_map.end() || gotValue2 == operand_map.end() ) {  
                                     outs() << " Unknown Case " << '\n';
+                                    std::exit(10);
                                 } else {
                                     nvvm_function->setArgOperand(0, gotValue->second);
                                     nvvm_function->setArgOperand(1, gotValue2->second);
@@ -397,6 +404,7 @@ bool TextureTransformPass::runOnModule(Module &M) {
                             if ( got == umap.end() ) {
                                 outs() << "not found";
                                 outs() << F << '\n';
+                                std::exit(10);
                             // exit(1);
                             } else {
                                 outs() << " foound " << '\n';
@@ -767,7 +775,7 @@ bool TextureTransformPass::runOnModule(Module &M) {
                                                     nvvm_function->setArgOperand(ii,dyn_cast<Value>(loadVectorType));
                                                     need_remove.insert(addrSpaceCastInstr);
                                                     need_remove.insert(allocaInstr);
-                                                    nvvm_function->removeParamAttr(ii,Attribute::AttrKind::ByVal);;
+                                                    nvvm_function->removeParamAttr(ii,Attribute::AttrKind::ByVal);
 
                                                     // getelementptr inbounds on it
                                                     // load vector base from vector type and replace it here
