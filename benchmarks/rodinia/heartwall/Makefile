@@ -5,7 +5,7 @@ CUPBOPCC=$(AMDCUDA_DIR)/scripts/amdcuda
 CC=clang
 CXX=clang++
 LD=ld.lld
-CXXFLAGS=-g -O0 -IAVI
+CXXFLAGS=-O3 -IAVI
 LDFLAGS=-LAVI -lavi
 
 # Objects required for compilation

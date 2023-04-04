@@ -5,7 +5,7 @@ CUPBOPCC=$(AMDCUDA_DIR)/scripts/amdcuda
 CC=clang
 CXX=clang++
 LD=ld.lld
-CXXFLAGS=-g -O0
+CXXFLAGS=-O3
 
 # Objects required for compilation
 OBJS=main.o dwt.o components.o dwt_cuda/common.o dwt_cuda/fdwt53.o dwt_cuda/rdwt53.o dwt_cuda/fdwt97.o dwt_cuda/rdwt97.o

@@ -5,7 +5,7 @@ CUPBOPCC=$(AMDCUDA_DIR)/scripts/amdcuda
 CC=clang
 CXX=clang++
 LD=ld.lld
-CXXFLAGS=-O0 -g
+CXXFLAGS=-O3
 
 # Objects required for compilation
 OBJS=gaussian.o
@@ -37,7 +37,7 @@ clean:
 	rm -f $(BENCHMARK_NAME).cupbop $(BENCHMARK_NAME).hipify *.o *.hipify.cpp
 
 $(BENCHMARK_NAME).cupbop: $(CUPBOP_OBJS)
-	$(CUPBOPCC) -o $@ $^
+	$(CUPBOPCC) -L/opt/rocm/llvm/lib/clang/14.0.0/lib/linux -o $@ $^
 
 $(BENCHMARK_NAME).hipify: $(HIPIFY_OBJS)
 	$(HIPCC) -L/opt/rocm/llvm/lib/clang/14.0.0/lib/linux -o $@ $^

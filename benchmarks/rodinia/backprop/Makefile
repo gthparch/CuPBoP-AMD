@@ -5,7 +5,7 @@ CUPBOPCC=$(AMDCUDA_DIR)/scripts/amdcuda
 CC=clang
 CXX=clang++
 LD=ld.lld
-CXXFLAGS=-g -O0
+CXXFLAGS=-g -O3
 
 # Objects required for compilation
 OBJS=backprop_cuda.o backprop.o facetrain.o imagenet.o

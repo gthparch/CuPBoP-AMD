@@ -5,7 +5,7 @@ CUPBOPCC=$(AMDCUDA_DIR)/scripts/amdcuda
 CC=clang
 CXX=clang++
 LD=ld.lld
-CXXFLAGS=-g -O0 -I/opt/rocm-5.2.0/llvm/include/ -I../common -openmp
+CXXFLAGS=-O3 -I/opt/rocm-5.2.0/llvm/include/ -I../common -openmp
 LDFLAGS=-L../base -L../common -lludbase -lludcommon
 
 # Objects required for compilation

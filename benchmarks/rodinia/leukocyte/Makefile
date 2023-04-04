@@ -5,7 +5,7 @@ CUPBOPCC=$(AMDCUDA_DIR)/scripts/amdcuda
 CC=clang
 CXX=clang++
 LD=ld.lld
-CXXFLAGS=-g -O0 -I/opt/rocm-5.2.0/llvm/include/ -IAVI -Imeschach_lib -openmp
+CXXFLAGS=-O3 -I/opt/rocm-5.2.0/llvm/include/ -IAVI -Imeschach_lib -openmp
 LDFLAGS=-LAVI -Lmeschach_lib -lmeschach -lavi
 
 # Objects required for compilation

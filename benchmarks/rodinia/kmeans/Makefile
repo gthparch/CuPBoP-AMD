@@ -15,7 +15,7 @@ CUPBOPCC=$(AMDCUDA_DIR)/scripts/amdcuda
 CC=clang
 CXX=clang++
 LD=ld.lld
-CXXFLAGS=-g -O0 -I/opt/rocm/llvm/include/ -openmp
+CXXFLAGS=-O3 -I/opt/rocm/llvm/include/ -openmp
 
 HIPIFY_OBJS=$(OBJS:.o=.hipify.o)
 CUPBOP_OBJS=$(OBJS:.o=.cupbop.o)

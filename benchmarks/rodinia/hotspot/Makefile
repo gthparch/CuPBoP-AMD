@@ -5,7 +5,7 @@ CUPBOPCC=$(AMDCUDA_DIR)/scripts/amdcuda
 CC=clang
 CXX=clang++
 LD=ld.lld
-CXXFLAGS=-g -O0
+CXXFLAGS=-O3
 
 # Objects required for compilation
 OBJS=hotspot.o

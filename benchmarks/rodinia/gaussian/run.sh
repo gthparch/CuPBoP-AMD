@@ -9,7 +9,7 @@ BENCHMARK="gaussian"
 TIMEFORMAT='%3R'
 CuBoP_OUTPUT_FILE="CuPBoP_Execution_Time.txt" 
 HIPIFY_OUTPUT_FILE="HIPIFY_Execution_Time.txt" 
-count=10
+count=1
 SAVE_OUTPUTS=0
 
 
@@ -34,8 +34,11 @@ for i in $(seq $count); do
     else
         echo "[*] Running CuPBoP version..."
         time ./$BENCHMARK.cupbop -f "$RODINIA_PATH/rodinia-data/gaussian/matrix1024.txt"
+        # time ./$BENCHMARK.cupbop -f "$RODINIA_PATH/rodinia-data/gaussian/matrix1024.txt" > cupbop_output.txt
         echo "[*] Running hipify version..."
         time ./$BENCHMARK.hipify -f "$RODINIA_PATH/rodinia-data/gaussian/matrix1024.txt"
+        # time ./$BENCHMARK.hipify -f "$RODINIA_PATH/rodinia-data/gaussian/matrix1024.txt" > hipify_output.txt
+        # diff cupbop_output.txt hipify_output.txt
     fi
 done
 

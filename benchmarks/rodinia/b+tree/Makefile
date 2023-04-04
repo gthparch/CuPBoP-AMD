@@ -5,7 +5,7 @@ CUPBOPCC=$(AMDCUDA_DIR)/scripts/amdcuda
 CC=clang
 CXX=clang++
 LD=ld.lld
-CXXFLAGS=-g -O0
+CXXFLAGS=-g -O3
 
 # Objects required for compilation
 OBJS=main.o kernel/kernel_gpu_cuda_wrapper.o kernel/kernel_gpu_cuda_wrapper_2.o util/cuda/cuda.o util/num/num.o util/timer/timer.o
