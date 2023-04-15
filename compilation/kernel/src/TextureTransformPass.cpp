@@ -157,7 +157,48 @@ bool TextureTransformPass::runOnModule(Module &M) {
                 float4VectorTypeParams, false);
 
 
-      
+
+        // tex2d uint4
+        // _ZL5tex2DI15HIP_vector_typeIjLj4EEL18hipTextureReadMode0EEN13__hip_tex_retIT_XT0_EbE4typeE7textureIS4_Li2EXT0_EEff
+        std::vector<Type *> uint4VectorTypeParams;
+        uint4VectorTypeParams.push_back(textureReference);
+        uint4VectorTypeParams.push_back(floatType);
+        uint4VectorTypeParams.push_back(floatType);
+        // struct.HIP_vector_type.3
+        llvm::FunctionType *LLVMUint4VectorType = FunctionType::get(cvt->getI32_4Type(),
+                uint4VectorTypeParams, false);
+
+
+        // _ZL9make_int2ii
+        std::vector<Type *> makeint2Params;
+        uint4VectorTypeParams.push_back(I32);
+        uint4VectorTypeParams.push_back(I32);
+        llvm::FunctionType *LLVMint2make = FunctionType::get(ArrayType::get(I32, 2),
+                makeint2Params, false);
+
+        Function *makeInt = M.getFunction("_ZL9make_int2ii");
+        // replace the function call and return value
+        for (User *U : makeInt->users()) {
+            if (Instruction *Inst = dyn_cast<Instruction>(U)) {
+                errs() << "F is used in instruction:\n";
+                errs() << *Inst << "\n";
+
+
+                // change the instructions in the next
+
+            }
+        }
+        // if(makeInt) {
+        //     outs() << "here \n";
+        //     FunctionCallee LLVMnewFunFC = M.getOrInsertFunction("CUPBOP_temp_makeint", LLVMint2make);
+        //     Function* LLVMnewFunFn = dyn_cast<Function>(LLVMnewFunFC.getCallee());
+        //     makeInt->replaceAllUsesWith(LLVMnewFunFn);
+        //     LLVMnewFunFn->takeName(makeInt);
+        //     makeInt->deleteBody();
+        //     makeInt->dropAllReferences();
+        //     makeInt->eraseFromParent();
+
+        // }
 
 
         // vector types
@@ -169,13 +210,14 @@ bool TextureTransformPass::runOnModule(Module &M) {
         for (auto &F : M) {
             // check if the function is device function 
             // check if the function uses vector types 
-            if (F.getCallingConv() == CallingConv::AMDGPU_KERNEL) {
+            if (F.getCallingConv() == CallingConv::AMDGPU_KERNEL || !isCudaBuiltin(F.getName().str())) {
                 // if function has texture annotations:
                 std::unordered_map<Value*, Value*> operand_map;
 
                 std::cout << "Function: " << F.getName().str() << std::endl;
 
-                // if (F.getName().str() != "_Z9mergepackPfS_") continue;
+                if (F.getName().str() != "_Z10set_resultjP11_MatchCoordiiii") continue;
+                outs() << F << '\n';
 
                 Function::iterator I = F.begin();
                 BasicBlock::iterator firstBB = I->getFirstInsertionPt();
@@ -257,6 +299,11 @@ bool TextureTransformPass::runOnModule(Module &M) {
 
 
                             }
+
+                            // mummergpu case
+                            //   call void @llvm.memcpy.p0.p0.i64(ptr align 8 %29, ptr align 8 %13, i64 8, i1 false)
+
+
                             // outs() << F << '\n';
                             // std::exit(122);
 
@@ -436,7 +483,23 @@ bool TextureTransformPass::runOnModule(Module &M) {
 
                             }
                             
-                        } else if (func_name == "_ZL5tex2DIiEN17__nv_tex_rmet_retIT_E4typeE7textureIS1_Li2EL19cudaTextureReadMode0EEff") {
+                        } else if (func_name == "_ZL9make_int2ii") {
+
+                        // %23 = call %struct.int2 @_ZL9make_int2ii(i32 noundef %21, i32 noundef %22) #7
+                        // %24 = getelementptr inbounds %struct.int2, ptr %13, i32 0, i32 0
+                        // %25 = extractvalue %struct.int2 %23, 0
+                        // store i32 %25, ptr %24, align 8
+                        // %26 = getelementptr inbounds %struct.int2, ptr %13, i32 0, i32 1
+                        // %27 = extractvalue %struct.int2 %23, 1
+                        // store i32 %27, ptr %26, align 4
+
+
+                        
+                        
+                        }
+                        
+                        
+                         else if (func_name == "_ZL5tex2DIiEN17__nv_tex_rmet_retIT_E4typeE7textureIS1_Li2EL19cudaTextureReadMode0EEff") {
                             /*
                             2D Integer ReadMode
 
@@ -476,6 +539,110 @@ bool TextureTransformPass::runOnModule(Module &M) {
                             
                             nvvm_function->setCalledFunction(LLVMnewFunFn);
 
+                        } 
+                        else if ( func_name =="_ZL5tex2DI5uint4EN17__nv_tex_rmet_retIT_E4typeE7textureIS2_Li2EL19cudaTextureReadMode0EEff") {
+                            
+                            // tex2dfetch uint4, 2, readmode
+                            outs() << " fetch here 2222" << '\n';
+
+                            // outs() << F << '\n';
+
+                            // count the vector type 
+                            outs() << *nvvm_function << '\n';
+                            Type* t = nvvm_function->getCalledFunction()->getReturnType();
+                            outs() << *t << '\n';
+                            
+                            auto StructTy = dyn_cast<StructType>(t);
+                
+                            int numElementsVector = StructTy->getNumElements();
+                            // std::cout << numElementsVector << std::endl;
+                            Type* vectorType = StructTy->getStructElementType(0);
+
+
+                            LoadInst* loadTexture = dyn_cast<LoadInst>(nvvm_function->getPrevNode());
+                            Builder.SetInsertPoint(loadTexture);
+                            LoadInst* newLoadTexture = Builder.CreateLoad(textureReference, textureToBeLoaded);
+                            loadTexture->replaceAllUsesWith(newLoadTexture);
+
+                            outs() << *newLoadTexture <<  " \n";
+                            need_remove.insert(nvvm_function->getPrevNode());
+
+                            FunctionCallee LLVMnewFunFC = M.getOrInsertFunction("_ZL5tex2DI15HIP_vector_typeIjLj4EEL18hipTextureReadMode0EEN13__hip_tex_retIT_XT0_EbE4typeE7textureIS4_Li2EXT0_EEff", LLVMUint4VectorType);
+                            Function* LLVMnewFunFn = dyn_cast<Function>(LLVMnewFunFC.getCallee());
+                            Builder.SetInsertPoint(nvvm_function);
+                            SmallVector<Value *, 3> texArgs;
+                            outs() << *nvvm_function->getArgOperand(0) << '\n';
+                            texArgs.push_back(nvvm_function->getArgOperand(0));
+                            texArgs.push_back(nvvm_function->getArgOperand(1));
+                            texArgs.push_back(nvvm_function->getArgOperand(2));
+                            auto newTexCall = Builder.CreateCall(LLVMnewFunFn, texArgs);
+                            nvvm_function->replaceAllUsesWith(newTexCall);
+
+                            // get the next instructions which are 
+                            // %45 = getelementptr inbounds %struct.float4, ptr %16, i32 0, i32 0
+                            // %46 = ewextractvalue %struct.HIP_vector_type %43, 0
+
+                            // if already have the allocated type // skip
+                           
+                            
+                            GetElementPtrInst* gep = dyn_cast<GetElementPtrInst>(nvvm_function->getNextNode());
+                            // outs() << *gep->getSourceElementType();
+                            if (gep->getSourceElementType() != cvt->getI32_4Base()) {
+                                Builder.SetInsertPoint(first_instr);     
+                                AllocaInst *newVector = Builder.CreateAlloca(cvt->getI32_4Type(), DL.getAllocaAddrSpace() , 0, "");
+                                auto *newVec = Builder.CreateAddrSpaceCast(newVector , I32Ptr); // int32ptr or int64ptr
+                                operand_map[gep->getOperand(0)] = newVec;
+
+                            } else {
+                                operand_map[gep->getOperand(0)] = gep->getOperand(0);
+                            }
+                            
+                           
+
+
+                            Builder.SetInsertPoint(gep);
+                            Value *i32zero = ConstantInt::get(context, APInt(32, 0));
+                            Value *indices[2] = {i32zero, i32zero};
+                            auto vectorToBeExtract = Builder.CreateStructGEP(cvt->getI32_4Type(), operand_map[gep->getOperand(0)], 0 /*ArrayRef<Value *>(indices, 2)*/ ,"");
+
+                            gep->replaceAllUsesWith(vectorToBeExtract);
+                          
+
+                            auto newEEV = Builder.CreateExtractValue(newTexCall, ArrayRef<unsigned int>({0}), "");
+                            auto newStore = Builder.CreateStore(newEEV, vectorToBeExtract);
+
+                            // store->replaceAllUsesWith(newStore);
+
+
+
+                            
+                        
+                            // outs() << F << '\n';
+                            // std::exit(12);
+
+                            need_remove.insert(nvvm_function);
+                            /*
+                                Remove the getelementptr, extractvalue, store for each element of the struct
+
+                            */
+                            int ii = 0;
+                            auto prev = dyn_cast<Instruction>(gep);
+                            // if processed by device arg pass then, 4 is required at times
+                            for(ii = 0; ii < numElementsVector*4; ++ii) {
+                                need_remove.insert(prev);
+                                
+                                outs() << *prev << " need remove " << "\n";
+                                prev = prev->getNextNode();
+                                if (!prev) break;
+
+                            }
+
+                            outs() << ii << '\n';
+
+
+
+
+                            
                         } else if (func_name == "_ZL10tex1DfetchI6float4EN17__nv_tex_rmet_retIT_E4typeE7textureIS2_Li1EL19cudaTextureReadMode0EEi") {
 
 
@@ -571,6 +738,7 @@ bool TextureTransformPass::runOnModule(Module &M) {
 
                             }
                             
+                            // outs() << ii << '\n';
 
                             // if after store instruction there can be call void @llvm.memcpy.p0.p0.i64(ptr align 16 %19, ptr align 16 %21, i64 16, i1 false)
                             // which changes to   %172 = call noundef nonnull align 16 dereferenceable(16) ptr @_ZN15HIP_vector_typeIfLj4EEaSEOS0_(ptr noundef nonnull align 16 dereferenceable(16) %60, ptr noundef nonnull align 16 dereferenceable(16) %62) #27
@@ -663,6 +831,8 @@ bool TextureTransformPass::runOnModule(Module &M) {
                             Function *f = M.getFunction(func_name);
 
                             outs() << f->getName() << " x" << '\n';
+                          
+                            outs() << F << '\n';
 
                             // go through all the call arg operands if device function 
                             // has struct.float4 arg type or return type
@@ -745,8 +915,6 @@ bool TextureTransformPass::runOnModule(Module &M) {
                                     }
                                   }
                                  
-
-
                                  if (auto addrSpaceCastInstr = dyn_cast<AddrSpaceCastInst>(nvvm_function->getArgOperand(ii))) {
 
                                     std::unordered_map<Value*,Value*>::iterator gotValue = operand_map.find(addrSpaceCastInstr);
@@ -1124,8 +1292,8 @@ bool TextureTransformPass::runOnModule(Module &M) {
                 }
                 need_remove.clear();
 
-                // outs() << F << '\n';
-                // std::exit(122);
+                outs() << F << '\n';
+                std::exit(122);
 
             }
         }

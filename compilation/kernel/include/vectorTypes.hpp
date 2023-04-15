@@ -155,12 +155,12 @@ class CupbopVectorType {
 
 
       // uchar3 // has another layer // type { [3 x i8] }
-      arrayI8_3Type = ArrayType::get(I8, 3)
+      arrayI8_3Type = ArrayType::get(I8, 3);
       hipVectorNativeI8_3Base = StructType::create(context, "struct.HIP_Native_vector_base_i8.3"); 
       hipVectorNativeI8_3Base->setBody(arrayI8_3Type);
 
       vectorI8_3Type = VectorType::get(I8, 3, false);
-      
+
       unionI8_3Vector = StructType::create(context, "union_i8_3.anon"); 
       unionI8_3Vector->setBody(hipVectorNativeI8_3Base);
 
@@ -223,6 +223,11 @@ class CupbopVectorType {
 
     StructType* getI8_3Union() {
       return unionI8_3Vector;
+    }
+
+    // Maybe char specific
+    StructType* getI8_3Native() {
+      return hipVectorNativeI8_3Base;
     }
 
     StructType* getI32_4Struct() {

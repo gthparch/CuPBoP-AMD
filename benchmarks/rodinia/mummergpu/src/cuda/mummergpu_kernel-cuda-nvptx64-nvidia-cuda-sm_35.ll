@@ -3,6 +3,7 @@ source_filename = "mummergpu_kernel.cu"
 target datalayout = "e-i64:64-i128:128-v16:16-v32:32-n16:32:64"
 target triple = "nvptx64-nvidia-cuda"
 
+
 %struct.__cuda_builtin_blockIdx_t = type { i8 }
 %struct.__cuda_builtin_blockDim_t = type { i8 }
 %struct.__cuda_builtin_threadIdx_t = type { i8 }
@@ -585,6 +586,7 @@ define dso_local void @_Z15mummergpuKernelPvPcS0_PKiS2_ii(ptr noundef %0, ptr no
   store i8 %149, ptr %148, align 1
   call void @llvm.memcpy.p0.p0.i64(ptr align 1 %30, ptr align 1 %31, i64 3, i1 false)
   br label %150
+
 
 150:                                              ; preds = %142, %139, %136, %133, %130
   call void @llvm.memcpy.p0.p0.i64(ptr align 1 %32, ptr align 1 %30, i64 3, i1 false)

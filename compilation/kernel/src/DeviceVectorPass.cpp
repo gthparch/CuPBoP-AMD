@@ -41,11 +41,21 @@ bool VectorPass::runOnFunction(Function &F) {
     Type* llvmVoidTy = Type::getVoidTy(context);
     Type* llvmI8PtrTy = Type::getInt8PtrTy(context);
     Type* llvmI64Ty = IntegerType::get(context, 64);
+    Type* llvmI32Ty = IntegerType::get(context, 32);
     Type* llvmI1Ty = IntegerType::get(context, 1);
     auto llvmFloatType = Type::getFloatTy(context);
     auto llvmI32PtrTy= Type::getInt32PtrTy(context);
       
     const DataLayout &DL = M->getDataLayout();
+
+
+    std::vector<Type *> memcpyParams;
+    memcpyParams.push_back(llvmI8PtrTy);
+    memcpyParams.push_back(llvmI8PtrTy);
+    memcpyParams.push_back(llvmI64Ty);
+    memcpyParams.push_back(llvmI1Ty);
+    llvm::FunctionType *LLVMmemcpyType = FunctionType::get(llvmVoidTy,
+            memcpyParams, false);
 
 
     if (F.getCallingConv() != CallingConv::AMDGPU_KERNEL
@@ -56,7 +66,7 @@ bool VectorPass::runOnFunction(Function &F) {
 
       std::cout << "Function: " << F.getName().str() << std::endl;
 
-
+      outs() << F << '\n';
       /*
         First Step:
         If parameter is the already converted  %struct.HIP_vector_base %0,
@@ -78,15 +88,52 @@ bool VectorPass::runOnFunction(Function &F) {
       std::unordered_map<Value*, Value*> operand_map;
       std::set<Value*> operand_set;
 
+      int index = 0;
       for (Function::arg_iterator I = F.arg_begin(), E = F.arg_end();
         I != E; ++I) {
+          
           Type *ArgType = I->getType();
           Value *val = dyn_cast<Value>(I);
-          if (StructType* StructTy = dyn_cast<StructType>(ArgType)){
-            StructType* vecType = nullptr;
-            StructType* vecBase;
-            StructType* vecUnion;
-            Builder.SetInsertPoint(first_instr);   
+
+          // mummergpu case
+          // define dso_local void @_Z14arrayToAddress6uchar3Rj(i32 noundef byval(%struct.uchar3) %0, ptr noundef nonnull align 4 dereferenceable(4) %1)
+          StructType* vecType = nullptr;
+          StructType* vecBase;
+          StructType* vecUnion;
+          StructType* vecNative = nullptr;
+          Builder.SetInsertPoint(first_instr);  
+          
+          auto byValAttr = I->getAttribute(Attribute::AttrKind::ByVal);
+          auto* byValTy = byValAttr.getValueAsType();
+          
+          if (byValTy) {
+              outs() << *byValTy << '\n';
+              if(StructType* StructTy = dyn_cast<StructType>(byValTy)) {
+                if (byValTy->getStructName().str().find("struct.uchar3") != std::string::npos) {
+                    
+                      F.removeParamAttr(index,Attribute::AttrKind::ByVal);
+
+                      vecType = cvt->getI8_3Type();
+                      vecBase = cvt->getI8_3Base();
+                      vecUnion = cvt->getI8_3Union();
+                      vecNative = cvt->getI8_3Native();
+                      
+
+                      /*
+                        %9 = getelementptr inbounds %struct.HIP_vector_type, ptr %6, i32 0, i32 0
+                        %10 = getelementptr inbounds %struct.HIP_vector_base, ptr %9, i32 0, i32 0
+                        %11 = getelementptr inbounds %union.anon.1, ptr %10, i32 0, i32 0
+                        %12 = getelementptr inbounds %"struct.HIP_vector_base<unsigned char, 3>::Native_vec_", ptr %11, i32 0, i32 0
+                        store i32 %0, ptr %7, align 4
+                        call void @llvm.memcpy.p0.p0.i64(ptr align 1 %12, ptr align 4 %7, i64 3, i1 false)
+
+                      */
+         
+                }
+              }
+
+          } else if (StructType* StructTy = dyn_cast<StructType>(ArgType)){
+            
             if (ArgType->getStructName().str().find("HIP_vector_base_float.4") != std::string::npos) {
                 vecType = cvt->getFloat4Type();
                 vecBase = cvt->getFloat4Base();
@@ -125,32 +172,84 @@ bool VectorPass::runOnFunction(Function &F) {
                 vecType = cvt->getI32_2Type();
                 vecBase = cvt->getI32_2Base();
                 vecUnion = cvt->getI32_2Union();
-          } else if(ArgType->getStructName().str().find("HIP_vector_base_i8.3") != std::string::npos) {
+          } else if(ArgType->getStructName().str().find("struct.uchar3") != std::string::npos) {
+                
+                // case maybe wrong
+                F.removeParamAttr(index,Attribute::AttrKind::ByVal);
+
+       
                 vecType = cvt->getI8_3Type();
                 vecBase = cvt->getI8_3Base();
                 vecUnion = cvt->getI8_3Union();
                 
           }
 
+          
+          
+      
+
+
+        }
+      
+          // getI8_3Native
           if(vecType) {
             AllocaInst *newVector = Builder.CreateAlloca(vecType, DL.getAllocaAddrSpace() , 0, "");
             auto *newVec = Builder.CreateAddrSpaceCast(newVector , llvmI32PtrTy); // int32ptr or int64ptr
             val->replaceAllUsesWith(newVec);
+
             auto vectorTypeToGEP = Builder.CreateStructGEP(vecType, newVec, 0 /*ArrayRef<Value *>(indices, 2)*/ ,"");
 
             auto vectorToUnion= Builder.CreateStructGEP(vecBase, vectorTypeToGEP, 0  ,"");
 
             auto vectorToBase = Builder.CreateStructGEP(vecUnion, vectorToUnion, 0  ,"");
             
-            auto vectorToBeExtract = Builder.CreateStructGEP(vecBase, vectorToBase, 0  ,"");
+            // case currently for uchar3
+            if (vecNative) {
 
-            auto newEEV = Builder.CreateExtractValue(val, ArrayRef<unsigned int>({0}), "");
+              // alloca i32
+              // address space cast i32
+
+              AllocaInst *newInt = Builder.CreateAlloca(llvmI32Ty, DL.getAllocaAddrSpace() , 0, "");
+              auto *newI32Cast = Builder.CreateAddrSpaceCast(newInt , llvmI32PtrTy); // int32ptr or int64ptr
+              
+              auto vectorToBeStore = Builder.CreateStructGEP(vecNative, vectorToBase, 0  ,"");
+
+              // auto newEEV = Builder.CreateExtractValue(val, ArrayRef<unsigned int>({0}), "");
+              
+              auto newStore = Builder.CreateStore(val, newI32Cast);
+
+              //   call void @llvm.memcpy.p0.p0.i64(ptr align 1 %12, ptr align 4 %7, i64 3, i1 false)
+
+
+              FunctionCallee LLVMmemcpyFC = M->getOrInsertFunction("llvm.memcpy.p0.p0.i64", LLVMmemcpyType);
+              Function * LLVMmemcpyFn = dyn_cast<Function>(LLVMmemcpyFC.getCallee());
+                            
+              SmallVector<Value *, 4> memcpyArgs;
+              memcpyArgs.push_back(vectorToBeStore);
+              // ptr align 8 addrspacecast (ptr addrspace(1) @tex to ptr)
+              memcpyArgs.push_back(newI32Cast);
+              // i64 88
+              llvm::Constant *i64_val = llvm::ConstantInt::get(llvmI64Ty, 3/*value*/, false);
+              memcpyArgs.push_back(i64_val);
+              // i1 false 
+              llvm::Constant *ifalse_val = llvm::ConstantInt::get(llvmI1Ty, 0/*value*/, false);
+              memcpyArgs.push_back(ifalse_val);
             
-            auto newStore = Builder.CreateStore(newEEV, vectorToBeExtract);
+              Builder.CreateCall(LLVMmemcpyFn, memcpyArgs);
+
+
+
+            } else {
+              auto vectorToBeExtract = Builder.CreateStructGEP(vecBase, vectorToBase, 0  ,"");
+
+              auto newEEV = Builder.CreateExtractValue(val, ArrayRef<unsigned int>({0}), "");
+              
+              auto newStore = Builder.CreateStore(newEEV, vectorToBeExtract);
+            }
+           
           }
 
-
-      }
+         ++index;
       }
 
 
@@ -326,9 +425,10 @@ bool VectorPass::runOnFunction(Function &F) {
               if (loadInstr->getType()->isStructTy()) {
                  StructType* vecType = nullptr;
                   if (loadInstr->getType()->getStructName().str() == "struct.float4") {
-                      vecType = cvt->getFloat4Type();
-                       
+                      vecType = cvt->getFloat4Type();      
                   } else if (loadInstr->getType()->getStructName().str() == "struct.uchar3") {
+
+                     // this case might not be the same for HIP as in other types (mummergpu example)
                      vecType = cvt->getI8_3Type();
                   } else if (loadInstr->getType()->getStructName().str() == "struct.uint4") {
                     vecType = cvt->getI32_4Type();
@@ -340,7 +440,7 @@ bool VectorPass::runOnFunction(Function &F) {
 
                 if(vecType) {
                   Builder.SetInsertPoint(loadInstr);
-                  LoadInst* newLoad = Builder.CreateLoad(cvt->getFloat4Type(), loadInstr->getPointerOperand());
+                  LoadInst* newLoad = Builder.CreateLoad(vecType, loadInstr->getPointerOperand());
                   loadInstr->replaceAllUsesWith(newLoad);
                   need_remove.push_back(loadInstr);
                 }
@@ -367,6 +467,8 @@ bool VectorPass::runOnFunction(Function &F) {
       remove->dropAllReferences();
       remove->eraseFromParent();
     }
+
+    outs() << F << '\n';
 
     return true;
 }

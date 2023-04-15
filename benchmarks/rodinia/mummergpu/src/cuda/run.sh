@@ -7,7 +7,9 @@
 
 # hipify-perl  mummergpu_kernel.cu > mummergpu_kernel.cpp
 
-/nethome/jchen706/coding/code2/amdcuda/build/compilation/kernelTranslator mummergpu_kernel-cuda-nvptx64-nvidia-cuda-sm_35.ll
+# /nethome/jchen706/coding/code2/amdcuda/build/compilation/kernelTranslator mummergpu_kernel-cuda-nvptx64-nvidia-cuda-sm_35.ll
+
+/nethome/jchen706/coding/code2/amdcuda/build/compilation/kernelTranslator atest.ll
 
 # Process Device Side Vector Function Type _Z7addr2idj
 # Process Device Side Vector Function Type _Z7id2addri

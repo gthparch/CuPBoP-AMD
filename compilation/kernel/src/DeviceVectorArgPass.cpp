@@ -40,6 +40,8 @@ Function *VectorArgPass::processKernel(Module &M, Function &F) {
     auto *FTy = F.getFunctionType();
     std::vector<Type *> modifiedParamsTy = {};
 
+    auto I32 = Type::getInt32Ty(context);
+
     // Check if any params are vectors and add then to modify param list
     std::cout << "Process Device Side Vector Function Type " << F.getName().str()  << std::endl;
     
@@ -58,7 +60,7 @@ Function *VectorArgPass::processKernel(Module &M, Function &F) {
 
             vectorContinue = true;
           } else if(ptype->getStructName().str() == "struct.uint4") {
-             F.removeParamAttr(modifiedParamsTy.size(),Attribute::AttrKind::ByVal);
+            F.removeParamAttr(modifiedParamsTy.size(),Attribute::AttrKind::ByVal);
             F.removeParamAttr(modifiedParamsTy.size(),Attribute::AttrKind::Alignment);
 
             modifiedParamsTy.push_back(cvt->getI32_4Base());
@@ -74,10 +76,11 @@ Function *VectorArgPass::processKernel(Module &M, Function &F) {
 
             vectorContinue = true;
           }  else if(ptype->getStructName().str() == "struct.uchar3") {
-            F.removeParamAttr(modifiedParamsTy.size(),Attribute::AttrKind::ByVal);
+            // F.removeParamAttr(modifiedParamsTy.size(),Attribute::AttrKind::ByVal);
             F.removeParamAttr(modifiedParamsTy.size(),Attribute::AttrKind::Alignment);
 
-            modifiedParamsTy.push_back(cvt->getI8_3Base());
+            // changes to i32 parameter
+            modifiedParamsTy.push_back(I32);
 
             vectorContinue = true;
 
@@ -108,6 +111,7 @@ Function *VectorArgPass::processKernel(Module &M, Function &F) {
         rt = cvt->getI32_2Type();
         vectorContinue = true;
       } else if(rt->getStructName().str() == "struct.uchar3") {
+        // mummergpu example coverts to i32
          rt = cvt->getI8_3Type();
         vectorContinue = true;
       }
