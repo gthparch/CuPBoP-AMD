@@ -45,6 +45,8 @@ bool TextureTransformPass::runOnModule(Module &M) {
         Type* llvmI64Ty = IntegerType::get(context, 64);
         Type* llvmI1Ty = IntegerType::get(context, 1);
         Type* I32 = IntegerType::get(context, 32); // 32 bits integer
+        Type* I8 = IntegerType::get(context, 8); // 32 bits integer
+
 
         auto floatType = Type::getFloatTy(context);
         auto I32Ptr = Type::getInt32PtrTy(context);
@@ -156,6 +158,13 @@ bool TextureTransformPass::runOnModule(Module &M) {
         llvm::FunctionType *LLVMFloat4VectorType = FunctionType::get(llvmI8PtrTy,
                 float4VectorTypeParams, false);
 
+        // _ZN15HIP_vector_typeIjLj4EEaSEOS0_
+        std::vector<Type *> int4VectorTypeParams;
+        int4VectorTypeParams.push_back(llvmI8PtrTy);
+        int4VectorTypeParams.push_back(llvmI8PtrTy);
+        llvm::FunctionType *LLVMInt4VectorType = FunctionType::get(llvmI8PtrTy,
+                int4VectorTypeParams, false);
+
 
 
         // tex2d uint4
@@ -171,23 +180,109 @@ bool TextureTransformPass::runOnModule(Module &M) {
 
         // _ZL9make_int2ii
         std::vector<Type *> makeint2Params;
-        uint4VectorTypeParams.push_back(I32);
-        uint4VectorTypeParams.push_back(I32);
+        makeint2Params.push_back(I32);
+        makeint2Params.push_back(I32);
         llvm::FunctionType *LLVMint2make = FunctionType::get(ArrayType::get(I32, 2),
                 makeint2Params, false);
 
-        Function *makeInt = M.getFunction("_ZL9make_int2ii");
-        // replace the function call and return value
-        for (User *U : makeInt->users()) {
-            if (Instruction *Inst = dyn_cast<Instruction>(U)) {
-                errs() << "F is used in instruction:\n";
-                errs() << *Inst << "\n";
+
+        std::vector<Type *> makeuchar3Params;
+        makeuchar3Params.push_back(I8);
+        makeuchar3Params.push_back(I8);
+        makeuchar3Params.push_back(I8);
+        llvm::FunctionType *LLVMuchar3make = FunctionType::get(I32,
+                makeuchar3Params, false);
+
+        llvm::IRBuilder<> Builder(M.getContext());
+
+        std::unordered_map<std::string, FunctionType *> makeVectorFnNames = {
+            {"_ZL9make_int2ii", LLVMint2make},
+            {"_ZL11make_uchar3hhh", LLVMuchar3make},
+        };
+       
+
+        for( const std::pair<const std::string, FunctionType *>& n : makeVectorFnNames ) {
+
+            
+            Function *makeVec = M.getFunction(n.first);
+            FunctionCallee LLVMnewFunFC = M.getOrInsertFunction("_Z_temp_make_vector", n.second);
+            Function* LLVMnewFunFn = dyn_cast<Function>(LLVMnewFunFC.getCallee());
+                    
+            for (User *U : makeVec->users()) {
+                if (Instruction *Inst = dyn_cast<Instruction>(U)) {
+                    errs() << "F is used in instruction:\n";
+                    errs() << *Inst << "\n";
+
+                    auto *callFn = dyn_cast<CallInst>(Inst);
+                    Builder.SetInsertPoint(callFn);
+                    
+                    // get number of operands: ->
+                    unsigned int argSize = callFn->arg_size();
 
 
-                // change the instructions in the next
+                    std::vector<Value*> texArgs;
+                    // SmallVector<Value *, argSize> texArgs;
+                    for (int ii = 0; ii < argSize; ++ii) {
+                        texArgs.push_back(callFn->getArgOperand(ii));
+                    }
+                    
 
+                    // texArgs.push_back(callFn->getArgOperand(0));
+                    // texArgs.push_back(callFn->getArgOperand(1));
+                    Value* makeIntCall = Builder.CreateCall(LLVMnewFunFn, texArgs);
+                    callFn->replaceAllUsesWith(makeIntCall);
+                    callFn->dropAllReferences();
+                    callFn->eraseFromParent();
+                    makeVec->deleteBody();
+                    makeVec->dropAllReferences();
+                    makeVec->eraseFromParent();
+                    
+                    // removeMakeVectorFn.insert(makeIntCall);
+
+
+
+                    // change the extractvalue to extractelement
+
+                    // %30 = call [2 x i32] @_ZL9make_int2ii(i32 %28, i32 %29)
+                    // %31 = getelementptr inbounds %struct.HIP_vector_base_int.2, ptr %20, i32 0, i32 0
+                    // %32 = getelementptr inbounds %struct.i32_2.anon, ptr %31, i32 0, i32 0
+                    // %33 = extractvalue [2 x i32] %30, 0
+                    // store i32 %33, ptr %32, align 8
+
+                    // getNextNode()
+                    // outs() << *makeIntCall->getType() << '\n';
+                    // if(makeIntCall->getType()->isArrayTy()) {
+                    //     outs() << "is vector type type\n";
+                    // }
+                    // outs() << cast<VectorType>(makeIntCall->getType())->getElementCount() << " weher\n";
+
+
+
+
+
+                }
             }
+            LLVMnewFunFn->setName(n.first);
+
+
         }
+
+        
+       
+        
+
+        
+        // extractvalue don't work with vector types, have to use extract element 
+
+        // for(auto remove: removeMakeVectorFn) {
+        //     remove->deleteBody();
+        //     remove->dropAllReferences();
+        //     remove->eraseFromParent();
+        // }
+        // removeMakeVectorFn.clear();
+
+        // drop the functions
+
         // if(makeInt) {
         //     outs() << "here \n";
         //     FunctionCallee LLVMnewFunFC = M.getOrInsertFunction("CUPBOP_temp_makeint", LLVMint2make);
@@ -203,7 +298,6 @@ bool TextureTransformPass::runOnModule(Module &M) {
 
         // vector types
 
-        llvm::IRBuilder<> Builder(M.getContext());
         const DataLayout &DL = M.getDataLayout();
         int count = 0;
         // check if the functionis cuda buildin, if so continue
@@ -216,8 +310,8 @@ bool TextureTransformPass::runOnModule(Module &M) {
 
                 std::cout << "Function: " << F.getName().str() << std::endl;
 
-                if (F.getName().str() != "_Z10set_resultjP11_MatchCoordiiii") continue;
-                outs() << F << '\n';
+                // if (F.getName().str() != "_Z10set_resultjP11_MatchCoordiiii") continue;
+                // outs() << F << '\n';
 
                 Function::iterator I = F.begin();
                 BasicBlock::iterator firstBB = I->getFirstInsertionPt();
@@ -483,20 +577,21 @@ bool TextureTransformPass::runOnModule(Module &M) {
 
                             }
                             
-                        } else if (func_name == "_ZL9make_int2ii") {
+                        } 
+                        // else if (func_name == "_ZL9make_int2ii") {
 
-                        // %23 = call %struct.int2 @_ZL9make_int2ii(i32 noundef %21, i32 noundef %22) #7
-                        // %24 = getelementptr inbounds %struct.int2, ptr %13, i32 0, i32 0
-                        // %25 = extractvalue %struct.int2 %23, 0
-                        // store i32 %25, ptr %24, align 8
-                        // %26 = getelementptr inbounds %struct.int2, ptr %13, i32 0, i32 1
-                        // %27 = extractvalue %struct.int2 %23, 1
-                        // store i32 %27, ptr %26, align 4
+                        // // %23 = call %struct.int2 @_ZL9make_int2ii(i32 noundef %21, i32 noundef %22) #7
+                        // // %24 = getelementptr inbounds %struct.int2, ptr %13, i32 0, i32 0
+                        // // %25 = extractvalue %struct.int2 %23, 0
+                        // // store i32 %25, ptr %24, align 8
+                        // // %26 = getelementptr inbounds %struct.int2, ptr %13, i32 0, i32 1
+                        // // %27 = extractvalue %struct.int2 %23, 1
+                        // // store i32 %27, ptr %26, align 4
 
 
                         
                         
-                        }
+                        // }
                         
                         
                          else if (func_name == "_ZL5tex2DIiEN17__nv_tex_rmet_retIT_E4typeE7textureIS1_Li2EL19cudaTextureReadMode0EEff") {
@@ -818,21 +913,32 @@ bool TextureTransformPass::runOnModule(Module &M) {
                             // outs() << " finish two " << '\n';
 
 
-                        } else  {
+                        } 
+                        else if (func_name == "_ZL11make_uchar3hhh") {
+
+
+                            
+                        }
+                        
+                        else  {
 
                             /*
                                 For some reason replace function didn't work with the DeviceVectorArgPass
                                 %55 = call %struct.float4 @_Z8sortElem6float4(ptr noundef byval(%struct.float4) align 16 %22) 
                             */
 
-                            // called maybe a device function
-                            if (isCudaBuiltin(func_name.str()) || func_name.str().find("HIP_") != std::string::npos) continue;
+                            // called maybe a device function, need to map out all the possible device function that are internal somehow
+                            if (isCudaBuiltin(func_name.str()) || func_name.str().find("HIP_") != std::string::npos 
+                            || func_name.str().find("_ZL11make_uchar3hhh") != std::string::npos  || 
+                            func_name.str().find("_ZL8__umul24jj") != std::string::npos)  {
+                                continue;
+                            }
                             
                             Function *f = M.getFunction(func_name);
 
                             outs() << f->getName() << " x" << '\n';
                           
-                            outs() << F << '\n';
+                            // outs() << F << '\n';
 
                             // go through all the call arg operands if device function 
                             // has struct.float4 arg type or return type
@@ -858,6 +964,8 @@ bool TextureTransformPass::runOnModule(Module &M) {
 
                            */
                             auto prevInstr = nvvm_function->getPrevNode();
+                            
+                            outs() << *returnType << '\n';
                             for (int ii = nvvm_function->arg_size()-1; ii >= 0; --ii) {
 
                                 outs() << " arg: " << ii << " " << *prevInstr << "\n";
@@ -986,7 +1094,28 @@ bool TextureTransformPass::runOnModule(Module &M) {
                             // then take out the arguments
 
                             if (returnType->isStructTy()) {
+
+
+                                StructType* vecType = nullptr;
+                                FunctionCallee LLVMnewFunFC = NULL;
+                                Function* LLVMnewFunFn = nullptr;
                                 if (returnType->getStructName().str() == "struct.float4") {
+
+                                    vecType = cvt->getFloat4Type();
+                                    LLVMnewFunFC = M.getOrInsertFunction("_ZN15HIP_vector_typeIfLj4EEaSERKS0_", LLVMFloat4VectorType);
+                                   
+                                } else if (returnType->getStructName().str() == "struct.uint4") {
+                                    vecType = cvt->getI32_4Type();
+                                    LLVMnewFunFC = M.getOrInsertFunction("_ZN15HIP_vector_typeIjLj4EEaSEOS0_", LLVMInt4VectorType);
+                                } else if (returnType->getStructName().str() == "struct.uchar3" ) {
+                                    vecType = cvt->getI32_4Type();
+                                    LLVMnewFunFC = M.getOrInsertFunction("_ZN15HIP_vector_typeIjLj4EEaSEOS0_", LLVMInt4VectorType);
+
+                                }
+
+                                if (vecType) {
+
+                                    
 
                                     /*
                                         %9 = alloca %struct.HIP_vector_type, align 16, addrspace(5)
@@ -997,7 +1126,7 @@ bool TextureTransformPass::runOnModule(Module &M) {
                                         store %struct.HIP_vector_base %45, ptr %44, align 16
                                     */
                                     Builder.SetInsertPoint(first_instr);     
-                                    AllocaInst *newVector = Builder.CreateAlloca(cvt->getFloat4Type(), DL.getAllocaAddrSpace() , 0, "");
+                                    AllocaInst *newVector = Builder.CreateAlloca(vecType, DL.getAllocaAddrSpace() , 0, "");
                                     auto *newVec = Builder.CreateAddrSpaceCast(newVector , I32Ptr); // int32ptr or int64ptr
 
 
@@ -1006,9 +1135,9 @@ bool TextureTransformPass::runOnModule(Module &M) {
                                     Builder.SetInsertPoint(gep);
                                     // Value *i32zero = ConstantInt::get(context, APInt(32, 0));
                                     // Value *indices[2] = {i32zero, i32zero};
-                                    auto vectorToBeExtract = Builder.CreateStructGEP(cvt->getFloat4Type(), newVec, 0 /*ArrayRef<Value *>(indices, 2)*/ ,"");
+                                    auto vectorToBeExtract = Builder.CreateStructGEP(vecType, newVec, 0 /*ArrayRef<Value *>(indices, 2)*/ ,"");
 
-                                    gep->replaceAllUsesWith(vectorToBeExtract);
+                                    //gep->replaceAllUsesWith(vectorToBeExtract);
 
                                     ExtractValueInst* eei = dyn_cast<ExtractValueInst>(gep->getNextNode());
                                     // if (!eei) {
@@ -1028,18 +1157,101 @@ bool TextureTransformPass::runOnModule(Module &M) {
                                         Remove the getelementptr, extractvalue, store for each element of the struct
 
                                     */
+                                  
+
                                     int ii = 0;
                                     auto prev = dyn_cast<Instruction>(gep);
                                     auto StructTy = dyn_cast<StructType>(returnType);
                 
                                     int numElementsVector = StructTy->getNumElements();
-                                    for(ii = 0; ii < numElementsVector*3; ++ii) {
-                                        need_remove.insert(prev);
-                                        
-                                        outs() << *prev << " need remove " << "\n";
-                                        prev = prev->getNextNode();
-                                        if (!prev) break;
+                                    // hybridsort case for struct.float4
+                                    
+                                    int numCounts = 0;
+                                    // outs() << F <<"\n";
+                                    // outs() << *prev << '\n';
+                                    while (auto getElementPtrNex = dyn_cast<GetElementPtrInst>(prev)) {
+                                            // should only be one uses:
+                                            // getelementptr type is the same as as gep
+                                            // maybe need better condition checking
 
+                                            /*
+                                                %158 = getelementptr inbounds %struct.HIP_vector_base_int.4, ptr %53, i32 0, i32 0
+                                                %159 = getelementptr inbounds %struct.i32_4.anon, ptr %158, i32 0, i32 0
+                                                %160 = extractvalue %struct.HIP_vector_type_int.4 %155, 0
+                                                store i32 %160, ptr %159, align 16
+                                            
+                                            */
+                                        
+                                            if (gep->getOperand(0) == getElementPtrNex->getOperand(0)) {
+                                                  
+                                                  outs() << "inside2 - " << getElementPtrNex->getNumUses() <<"\n";  
+                                                  if (prev->hasOneUser()) {
+                                                   for (User *U : prev->users()) {
+                                                        outs() << *U << " inside3\n"; 
+                                                        int numToRemove = 0;
+                                                        if (auto getElementPtrInst = dyn_cast<GetElementPtrInst>(U)) {
+                                                           numToRemove = 4;
+                                                        } else if (auto storeInst = dyn_cast<StoreInst>(U)) {
+                                                           numToRemove = 3;
+                                                        }
+                                                        for(ii = 0; ii < numToRemove; ++ii) {
+                                                            need_remove.insert(prev);
+                                                            outs() << *prev << " need remove " << "\n";
+                                                            prev = prev->getNextNode();
+                                                        }
+                                                    }
+                                                  } else {
+                                                    break;
+                                                  }
+                                                  
+                                                    
+                                                // std::exit(1111);
+                                            } else {
+                                                break;
+                                            }
+                                            
+                                    } 
+                                  
+                                    
+                                    // for(ii = 0; ii < numCounts*3; ++ii) {
+                                    //     need_remove.insert(prev);
+                                    //     // for (User *U : makeInt->users()) {
+                                   
+                                    //     outs() << *prev << " need remove " << "\n";
+                                    //     prev = prev->getNextNode();
+                                    //     if (!prev) break;
+
+                                    // }
+
+                                    outs() << F << '\n';
+                                    outs() << " prev " << *prev << '\n';
+                                      
+                                 
+                                    // next instruction maybe not be call instruction, but 
+                                    // nested indexted to a specific aggregate type or non-aggregate type
+                                    // %166 = getelementptr inbounds %struct._PixelOfChildren, ptr %49, i32 0, i32 0
+                                    // call void @llvm.memcpy.p0.p0.i64(ptr align 16 %166, ptr align 16 %51, i64 16, i1 false)
+                                    //
+                                    //
+                                    if(auto *getElementPtrNex = dyn_cast<GetElementPtrInst>(prev)) {
+                                        auto nextInst = prev->getNextNode();
+                                        outs() << "eeeeeeeeeee\n";
+                                        if (nextInst) {
+                                            outs() << "eeeeeeeeeee2\n";
+                                             if (auto *memcpyFn = dyn_cast<CallInst>(nextInst)) {
+                                                    auto callFnName = memcpyFn->getCalledFunction()->getName();
+                                                    if (callFnName == "llvm.memcpy.p0.p0.i64") {
+                                                        if (memcpyFn->getArgOperand(1) == gep->getOperand(0)) {
+                                                                outs() << "hereee\n";
+                                                                prev = prev->getNextNode();
+                                                        }
+
+                                                    }
+
+                                            
+                                             }
+                                        }
+                                        
                                     }
 
 
@@ -1049,45 +1261,62 @@ bool TextureTransformPass::runOnModule(Module &M) {
                                         outs() << " hhhhh \n";
                                         if (callFnName == "llvm.memcpy.p0.p0.i64") {
                                             if (memcpyFn->getArgOperand(1) == gep->getOperand(0)) {
-                                                outs() << " hhhhh \n";
+                                                outs() << " hhhhhttttttt \n";
+
+                                                // std::exit(1);
+
+                                                /*
+                                                    First Operand may not be need to allocated as it is from a aggregate type
+                                                */
 
                                                
 
-                                                if (gep->getSourceElementType()->isStructTy()
-                                                && gep->getSourceElementType()->getStructName().str() == "struct.float4") {
-                                                    outs() << " hhhhh \n";
+                                                if (gep->getSourceElementType()->isStructTy()) {
+                                                      outs() << " hhheqewhh \n";
                                                     llvm::Value* first_operand = memcpyFn->getArgOperand(0);
 
-                                                    
-                                                std::unordered_map<Value*,Value*>::iterator gotValue = operand_map.find(memcpyFn->getArgOperand(0));
-                                                if ( gotValue == operand_map.end() ) {
-                                                    if (auto addrSpaceCastInstr = dyn_cast<AddrSpaceCastInst>(first_operand)) {
-                                                        if (auto allocaInstr = dyn_cast<AllocaInst>(addrSpaceCastInstr->getPointerOperand())) {
-                                                            if (allocaInstr->getAllocatedType()->isStructTy()) {
-                                                            if (allocaInstr->getAllocatedType()->getStructName().str() == "struct.float4") {
-                                                                    Builder.SetInsertPoint(addrSpaceCastInstr);
-                                                                    AllocaInst *newVector = Builder.CreateAlloca(cvt->getFloat4Type(), DL.getAllocaAddrSpace() , 0, "");
-                                                                    auto *newVec = Builder.CreateAddrSpaceCast(newVector , I32Ptr); // int32ptr or int64ptr
-                                                                    operand_map[first_operand] = newVec;
-                                                                    // replace all uses       
-                                                                    memcpyFn->setArgOperand(0, newVec);                                                     
-                                                                    need_remove.insert(addrSpaceCastInstr);
-                                                                    need_remove.insert(allocaInstr);
 
-                                                            }
+                                                    std::unordered_map<Value*,Value*>::iterator gotValue = operand_map.find(memcpyFn->getArgOperand(0));
+                                                    if ( gotValue == operand_map.end() ) {
+                                                            outs() << " hh444hhh \n";
+                                                            if (auto addrSpaceCastInstr = dyn_cast<AddrSpaceCastInst>(first_operand)) {
+                                                                if (auto allocaInstr = dyn_cast<AllocaInst>(addrSpaceCastInstr->getPointerOperand())) {
+                                                                    if (allocaInstr->getAllocatedType()->isStructTy()) {
+                                                                    // if (allocaInstr->getAllocatedType()->getStructName().str() == "struct.float4") {
+                                                                            Builder.SetInsertPoint(addrSpaceCastInstr);
+                                                                            AllocaInst *newVector = Builder.CreateAlloca(vecType, DL.getAllocaAddrSpace() , 0, "");
+                                                                            auto *newVec = Builder.CreateAddrSpaceCast(newVector , I32Ptr); // int32ptr or int64ptr
+                                                                            operand_map[first_operand] = newVec;
+                                                                            // replace all uses       
+                                                                            memcpyFn->setArgOperand(0, newVec);                                                     
+                                                                            need_remove.insert(addrSpaceCastInstr);
+                                                                            need_remove.insert(allocaInstr);
 
+                                                                    //}
+
+                                                                    }
+                                                                }
+                                                                
+                                                            } else if(auto *getElementPtrNex = dyn_cast<GetElementPtrInst>(first_operand)) {
+
+                                                                // maybe the 
+                                                                outs() << " GetElementPtr for llvm.memcpy , no changes needed. \n";
+                                                            } else {
+                                                                 outs() << " Unknown Case \n";
+                                                                 std::exit(12);
                                                             }
-                                                        }
-                                                        
+                                                    } else {
+                                                        // outs() << " hhhh392039\n";
+                                                        memcpyFn->setArgOperand(0, gotValue->second);                                                     
                                                     }
-                                                } else {
-                                                    memcpyFn->setArgOperand(0, gotValue->second);                                                     
-                                                }
-
                                                     Builder.SetInsertPoint(prev);
+                                                   
+                                                    // if (gep->getSourceElementType()->getStructName().str() == "struct.float4") {
+                                                    outs() << " hhhhh \n";
+                                                      
+                                                        // _ZN15HIP_vector_typeIjLj4EEaSEOS0_
 
-                                                    FunctionCallee LLVMnewFunFC = M.getOrInsertFunction("_ZN15HIP_vector_typeIfLj4EEaSERKS0_", LLVMFloat4VectorType);
-                                                    Function* LLVMnewFunFn = dyn_cast<Function>(LLVMnewFunFC.getCallee());
+                                                    LLVMnewFunFn = dyn_cast<Function>(LLVMnewFunFC.getCallee());
                                                     // TODO: get dereferenceable from data layout type size DL.getTypeStoreSize(newGEP->getType())
                                                     LLVMnewFunFn->addDereferenceableParamAttr(0,16);
                                                     LLVMnewFunFn->addDereferenceableParamAttr(1,16);
@@ -1105,14 +1334,28 @@ bool TextureTransformPass::runOnModule(Module &M) {
                                                     memcpyFn->replaceAllUsesWith(vectorTypeCall);
                                                     need_remove.insert(memcpyFn);
                                                 
+                                                    // } else {
+                                                    outs() << F << '\n';
+                                                    std::exit(333);
+                                                    // }
                                                 }
+
+
+
+                                               
                                                 
                                             }
 
                                             
                                         }
-                                    }
+                                    } 
+
+
                                 }
+
+
+
+
                             }
                              
 
@@ -1292,8 +1535,8 @@ bool TextureTransformPass::runOnModule(Module &M) {
                 }
                 need_remove.clear();
 
-                outs() << F << '\n';
-                std::exit(122);
+                // outs() << F << '\n';
+                // std::exit(122);
 
             }
         }
