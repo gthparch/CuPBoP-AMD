@@ -61,7 +61,7 @@ AMDCUDA_LINKED_ADDITIONAL_BITCODE=(
     # Linked CuPBoP-AMD bitcode
     "cudaamd-gridblock-size.ll" "cudaamd-math.ll" "cuda2gcn.ll"
     "atomic.ll" "textureInt2DReadMode.ll" "textureFloat1DReadMode.ll"
-    "textureFloat4_1DReadMode.ll" "cupbop-amd-bitcode.bc"
+    "textureFloat4_1DReadMode.ll" "cupbop-amd-bitcode.bc" "vectorMake.ll"
     
     # Re-link against ROCm-Device-Libs
     opencl.bc ockl.bc ocml.bc oclc_abi_version_400.bc oclc_finite_only_off.bc
@@ -100,13 +100,13 @@ AMDCUDA_OPT_LINK=1
 AMDCUDA_OPT_OUTPUT=
 
 # Save intermediate files
-AMDCUDA_OPT_SAVE_TEMPS=0
+AMDCUDA_OPT_SAVE_TEMPS=1
 
 # Disassemble intermediate and translated IRs
 AMDCUDA_OPT_INSPECT_IR=0
 
 # Verbose outputs
-AMDCUDA_OPT_VERBOSE=0
+AMDCUDA_OPT_VERBOSE=1
 
 # Optimization level passed to the compiler
 AMDCUDA_OPT_OPTIMIZATION_LEVEL=0
