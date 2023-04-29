@@ -434,7 +434,7 @@ bool TextureTransformPass::runOnModule(Module &M) {
                                                         nvvm_function->setArgOperand(1, gotValue2->second);
                                                         Builder.SetInsertPoint(nvvm_function);
 
-                                                        FunctionCallee LLVMnewFunFC = M.getOrInsertFunction("__ZN15HIP_vector_typeIiLj2EEaSEOS0_", LLVMInt2VectorType);
+                                                        FunctionCallee LLVMnewFunFC = M.getOrInsertFunction("_ZN15HIP_vector_typeIiLj2EEaSEOS0_", LLVMInt2VectorType);
                                                         Function* LLVMnewFunFn = dyn_cast<Function>(LLVMnewFunFC.getCallee());
                                                         SmallVector<Value *, 2> texArgs;
                                                         texArgs.push_back(nvvm_function->getArgOperand(0));
@@ -2275,13 +2275,15 @@ bool TextureTransformPass::runOnModule(Module &M) {
                      if (auto addrSpaceCastInstr = dyn_cast<AddrSpaceCastInst>(addrInstr.first)) {
                         if (auto allocaInstr = dyn_cast<AllocaInst>(addrSpaceCastInstr->getPointerOperand())) {
                             if (allocaInstr->getAllocatedType()->isStructTy()) {
-                            if (allocaInstr->getAllocatedType()->getStructName().str() == "struct.float4") {
-                                   
+                                if (allocaInstr->getAllocatedType()->getStructName().str() == "struct.float4"
+                                || allocaInstr->getAllocatedType()->getStructName().str() == "struct.uchar3" 
+                                || allocaInstr->getAllocatedType()->getStructName().str() == "struct.uint4") {
                                     
-                                    need_remove.insert(addrSpaceCastInstr);
-                                    need_remove.insert(allocaInstr);
+                                        
+                                        need_remove.insert(addrSpaceCastInstr);
+                                        need_remove.insert(allocaInstr);
 
-                            }
+                                }
 
                             }
                         }
