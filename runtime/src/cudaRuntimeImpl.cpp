@@ -155,6 +155,12 @@ cudaError_t cudaFreeArray(cudaArray_t array) {
     HIP_CHECK(hipFreeArray(array));
     return cudaSuccess;
 }
+
+cudaError_t cudaMemcpyToArray(cudaArray_t dst, size_t wOffset, size_t hOffset, const void *src, size_t count, enum cudaMemcpyKind kind) {
+   HIP_CHECK(hipMemcpyToArray(dst, wOffset, hOffset, src, count, (hipMemcpyKind)kind));
+   return cudaSuccess;
+}
+
 cudaError_t cudaHostAlloc(void **ptr, size_t size, unsigned int flag) {
     // printf("inside HostAlloc\n");
     HIP_CHECK(hipHostMalloc(ptr, size, flag));
@@ -391,9 +397,23 @@ cudaError_t cudaBindTexture2D(size_t *offset, const textureReference *texref,
     return cudaSuccess;
 }
 
+cudaError_t cudaBindTextureToArray(const textureReference *texref, cudaArray_const_t array, const cudaChannelFormatDesc *desc) {
+    HIP_CHECK(hipBindTextureToArray(texref, array, desc));
+    return cudaSuccess;
+}
+
+
+
 cudaError_t cudaUnbindTexture(const textureReference *texref) {
     HIP_CHECK(hipUnbindTexture(texref));
     return cudaSuccess;
+}
+
+
+
+
+void cuMemGetInfo_v2(size_t* free, size_t* total) {
+    HIP_CHECK(hipMemGetInfo(free, total));
 }
 
 static callParams callParamTemp;

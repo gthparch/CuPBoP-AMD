@@ -272,6 +272,10 @@ cudaError_t cudaMemcpy2D(void *dst, size_t dpitch, const void *src,
                          size_t spitch, size_t width, size_t height,
                          cudaMemcpyKind kind);
 
+cudaError_t cudaFreeArray(cudaArray_t array);
+
+cudaError_t cudaMemcpyToArray(cudaArray_t dst, size_t wOffset, size_t hOffset, const void *src, size_t count, enum cudaMemcpyKind kind);
+
 cudaError_t cudaLaunchKernel(const void *func, dim3 gridDim, dim3 blockDim,
                              void **args, size_t sharedMem,
                              cudaStream_t stream);
@@ -358,7 +362,13 @@ cudaError_t cudaBindTexture2D(size_t *offset, const textureReference *texref,
                               const cudaChannelFormatDesc *desc, size_t width,
                               size_t height, size_t pitch);
 
+
+cudaError_t cudaBindTextureToArray(const textureReference *texref, cudaArray_const_t array, const cudaChannelFormatDesc *desc);
+
+
 cudaError_t cudaUnbindTexture(const textureReference *texref);
+
+void cuMemGetInfo_v2(size_t* free, size_t* total);
 
 void **__hipRegisterFatBinary(const void *data);
 
