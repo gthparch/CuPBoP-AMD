@@ -7,7 +7,7 @@ AMDCUDA_DIR=$(realpath $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST)))
 # Linker flags
 # - LDFLAGS are passed to the linker, and are used to link the CUDA objects with
 #	other objects
-LDFLAGS=-L/opt/rocm-5.4.0/llvm/lib
+LDFLAGS=-L/opt/rocm-5.4.0/llvm/lib -lomp
 
 # Objects required for compilation
 # - Objects declared here are translated and compiled with both CuPBoP-CC and HIPIFY
@@ -49,7 +49,7 @@ CUPBOPCC=$(AMDCUDA_DIR)/scripts/amdcuda
 CC=clang
 CXX=clang++
 LD=ld.lld
-CXXFLAGS=-g -O0 -I/opt/rocm-5.4.0/llvm/include -lomp
+CXXFLAGS=-g -O3 -I/opt/rocm-5.4.0/llvm/include -openmp
 
 HIPIFY_OBJS=$(OBJS:.o=.hipify.o)
 CUPBOP_OBJS=$(OBJS:.o=.cupbop.o)
@@ -67,8 +67,14 @@ CUPBOP_OBJS=$(OBJS:.o=.cupbop.o)
 %.o: %.c
 	$(CXX) -openmp $(CXXFLAGS) -c $< -o $@
 
+
+# 
+#$(BENCHMARK_NAME).cupbop $(BENCHMARK_NAME).hipify
+
+# cupbop works with -O0 and hip works with -O3 
+
 .PHONY: clean all
-all: $(BENCHMARK_NAME).cupbop $(BENCHMARK_NAME).hipify
+all:  $(BENCHMARK_NAME).hipify
 	@echo ------- CUDA is at: $(CUDA_PATH)
 	@echo - CuPBoP-AMD is at: $(AMDCUDA_DIR)
 	@echo -- CuPBoP-CC is at: $(CUPBOPCC)

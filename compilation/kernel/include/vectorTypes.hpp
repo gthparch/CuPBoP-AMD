@@ -177,6 +177,8 @@ class CupbopVectorType {
 
     }
 
+    
+
     StructType* getFloat4Base() {
       return hipVectorFloat4Base;
     }

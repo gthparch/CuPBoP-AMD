@@ -31,6 +31,55 @@ using namespace cupbop::amd::passes;
 
 VectorPass::VectorPass() :  FunctionPass(ID) {}
 
+/*
+  Allocate and addrspacecast vector type 
+  variable if not already allocated
+
+*/
+// void createAlloca(const& std::unordered_map<Value*, Value*> operand_map,
+//  Value I
+//  ) {
+
+//    if (auto addrSpaceCastInstr = dyn_cast<AddrSpaceCastInst>(&I)) {
+//         if (auto allocaInstr = dyn_cast<AllocaInst>(addrSpaceCastInstr->getPointerOperand())) {
+//             if (allocaInstr->getAllocatedType()->isStructTy()) {
+//             StructType* vecType = nullptr;
+//             if (allocaInstr->getAllocatedType()->getStructName().str() == "struct.float4") {
+                  
+//                   vecType = cvt->getFloat4Type();
+        
+//             } else if(allocaInstr->getAllocatedType()->getStructName().str() == "struct.uchar3") {
+//               vecType = cvt->getI8_3Type();
+//             } else if(allocaInstr->getAllocatedType()->getStructName().str() == "struct.uint4") {
+//               vecType = cvt->getI32_4Type();
+//             } else if(allocaInstr->getAllocatedType()->getStructName().str() == "struct.int2") {
+//               vecType = cvt->getI32_2Type();
+//             } else if(allocaInstr->getAllocatedType()->getStructName().str() == "struct.float2") {
+//               vecType = cvt->getFloat2Type();
+//             }
+
+//             if(vecType) {
+//                 Builder.SetInsertPoint(addrSpaceCastInstr);
+//                 AllocaInst *newVector = Builder.CreateAlloca(vecType, DL.getAllocaAddrSpace() , 0, "");
+//                 auto *newVec = Builder.CreateAddrSpaceCast(newVector , llvmI32PtrTy); // int32ptr or int64ptr
+                
+//                 // replace all uses
+//                 addrSpaceCastInstr->replaceAllUsesWith(newVec);
+                
+//                 need_remove.push_back(addrSpaceCastInstr);
+//                 need_remove.push_back(allocaInstr);
+//             }
+
+//           }
+//         }
+        
+//       }
+
+
+
+// }
+
+
 
 bool VectorPass::runOnFunction(Function &F) {
     std::vector<Instruction*>  need_remove = {};
@@ -58,13 +107,19 @@ bool VectorPass::runOnFunction(Function &F) {
             memcpyParams, false);
 
 
-    if (F.getCallingConv() != CallingConv::AMDGPU_KERNEL
-        && !isCudaBuiltin(F.getName().str())) {
+    if (
+      F.getCallingConv() != CallingConv::AMDGPU_KERNEL
+
+      && !isCudaBuiltin(F.getName().str())) {
+        
+      // if (isCudaBuiltin(F.getName().str()) {
+      //   continue;
+      // }
 
 
       // if (F.getName().str() != "_Z14arrayToAddress6uchar3Rj") continue;
-
-      std::cout << "Function: " << F.getName().str() << std::endl;
+      outs() << isCudaBuiltin(F.getName().str()) << '\n';
+      std::cout << "Device Vector Pass Function: " << F.getName().str() << std::endl;
 
       outs() << F << '\n';
       /*
@@ -300,6 +355,13 @@ bool VectorPass::runOnFunction(Function &F) {
 
        for (auto &BB : F) {
           for (auto &I : BB) {
+
+            /*
+              Instead of changing the alloca's instruction, 
+              when use of it is reach, do the build alloca to the new type
+              and address space cast it instead 
+            
+            */
 
             if (auto addrSpaceCastInstr = dyn_cast<AddrSpaceCastInst>(&I)) {
               if (auto allocaInstr = dyn_cast<AllocaInst>(addrSpaceCastInstr->getPointerOperand())) {
