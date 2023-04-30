@@ -7,4 +7,4 @@ std::vector<llvm::GlobalVariable*> discover_texture_memory(llvm::Module&);
 void VerifyModule(llvm::Module&);
 std::string type_to_string(llvm::Type&);
 bool is_cuda_kernel(llvm::Function &F);
-bool isCudaBuiltin(std::string  functionName); 
+bool isCudaBuiltin(const std::string&  functionName); 
