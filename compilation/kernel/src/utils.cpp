@@ -101,7 +101,7 @@ std::vector<GlobalVariable *> discover_texture_memory(Module &M) {
     function with string "__cuda_" maybe cuda builtin
 */
 
-bool isCudaBuiltin(std::string  functionName) {
+bool isCudaBuiltin(const std::string&  functionName) {
 
     if (functionName.find("__cuda_") != std::string::npos) {
         return true;
@@ -112,12 +112,19 @@ bool isCudaBuiltin(std::string  functionName) {
     if (functionName.find("__nv_") != std::string::npos) {
         return true;
     }
+     if (functionName.find("_nv_") != std::string::npos) {
+        return true;
+    }
     if (functionName.find("llvm.") != std::string::npos) {
         return true;
     }
-     if (functionName.find(".nvvm.") != std::string::npos) {
+    if (functionName.find(".nvvm.") != std::string::npos) {
         return true;
     }
+     if (functionName.find("HIP_") != std::string::npos) {
+        return true;
+    }
+
 
    
     return false;
