@@ -23,6 +23,8 @@
 #include "cupbop_amd.hpp"
 #include "utils.hpp"
 #include "vectorTypes.hpp"
+#include "VectorAggregateTypeConv.hpp"
+
 
 using namespace llvm;
 
@@ -81,9 +83,20 @@ int main(const int argc, const char *argv[]) {
     // initialize the vector types
     cvt->setModule(*M);
     
-    
+   
+
     PM.run(*M);
 
+    // outs() << *M << '\n';
+
+    // modifiy nested struct vector types
+    // VectorConversions v = VectorConversions(*M);
+    // v.getModifiableStructTypes();
+
+    // outs() << "modify\n";
+    // v.modifyTypes();
+    ConvertVector(*M);
+    ConvertVectorCheck(*M);
     
     // outs() << *M << '\n';
 
@@ -94,6 +107,8 @@ int main(const int argc, const char *argv[]) {
     // transformTexture(*M);
 
     // outs() << *M << '\n';
+
+    
 
     
     VerifyModule(*M);
