@@ -1,175 +1,90 @@
-include ../../../common/make.config
+# Must points to the root of the AMDCUDA repository
+# - Depending on where the benchmark is relative to the root of the repository,
+#	you may or may not need to change this.
+# - Defaults to 3 directories up from the current directory
+AMDCUDA_DIR=$(realpath $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))/../../../..)
 
-all: mummergpu
-.SUFFIXES : .cu .cu_dbg_o .c_dbg_o .cpp_dbg_o .cu_rel_o .c_rel_o .cpp_rel_o .cubin
+# Linker flags
+# - LDFLAGS are passed to the linker, and are used to link the CUDA objects with
+#	other objects
+LDFLAGS=-L/opt/rocm-5.4.0/llvm/lib
 
-include ../experiments/test_rule.mk
+# Objects required for compilation
+# - Objects declared here are translated and compiled with both CuPBoP-CC and HIPIFY
+#
+# Example:
+# - OBJS=foo.o bar.o # will compile foo.cu and bar.cu with CuPBoP-CC, then
+#					 # translate foo.cu and bar.cu with HIPIFY and compile with HIPCC	
+OBJS=mummergpu.o
 
-CUDA_INSTALL_PATH := $(CUDA_DIR)
+# Non-CUDA objects for compilation
+# - Objects declared here are compiled with CXX and linked with the CUDA objects
+#
+# Example:
+# - CXXOBJS=foo.o bar.o # will compile foo.c and bar.c with CXX and link with
+#	CuPBoP-CC and HIPCC
+CXXOBJS=mummergpu_gold.o suffix-tree.o PoolMalloc.o mummergpu_main.o
 
-# Compilers
-NVCC       := $(CUDA_INSTALL_PATH)/bin/nvcc 
-CXX        := g++ -fopenmp $(PROFILE)
-CC         := gcc 
-LINK       := g++ -fopenmp -m64 -fPIC $(PROFILE)
+# Benchmark name, used for output binaries
+# - Hipify binary will be named BENCHMARK_NAME.hipify
+# - CuPBoP-CC binary will be named BENCHMARK_NAME.cupbop
+BENCHMARK_NAME=mummergpu
 
-# Add source files here
-STATIC_LIB := libmummergpu.a
-# Cuda source files (compiled with cudacc)
-CUFILES		:= mummergpu.cu
-# C/C++ source files (compiled with gcc / c++)
-CCFILES		:= \
-	 mummergpu_gold.cpp suffix-tree.cpp PoolMalloc.cpp
+# Additional CuPBoP-CC flags
+# - Run `amdcuda -h` to see the full list of options supported by the script.
+#
+# Example:
+# - C3FLAGS=-i 		# Tell CuPBoP-CC to produce human-redable IRs every step along the
+#			   		# translation pipeline.
+# - C3FLAGS=-v 		# Tell CuPBoP-CC to be more verbose
+# - C3FLAGS=-v -t 	# Tell CuPBoP-CC to be verbose and don't delete any temporary files
+C3FLAGS=-v
 
-################################################################################
-# Rules and targets
+# Other flags that you probably don't need to change
+$(info $(AMDCUDA_DIR))
 
+HIPCC=hipcc
+HIPIFY=$(AMDCUDA_DIR)/scripts/hipify-perl
+CUPBOPCC=$(AMDCUDA_DIR)/scripts/amdcuda
+CC=clang
+CXX=clang++
+LD=ld.lld
+CXXFLAGS=-g -O0 -I/opt/rocm-5.4.0/llvm/include -lomp
 
-# Basic directory setup for SDK
-# (override directories only if they are not already defined)
-SRCDIR     ?= 
-ROOTDIR    ?= ..
-ROOTBINDIR ?= $(ROOTDIR)/bin
-BINDIR     ?= $(ROOTBINDIR)
-ROOTOBJDIR ?= obj
-LIBDIR     := $(ROOTDIR)/lib
-BINNAME    ?= mummergpu
-# Includes
-INCLUDES  += -I. -I$(CUDA_INSTALL_PATH)/include 
+HIPIFY_OBJS=$(OBJS:.o=.hipify.o)
+CUPBOP_OBJS=$(OBJS:.o=.cupbop.o)
 
-# Libs
-LIB       := -L$(CUDA_LIB_DIR) -L$(LIBDIR) -lcuda -lcudart -lGL -lGLU ${LIB}
+%.hipify.cpp: %.cu
+	$(HIPIFY) $< -o $@ --save-temps
 
-# Warning flags
-CXXWARN_FLAGS := \
-	-W -Wall \
-	-Wimplicit \
-	-Wswitch \
-	-Wformat \
-	-Wchar-subscripts \
-	-Wparentheses \
-	-Wmultichar \
-	-Wtrigraphs \
-	-Wpointer-arith \
-	-Wcast-align \
-	-Wreturn-type \
-	-Wno-unused-function \
-	$(SPACE)
+.SECONDARY:
+%.hipify.o: %.hipify.cpp
+	$(HIPCC) $(CXXFLAGS) -c $< -o $@ --save-temps
 
-CWARN_FLAGS := $(CXXWARN_FLAGS) \
-	-Wstrict-prototypes \
-	-Wmissing-prototypes \
-	-Wmissing-declarations \
-	-Wnested-externs \
-	-Wmain \
+%.cupbop.o: %.cu
+	$(CUPBOPCC) $(C3FLAGS) $(CXXFLAGS) -o $@ -c $<
 
-# Compiler-specific flags
-NVCCFLAGS := -Xcompiler "-m64"
-CXXFLAGS  := -m64 $(CXXWARN_FLAGS)
-CFLAGS    := -m64 $(CWARN_FLAGS)
+%.o: %.c
+	$(CXX) -openmp $(CXXFLAGS) -c $< -o $@
 
-# Common flags
-COMMONFLAGS ?= 
-COMMONFLAGS += $(INCLUDES) -DUNIX
+.PHONY: clean all
+all: $(BENCHMARK_NAME).cupbop $(BENCHMARK_NAME).hipify
+	@echo ------- CUDA is at: $(CUDA_PATH)
+	@echo - CuPBoP-AMD is at: $(AMDCUDA_DIR)
+	@echo -- CuPBoP-CC is at: $(CUPBOPCC)
+	@echo --------- CC is at: $(CC)
+	@echo -------- CXX is at: $(CXX)
+	@echo ----- HIPIFY is at: $(HIPIFY)
+	@echo ------ HIPCC is at: $(HIPCC)
 
-# Debug/release configuration
-ifeq ($(dbg),1)
-	COMMONFLAGS += -g
-	NVCCFLAGS   += -D_DEBUG
-	BINSUBDIR   := debug
-	LIBSUFFIX   := D
-else 
-	COMMONFLAGS += -O3
-	BINSUBDIR   := release
-	LIBSUFFIX   :=
-endif
+clean:
+	rm -f $(BENCHMARK_NAME).cupbop $(BENCHMARK_NAME).hipify $(HIPIFY_OBJS) $(CUPBOP_OBJS) $(OBJS:.o=.hipify.cpp) $(CXXOBJS) *.ll
 
-# Device emulation configuration
-ifeq ($(emu), 1)
-	NVCCFLAGS   += -deviceemu
-	CUDACCFLAGS += 
-	BINSUBDIR   := emu$(BINSUBDIR)
-endif
+.PHONY:external_deps
+external_deps:
 
-ifeq ($(fastmath), 1)
-	NVCCFLAGS += -use_fast_math
-endif
+$(BENCHMARK_NAME).cupbop: $(CXXOBJS) $(CUPBOP_OBJS) external_deps
+	$(CUPBOPCC) $(C3FLAGS) -o $@ $(LDFLAGS) $(CUPBOP_OBJS) $(CXXOBJS)
 
-# Add cudacc flags
-NVCCFLAGS += -Xcompiler "$(CUDACCFLAGS)"
-
-# Add common flags
-NVCCFLAGS += $(COMMONFLAGS)
-CXXFLAGS  += $(COMMONFLAGS)
-CFLAGS    += $(COMMONFLAGS)
-
-OBJDIR := $(ROOTOBJDIR)/$(BINSUBDIR)
-
-#.c.c_$(APPEND)_o:
-$(OBJDIR)/%.c_o : $(SRCDIR)%.c
-	$(CC) $(CFLAGS) -o $@ -c $<
-
-#.cpp.cpp_$(APPEND)_o:
-$(OBJDIR)/%.cpp_o : $(SRCDIR)%.cpp
-	$(CXX) $(CXXFLAGS) -o $@ -c $<
-
-#.cu.cu_$(APPEND)_o:
-$(OBJDIR)/%.cu_o : $(SRCDIR)%.cu
-	$(NVCC) -o $@ -c $< $(NVCCFLAGS)
-
-#.cu.cubin
-%.cubin : $(SRCDIR)mummergpu.cu mummergpu_kernel.cu
-	$(NVCC) -o $(BINNAME).cubin -cubin $< $(NVCCFLAGS)
-
-#.cu.ptx
-%.ptx : $(SRCDIR)%.cu mummergpu_kernel.cu
-	$(NVCC) -o $@ -ptx -Xopencc -LIST:source=on $< $(NVCCFLAGS)
-
-makedirectories:
-	@mkdir -p $(LIBDIR)
-	@mkdir -p $(OBJDIR)
-	@mkdir -p $(BINDIR)
-
-LIBOBJS= \
-    $(OBJDIR)/mummergpu_gold.cpp_o \
-    $(OBJDIR)/suffix-tree.cpp_o \
-    $(OBJDIR)/PoolMalloc.cpp_o \
-    $(OBJDIR)/mummergpu.cu_o \
-
-$(LIBDIR)/libmummergpu$(LIBSUFFIX).a: $(LIBOBJS)
-	ar qv $@ $(LIBOBJS)
-
-BINOBJS= \
-    $(OBJDIR)/mummergpu_main.cpp_o
-
-$(BINDIR)/mummergpu: makedirectories $(LIBDIR)/libmummergpu$(LIBSUFFIX).a $(BINOBJS)
-	$(LINK) -o $(BINDIR)/$(BINNAME)  $(BINOBJS) -lmummergpu$(LIBSUFFIX) $(LIB) 
-		
-
-##############################################################################
-#                               Auto Generated rules go here                 #
-##############################################################################
-
-include ../experiments/rules.mk
-
-##############################################################################
-#                              End auto generated rules                      #
-##############################################################################
-
-
-clean: 
-	rm -f $(LIBOBJS)
-	rm -f $(LIBDIR)/libmummergpu$(LIBSUFFIX).a
-	rm -f $(BINOBJS)
-	rm -f $(BINDIR)/$(BINNAME)
-	rm -f *.linkinfo
-	rm -rf $(ROOTBINDIR)
-	rm -rf $(ROOTOBJDIR)
-	rm -rf $(LIBDIR)
-
-mummergpu: $(BINDIR)/mummergpu
-
-cubin: mummergpu.cubin
-
-ptx: mummergpu.ptx
-
+$(BENCHMARK_NAME).hipify: $(CXXOBJS) $(HIPIFY_OBJS) external_deps
+	$(HIPCC) $(CXXFLAGS) -o $@ $(HIPIFY_OBJS) $(CXXOBJS) $(LDFLAGS)
