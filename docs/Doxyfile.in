@@ -820,6 +820,8 @@ FILE_PATTERNS          = *.c \
                          *.cc \
                          *.cxx \
                          *.cpp \
+                         *.cu \
+                         *.cl \
                          *.c++ \
                          *.java \
                          *.ii \

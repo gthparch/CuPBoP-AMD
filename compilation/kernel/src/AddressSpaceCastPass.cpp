@@ -51,13 +51,6 @@ static void processPointerAlloca(IRBuilder<> &builder,
 
 /// Fix store instructions that attempts to write to any address space other
 /// than the flat address space.
-///
-/// Change:
-///  %2 = alloca ptr, align 8
-/// To:
-///  %2 = alloca ptr, align 8, addrspace(5)
-///  %4 = addrspacecast ptr addrspace(5) %2 to ptr
-/// Then replace uses of 2 with 4
 static void processPointerStore(IRBuilder<> &builder,
                                 const DataLayout &dataLayout,
                                 StoreInst *storeInst) {
