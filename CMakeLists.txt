@@ -16,6 +16,8 @@ separate_arguments(LLVM_DEFINITIONS_LIST NATIVE_COMMAND ${LLVM_DEFINITIONS})
 add_definitions(${LLVM_DEFINITIONS_LIST})
 find_package(Clang REQUIRED CONFIG HINTS ${LLVM_DIR}/../clang)
 
+include(CuPBoPDoxygen)
+
 # Find HIP and ROCm
 include(ROCmDependencies)
 locate_rocm_dependencies()
@@ -32,3 +34,5 @@ include_directories(include)
 add_subdirectory(device-libs)
 add_subdirectory(compilation)
 add_subdirectory(runtime)
+
+cupbop_generate_docs()

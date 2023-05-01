@@ -1,5 +1,6 @@
 add_compile_options(${CUPBOP_CXXFLAGS})
 add_link_options(${CUPBOP_LDFLAGS})
+cupbop_document_sources(NAME cupbop-translators DIRS .)
 
 include_directories(./kernel/include/)
 add_subdirectory(kernel)
