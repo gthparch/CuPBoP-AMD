@@ -9,3 +9,4 @@ std::string type_to_string(llvm::Type&);
 bool is_cuda_kernel(llvm::Function &F);
 std::string llvm_to_string(const llvm::Value &V);
 std::string llvm_type_to_string(const llvm::Type &Ty);
+bool isCudaBuiltin(std::string  functionName); 

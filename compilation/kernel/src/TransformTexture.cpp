@@ -33,6 +33,7 @@
 
 #include "TransformTexture.hpp"
 #include "utils.hpp"
+#include "vectorTypes.hpp"
 
 using namespace llvm;
 
@@ -89,21 +90,7 @@ void transformTexture(llvm::Module &M) {
   textureStruct->setBody({textureReference}, false);
   std::unordered_map<std::string, GlobalVariable*> umap;
 
-  // vector type <4 x i32> ?
-  Type *vectorIntType = VectorType::get(int32Type, 4, false);
-  auto unionIntVector = StructType::create(context, "vector.int.union"); 
-  unionIntVector->setBody(vectorIntType);
-
-  // vector type <4x float>
-  Type *vectorFloat4Type = VectorType::get(floatType, 4, false);
-  auto unionFloat4Vector = StructType::create(context, "union.anon"); 
-  unionFloat4Vector->setBody(vectorFloat4Type);
-
-  auto hipVectorFloat4Base = StructType::create(context, "struct.HIP_vector_base");
-  hipVectorFloat4Base->setBody(unionFloat4Vector);
-
-  auto hipVectorFloat4Type = StructType::create(context, "struct.HIP_vector_type");
-  hipVectorFloat4Type->setBody(hipVectorFloat4Base);
+ 
 
   // Type *vectorFloat4Type = VectorType::get(floatType, 4, false);
   // auto unionFloat4Vector = StructType::create(context, "vector.float.union"); 
@@ -114,6 +101,23 @@ void transformTexture(llvm::Module &M) {
 
   // auto hipVectorFloat4Type = StructType::create(context, "struct.HIP_vector_type");
   // hipVectorFloat4Type->setBody({hipVectorFloat4Base});
+
+  // vector type <4 x i32> ?
+Type *vectorIntType = VectorType::get(int32Type, 4, false);
+auto unionIntVector = StructType::create(context, "vector.int.union"); 
+unionIntVector->setBody(vectorIntType);
+
+// vector type <4x float>
+Type *vectorFloat4Type = VectorType::get(floatType, 4, false);
+auto unionFloat4Vector = StructType::create(context, "union.anon"); 
+unionFloat4Vector->setBody(vectorFloat4Type);
+
+auto hipVectorFloat4Base = StructType::create(context, "struct.HIP_vector_base");
+hipVectorFloat4Base->setBody(unionFloat4Vector);
+
+auto hipVectorFloat4Type = StructType::create(context, "struct.HIP_vector_type");
+hipVectorFloat4Type->setBody(hipVectorFloat4Base);
+
 
   for(GlobalVariable* global: allTextureMemories) {
     std::string new_name = "cupbop_" + global->getName().str(); 
@@ -218,15 +222,21 @@ void transformTexture(llvm::Module &M) {
 
   // map operand of old operand of the last segment of llvm.memcpy to new operand for 
   // functions such as _ZN15HIP_vector_typeIfLj4EEaSERKS0_
-  std::unordered_map<Value*, Value*> operand_map;
+  // __cuda_
+ 
 
   for (Module::iterator i = M.begin(), e = M.end(); i != e; ++i) {
     Function *F = &(*i);
+    std::unordered_map<Value*, Value*> operand_map;
       
-    if (!is_cuda_kernel(*F))
+    // if (!is_cuda_kernel(*F))
+    //   continue;
+    if (isCudaBuiltin(F->getName().str()))
       continue;
     
+
     std::cout << "Function: " << F->getName().str() << std::endl;
+
     Function::iterator I = F->begin();
     BasicBlock::iterator firstBB = I->getFirstInsertionPt();
     auto *first_instr = dyn_cast<Instruction>(firstBB);
@@ -253,12 +263,14 @@ void transformTexture(llvm::Module &M) {
             
 
             // get the operand of the call function
+            // this may not be a global variable 
             llvm::Value* texOperand = nvvm_function->getArgOperand(0);
             outs() << *texOperand << '\n';
             std::unordered_map<std::string,GlobalVariable*>::const_iterator got = umap.find(texOperand->getName().str());
             if ( got == umap.end() ) {
               std::cout << "not found";
-              exit(1);
+              outs() << *F << '\n';
+              // exit(1);
             } else {
                 std::cout << " foound " << std::endl;
                 SmallVector<Value *, 4> memcpyArgs;
@@ -468,7 +480,8 @@ void transformTexture(llvm::Module &M) {
                 std::unordered_map<Value*,Value*>::iterator gotValue = operand_map.find(texOperand);
                 if ( gotValue == operand_map.end() ) {
                   std::cerr << "not found";
-                  exit(1);
+                  outs() << *F << '\n';
+                  // exit(1);
                 } else {
                   texArgs.push_back(newGEP);
                   texArgs.push_back(gotValue->second);

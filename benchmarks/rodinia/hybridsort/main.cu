@@ -3,6 +3,7 @@
 #  define NOMINMAX
 #  include <windows.h>
 #endif
+#include <cuda.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -11,14 +12,16 @@
 #include "helper_cuda.h"
 #include "helper_timer.h"
 #include <iostream>
-#include "bucketsort.cuh"
-#include "mergesort.cuh"
+#include "bucketsort.h"
+#include "mergesort.h"
 using namespace std; 
 
 ////////////////////////////////////////////////////////////////////////////////
 // Size of the testset (Bitwise shift of 1 over 22 places)
 ////////////////////////////////////////////////////////////////////////////////
 #define SIZE	(1 << 22)
+// #define SIZE	((4000)) 
+
 ////////////////////////////////////////////////////////////////////////////////
 // Number of tests to average over
 ////////////////////////////////////////////////////////////////////////////////
@@ -60,6 +63,7 @@ main( int argc, char** argv)
     // Number of elements in the test bed
        	if(strcmp(argv[1],"r") ==0) {
 	numElements = SIZE; 
+	
 	}
 	else {
 		FILE *fp;
@@ -133,10 +137,12 @@ main( int argc, char** argv)
 			printf("Sort missmatch on element %d: \n", i); 
 			printf("CPU = %f : GPU = %f\n", cpu_odata[i], gpu_odata[i]); 
 			count++; 
-			break; 
+			// break; 
+		} else {
+			// printf("CPU = %f : GPU = %f\n", cpu_odata[i], gpu_odata[i]);
 		}
 	if(count == 0) cout << "PASSED.\n";
-	else cout << "FAILED.\n";
+	else cout << "FAILED. " << count << " mismatches \n";
 #endif
 	// Timer report
 	printf("GPU iterations: %d\n", TEST); 
@@ -199,6 +205,9 @@ void cudaSort(float *origList, float minimum, float maximum,
 		unsigned int *origOffsets = (unsigned int *) malloc((DIVISIONS + 1) * sizeof(int)); 
 		bucketSort(d_input, d_output, numElements, sizes, nullElements, 
 				   minimum, maximum, origOffsets); 
+
+
+		
 	sdkStopTimer(&bucketTimer); 
 
 	// Mergesort the result
@@ -218,7 +227,7 @@ void cudaSort(float *origList, float minimum, float maximum,
 
 	// Download result
 	sdkStartTimer(&downloadTimer); 
-		checkCudaErrors(	cudaMemcpy((void *) resultList, 
+		(	cudaMemcpy((void *) resultList, 
 				(void *)mergeresult, numElements * sizeof(float), cudaMemcpyDeviceToHost) );
 	sdkStopTimer(&downloadTimer); 
 

@@ -15,7 +15,8 @@ LDFLAGS=
 # Example:
 # - OBJS=foo.o bar.o # will compile foo.cu and bar.cu with CuPBoP-CC, then
 #					 # translate foo.cu and bar.cu with HIPIFY and compile with HIPCC	
-OBJS=bucketsort_kernel.o bucketsort.o histogram1024_kernel.o main.o mergesort_kernel.o mergesort.o
+# OBJS=bucketsort_kernel.o bucketsort.o histogram1024_kernel.o main.o mergesort_kernel.o mergesort.o
+OBJS=main.o bucketsort.o mergesort.o histogram1024_kernel.o
 
 # Non-CUDA objects for compilation
 # - Objects declared here are compiled with CXX and linked with the CUDA objects
@@ -42,7 +43,12 @@ C3FLAGS=
 
 # Other flags that you probably don't need to change
 HIPCC=hipcc
-HIPIFY=$(AMDCUDA_DIR)/scripts/hipify-clang
+# HIPIFY=$(AMDCUDA_DIR)/scripts/hipify-clang (does not run)
+C3FLAGS=-i -v
+
+# Other flags that you probably don't need to change
+# HIPCC=hipcc
+HIPIFY=$(AMDCUDA_DIR)/scripts/hipify-perl
 CUPBOPCC=$(AMDCUDA_DIR)/scripts/amdcuda
 CC=clang
 CXX=clang++
@@ -59,14 +65,14 @@ CUPBOP_OBJS=$(OBJS:.o=.cupbop.o)
 %.hipify.o: %.hipify.cpp
 	$(HIPCC) $(CXXFLAGS) -c $< -o $@
 
-# %.cupbop.o: %.cu
-# 	$(CUPBOPCC) $(C3FLAGS) $(CXXFLAGS) -o $@ -c $<
+%.cupbop.o: %.cu
+	$(CUPBOPCC) $(C3FLAGS) $(CXXFLAGS) -o $@ -c $<
 
 %.o: %.c
-	$(CC) -openmp $(CXXFLAGS) -c $< -o $@
+	$(CXX) -openmp $(CXXFLAGS) -c $< -o $@
 
 .PHONY: clean all
-all: $(BENCHMARK_NAME).hipify
+all: $(BENCHMARK_NAME).cupbop $(BENCHMARK_NAME).hipify
 	@echo ------- CUDA is at: $(CUDA_PATH)
 	@echo - CuPBoP-AMD is at: $(AMDCUDA_DIR)
 	@echo -- CuPBoP-CC is at: $(CUPBOPCC)
@@ -76,13 +82,13 @@ all: $(BENCHMARK_NAME).hipify
 	@echo ------ HIPCC is at: $(HIPCC)
 
 clean:
-	rm -f $(BENCHMARK_NAME).cupbop $(BENCHMARK_NAME).hipify $(HIPIFY_OBJS) $(CUPBOP_OBJS) $(OBJS:.o=.hipify.cpp) $(CXXOBJS) *.ll */*.ll */*/*.ll
+	rm -f $(BENCHMARK_NAME).cupbop $(BENCHMARK_NAME).hipify $(HIPIFY_OBJS) $(CUPBOP_OBJS) $(OBJS:.o=.hipify.cpp) $(CXXOBJS) *.ll
 
 .PHONY:external_deps
 external_deps:
 
-# $(BENCHMARK_NAME).cupbop: $(CXXOBJS) $(CUPBOP_OBJS) external_deps
-# 	$(CUPBOPCC) $(C3FLAGS) -o $@ $(LDFLAGS) $(CUPBOP_OBJS) $(CXXOBJS)
+$(BENCHMARK_NAME).cupbop: $(CXXOBJS) $(CUPBOP_OBJS) external_deps
+	$(CUPBOPCC) $(C3FLAGS) -o $@ $(LDFLAGS) $(CUPBOP_OBJS) $(CXXOBJS)
 
 $(BENCHMARK_NAME).hipify: $(CXXOBJS) $(HIPIFY_OBJS) external_deps
 	$(HIPCC) $(CXXFLAGS) -o $@ $(HIPIFY_OBJS) $(CXXOBJS) $(LDFLAGS)

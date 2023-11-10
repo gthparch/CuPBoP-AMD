@@ -1,16 +1,18 @@
+
 #pragma once
 #include "llvm/Pass.h"
 
 namespace cupbop {
 namespace amd {
 namespace passes {
-class TextureTransformPass : public llvm::ModulePass  {
+class VectorPass : public llvm::FunctionPass {
   public:
     static char ID;
     
-    TextureTransformPass();
-    virtual bool runOnModule(llvm::Module &M);
+    VectorPass();
+    virtual bool runOnFunction(llvm::Function &F);
 };
 } // namespace passes
 } // namespace amd
 } // namespace cupbop
+
