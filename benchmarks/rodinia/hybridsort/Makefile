@@ -38,7 +38,7 @@ BENCHMARK_NAME=hybridsort
 #			   		# translation pipeline.
 # - C3FLAGS=-v 		# Tell CuPBoP-CC to be more verbose
 # - C3FLAGS=-v -t 	# Tell CuPBoP-CC to be verbose and don't delete any temporary files
-C3FLAGS=
+C3FLAGS=-i -v
 
 # Other flags that you probably don't need to change
 HIPCC=hipcc
