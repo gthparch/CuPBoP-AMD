@@ -16,8 +16,11 @@
 
 ## Introduction
 
-CuPBoP-AMD (Extending CUDA to AMD Platforms) is a extension of the framework of CuPBoP following similar architecture. However,  CuPBoP-AMD has its over version of kernerl and host translators and runtime implementation.
+[CuPBoP-AMD (Extending CUDA to AMD Platforms)](https://doi.org/10.1145/3624062.3624185) is a extension of the framework of CuPBoP following similar architecture. However,  CuPBoP-AMD has its over version of kernerl and host translators and runtime implementation.
 CuPBoP-AMD currently supports many of the Rodinia benchmarks and more support than AMD HIPIFY.
+
+* [SC23-W - CuPBoP-AMD: Extending CUDA to AMD Platforms](https://doi.org/10.1145/3624062.3624185)
+* https://doi.org/10.1145/3624062.3624185
 
 ## Install
 
@@ -32,17 +35,28 @@ CuPBoP-AMD currently supports many of the Rodinia benchmarks and more support th
 1. Clone from github
 
    ```bash
-   
+   git clone --recursive git@github.com:gthparch/CuPBoP-AMD.git
+   cd CuPBoP-AMD
    ```
 
-2. Build CuPBoP-AMD
+2. Build LLVM using the `llvm-16-init` branch and the ROCm suites
+
+   Edit the `build-rocm.sh` script under the `scripts/` folder, replace `BUILD_LLVM=0` with `BUILD_LLVM=1`.
+
+   ```bash
+   ./scripts/build-rocm.sh
+   ```
+
+   Ensure the compiled LLVM binaries are in the `PATH` variable.
+
+3. Build CuPBoP-AMD
 
    ```bash
    mkdir build && cd build
    cmake .. \
       -DLLVM_CONFIG_PATH=`which llvm-config` \
       -DCUDA_PATH=$CUDA_PATH
-   make
+   cmake --build . -j$(nproc)
    ```
 
 ## Run Rodinia Benchmark example
