@@ -59,6 +59,21 @@ CuPBoP-AMD currently supports many of the Rodinia benchmarks and more support th
    cmake --build . -j$(nproc)
    ```
 
+4. Set the environment variables
+
+   ```bash
+   export ROCM_PATH="<path_to_rocm>"
+   export HIP_PATH="$ROCM_PATH/hip"
+   export DEVICE_LIB_PATH="$ROCM_PATH/amdgcn/bitcode"
+   export HIP_DEVICE_LIB_PATH="$ROCM_PATH/amdgcn/bitcode"
+   export HIP_CLANG_PATH="<path_to_compiled_llvm>"
+   export HIPCC_COMPILE_FLAGS_APPEND="--rocm-path=$ROCM_PATH"
+   export CMAKE_PREFIX_PATH="$ROCM_PATH/hip:$ROCM_PATH:$CMAKE_PREFIX_PATH"
+   export ROCMINFO_PATH="$ROCM_PATH"
+   export LD_LIBRARY_PATH="$ROCM_PATH/lib64:$ROCM_PATH/lib:$LD_LIBRARY_PATH"
+   export PATH="<path_to_compiled_binaries>:$PATH"
+   ```
+
 ## Run Rodinia Benchmark example
 
 In this section, we provide an example of how to use CuPBoP-AMD to execute a CUDA program.
