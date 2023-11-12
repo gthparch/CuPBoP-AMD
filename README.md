@@ -64,7 +64,16 @@ CuPBoP-AMD currently supports many of the Rodinia benchmarks and more support th
 In this section, we provide an example of how to use CuPBoP-AMD to execute a CUDA program.
 
 ```bash
-Todo
+# Run rodinia benchmarks. Ensure all environment variables are set.
+$ cd benchmarks/rodinia
+
+# Download Rodinia benchmark dataset
+# This script automatically downloads the dataset required to run the rodinia
+# suite of benchmarks to the rodinia-data folder
+$ ./download-data.sh
+
+# Take the `bfs` benchmark for an example
+$ cd bfs && ./run.sh
 ```
 
 ## How to contribute?
@@ -88,7 +97,6 @@ papers:
 - [Hyesoon Kim](https://faculty.cc.gatech.edu/~hyesoon/)
 
 ## Acknowledgements
-
 
 - This research was partially supported by AMD. We also want to thank John Lu, Ruobing Han, and Jaewon Lee
 for their support and expertise.
