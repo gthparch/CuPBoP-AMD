@@ -27,7 +27,7 @@ CuPBoP-AMD currently supports many of the Rodinia benchmarks and more support th
 ### Prerequisites
 
 - Linux system
-- [LLVM 14.0.1](https://github.com/llvm/llvm-project/releases/tag/llvmorg-14.0.1)
+- [LLVM 16.0.1](https://github.com/llvm/llvm-project/releases/tag/llvmorg-16.0.1)
 - CUDA Toolkit
 
 ### Installation
